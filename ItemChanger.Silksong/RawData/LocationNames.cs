@@ -1,0 +1,189 @@
+﻿namespace ItemChanger.Silksong.RawData;
+public static class LocationNames
+{
+    // Shops
+    public const string Forge_Daughter = "Forge_Daughter";
+    public const string Grindle = "Grindle";
+    public const string Jubilana = "Jubilana";
+    public const string Mort = "Mort";
+    public const string Mottled_Skarr = "Mottled_Skarr";
+    public const string Pebb = "Pebb";
+    public const string Shakra__Global = "Shakra-Global";
+    public const string Twelfth_Architect = "Twelfth_Architect";
+    public const string Vog = "Vog";
+
+    // Silk skills
+    public const string Cross_Stitch = "Cross_Stitch";
+    public const string Pale_Nails = "Pail_Nails";
+    public const string Rune_Rage = "Rune_Range";
+    public const string Sharpdart = "Sharpdart";
+    public const string Silkspear = "Silkspear";
+    public const string Thread_Storm = "Thread_Storm";
+
+    // Ancestral arts
+    public const string Beastling_Call = "Beastling_Call";
+    public const string Clawline = "Clawline";
+    public const string Cling_Grip = "Cling_Grip";
+    public const string Elegy_of_the_Deep = "Elegy_of_the_Deep";
+    public const string Needolin = "Needolin";
+    public const string Silk_Soar = "Silk_Soar";
+    public const string Swift_Step = "Swift_Step";
+    public const string Sylphsong = "Sylphsong";
+
+    // other abilities
+    public const string Drifter_s_Cloak = "Drifter's_Cloak";
+    public const string Faydown_Cloak = "Faydown_Cloak";
+    public const string Needle_Strike = "Needle_Strike";
+
+    // plot items (note: snare setter listed with red tools)
+    public const string Architect_s_Melody = "Architect's_Melody";
+    public const string Conductor_s_Melody = "Conductor's_Melody";
+    public const string Conjoined_Heart = "Conjoined_Heart";
+    public const string Encrusted_Heart = "Encrusted_Heart";
+    public const string Everbloom = "Everbloom";
+    public const string Hermit_s_Soul = "Hermit's_Soul";
+    public const string Hunter_s_Heart = "Hunter's_Heart";
+    public const string Maiden_s_Soul = "Maiden's_Soul";
+    public const string Pollen_Heart = "Pollen_Heart";
+    public const string Seeker_s_Soul = "Seeker's_Soul";
+    public const string Vaultkeeper_s_Melody = "Vaultkeeper's_Melody";
+
+    // crests
+    public const string Crest_of_Architect = "Crest_of_Architect";
+    public const string Crest_of_Beast = "Crest_of_Beast";
+    public const string Crest_of_Hunter = "Crest_of_Hunter";
+    public const string Crest_of_Reaper = "Crest_of_Reaper";
+    public const string Crest_of_Shaman = "Crest_of_Shaman";
+    public const string Crest_of_Wanderer = "Crest_of_Wanderer";
+    public const string Crest_of_Witch = "Crest_of_Witch";
+    public const string Vesticrest_Blue = "Vesticrest_Blue";
+    public const string Vesticrest_Yellow = "Vesticrest_Yellow";
+    // red tools (note: ruined tool is listed with quest items; curveclaw is a shop item; sting shard, cogwork wheel are craftmetal shop items)
+    public const string Cogfly = "Cogfly";
+      //public const string Cogwork_Wheel = "Cogwork_Wheel";
+    public const string Conchcutter = "Conchcutter";
+    public const string Curveclaw__Mottled_Skarr_Dead = "Curveclaw-Mottled_Skarr_Dead";
+    public const string Curvesickle = "Curvesickle";
+    public const string Delver_s_Drill = "Delver's_Drill";
+    public const string Flea_Brew = "Flew_Brew"; // TODO: refill location
+    public const string Flintslate = "Flintslate";
+    public const string Longpin = "Longpin";
+    public const string Needle_Phial = "Needle_Phial"; // TODO: technically two locations
+    public const string Pimpillo = "Pimpillo";
+    public const string Plasmium_Phial = "Plasmium_Phial"; // TODO: refill location
+    public const string Rosary_Cannon = "Rosary_Cannon";
+    public const string Silkshot__Forge_Daughter = "Silkshot-Forge_Daughter";
+    public const string Silkshot__Original = "Silkshot-Original";
+    public const string Silkshot__Twelfth_Architect = "Silkshot-Twelfth_Architect";
+    public const string Snare_Setter = "Snare_Setter";
+      //public const string Sting_Shard = "Sting_Shard";
+    public const string Straight_Pin = "Straight_Pin";
+    public const string Tacks = "Tacks";
+    public const string Threefold_Pin = "Threefold_Pin";
+    public const string Throwing_Ring = "Throwing_Ring";
+    public const string Voltvessels = "Voltvessels";
+
+    // blue tools (note: fractured mask, multibinder, snitch pick, spool extender are shop items; magma bell, sawtooth circlet are craftmetal shop items)
+    public const string Claw_Mirror = "Claw_Mirror";
+    public const string Claw_Mirrors = "Claw_Mirrors";
+    public const string Druid_s_Eye = "Druid's_Eye";
+    public const string Druid_s_Eyes = "Druid's_Eues";
+    public const string Egg_of_Flealia = "Egg_of_Flealia";
+      //public const string Fractured_Mask = "Fractured_Mask";
+    public const string Injector_Band = "Injector_Band";
+    public const string Longclaw = "Longclaw";
+      //public const string Magma_Bell = "Magma_Bell";
+    public const string Memory_Crystal = "Memory_Crystal";
+      //public const string Multibinder = "Multibinder";
+    public const string Pin_Badge = "Pin_Badge";
+    public const string Pollip_Pouch = "Pollip_Pouch";
+    public const string Quick_Sling = "Quick_Sling";
+    public const string Reserve_Bind = "Reserve_Bind";
+      //public const string Sawtooth_Circlet = "Sawtooth_Circlet";
+      //public const string Snitch_Pick = "Snitch_Pick";
+      //public const string Spool_Extender = "Spool_Extender";
+    public const string Volt_Filament = "Volt_Filament";
+    public const string Warding_Bell = "Warding_Bell";
+    public const string Weavelight = "Weavelight";
+    public const string Wispfire_Lantern = "Wispfire_Lantern";
+    public const string Wreath_of_Purity = "Wreath_of_Purity";
+
+    // yellow tools (note: ascendant's grip, compass, magnetite brooch, spider strings, thief's mark, weighted belt are shop items; scuttlebrace is a craftmetal shop item)
+      //public const string Ascendant_s_Grip = "Ascendant's_Grip";
+    public const string Barbed_Bracelet = "Barbed_Bracelet";
+      //public const string Compass = "Compass";
+    public const string Dead_Bug_s_Purse = "Dead_Bug's_Purse";
+      //public const string Magnetite_Brooch = "Magnetite_Brooch";
+    public const string Magnetite_Dice = "Magnetite_Dice";
+      //public const string Scuttlebrace = "Scuttlebrace";
+    public const string Shard_Pendant = "Shard_Pendant";
+    public const string Shell_Satchel = "Shell_Satchel"; // TODO: same as dead bug purse location?
+    public const string Silkspeed_Anklets = "Silkspeed_Anklets";
+      //public const string Spider_Strings = "Spider_Strings";
+      //public const string Thief_s_Mark = "Thief's_Mark";
+    public const string Weighted_Belt__Mort_Dead = "Weighted_Belt-Mort_Dead";
+
+    // TODO: collectable items
+
+    // keys (note: architect's key and two simple keys are shop items)
+      //public const string Architect_s_Key = "Architect's_Key";
+    public const string Bellhome_Key = "Bellhome_Key";
+    public const string Craw_Summons = "Craw_Summons";
+    public const string Diving_Bell_Key = "Diving_Bell_Key";
+    public const string Key_of_Apostate = "Key_of_Apostate";
+    public const string Key_of_Heretic = "Key_of_Heretic";
+    public const string Key_of_Indolent = "Key_of_Indolent";
+    public const string Simple_Key__Sinner_s_Road = "Simple_Key-Sinner's_Road";
+    public const string Simple_Key__Sands_of_Karak = "Simple_Key-Sands_of_Karak";
+    public const string Surgeon_s_Key = "Surgeon's_Key";
+    public const string White_Key = "White_Key";
+
+    // relics
+    public const string Arcane_Egg = "Arcane_Egg"; // Ancient Egg Abyss Middle
+    public const string Bone_Scroll__Burning_Bug = "Bone_Scroll-Burning_Bug"; // Bone Record Wisp Top
+    public const string Bone_Scroll__Lost_Pilgrim = "Bone_Scroll-Lost_Pilgrim"; // Bone Record Greymoor_flooded_corridor
+    public const string Bone_Scroll__Singed_Pilgrim = "Bone_Scroll-Singed_Pilgrim"; // Bone Record Bone_East_14
+    public const string Bone_Scroll__Underwprker = "Bone_Scroll-Underworker"; // Bone Record Understore_Map_Room
+    public const string Choral_Commandment__Eternity = "Choral_Commandment-Eternity"; // Seal Chit City Merchant
+    public const string Choral_Commandment__Light = "Choral_Commandment-Light"; // Seal Chit Silk Siphon
+    public const string Choral_Commandment__Surgeon = "Choral_Commandment-Surgeon"; // Seal Chit Ward Corpse
+    public const string Choral_Commandment__White_Wyrm = "Choral_Commandment-White_Wyrm"; // Seal Chit Aspid_01
+    public const string Psalm_Cylinder__Ascendence_Theme = "Psalm_Cylinder-Ascendence_Theme"; // Psalm Cylinder Hang
+    public const string Psalm_Cylinder__Choir_Voices = "Psalm_Cylinder-Choir_Voices"; // Psalm Cylinder Librarian
+    public const string Psalm_Cylinder__Salvation_Theme = "Psalm_Cylinder-Salvation_Theme"; // Psalm Cylinder Grindle
+    public const string Psalm_Cylinder__Sermon = "Psalm_Cylinder-Sermon"; // Psalm Cylinder Library Roof
+    public const string Psalm_Cylinder__Surgery = "Psalm_Cylinder-Surgery"; // Psalm Cylinder Ward
+    public const string Rune_Harp__Burden = "Rune_Harp-Burden"; // Weaver Record Conductor
+    public const string Rune_Harp__Escape = "Rune_Harp-Escape"; // Weaver Record Sprint_Challenge
+    public const string Rune_Harp__Eva = "Rune_Harp-Eva"; // Weaver Record Weave_08
+    public const string Sacred_Cylinder = "Sacred_Cylinder"; // Librarian Melody Cylinder
+    public const string Weaver_Effigy__Atla = "Weaver_Effigy-Atla"; // Weaver Totem Slab_Bottom
+    public const string Weaver_Effigy__Camora = "Weaver_Effigy-Camora"; // Weaver Totem Bonetown_upper_room
+    public const string Weaver_Effigy__Keelal = "Weaver_Effigy-Keelal"; // Weaver Totem Witch
+
+    // quills
+    public const string Quill__Purple = "Quill-Purple";
+    public const string Quill__Red = "Quill-Red";
+
+    // TODO: consumable items
+
+    // mementos (note: hearts listed with plot items)
+    public const string Craw_Memento = "Craw_Memento";
+    public const string Grey_Memento = "Grey_Memento";
+    public const string Guardian_s_Memento = "Guardian's_Memento";
+    public const string Hero_s_Memento = "Hero's_Memento";
+    public const string Hunter_s_Memento = "Hunter's_Memento";
+    public const string Sprintmaster_Memento = "Sprintmaster_Memento";
+    public const string Surface_Memento = "Surface_Memento";
+
+    // bellhome upgrades
+    public const string Crawbell = "Crawbell";
+    public const string Farsight = "Farsight";
+    public const string Materium = "Materium";
+
+    // TODO: finite quest items
+
+    // TODO: rosary chests, rosary and shell deposits, lore tablets, 
+
+    // TODO: Styx/Skynx
+}
