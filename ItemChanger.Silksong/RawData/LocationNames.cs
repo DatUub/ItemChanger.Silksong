@@ -183,7 +183,59 @@ public static class LocationNames
 
     // TODO: finite quest items
 
-    // TODO: rosary chests, rosary and shell deposits, lore tablets, 
+    // TODO: rosary chests, rosary and shell deposits,
+
+    // Lore tablets
+    public const string Lore_Tablet__Abyss_Top = "Lore_Tablet-Abyss_Top";
+    public const string Lore_Tablet__Abyss_Bottom_Left = "Lore_Tablet-Abyss_Bottom_Left";
+    public const string Lore_Tablet__Fleatopia_Weaver_Harp = "Lore_Tablet-Fleatopia_Weaver_Harp";
+    public const string Lore_Tablet__Memorium_Entrance = "Lore_Tablet-Memorium_Entrance";
+    public const string Lore_Tablet__Memorium_Orders = "Lore_Tablet-Memorium_Orders";
+    public const string Lore_Tablet__Bellhart_East = "Lore_Tablet-Bellhart_East";
+    public const string Lore_Tablet__Bellhart_West = "Lore_Tablet-Bellhart_West";
+    public const string Lore_Tablet__Marrow_Start = "Lore_Tablet-Marrow_Start";
+    public const string Lore_Tablet__Marrow_Top = "Lore_Tablet-Marrow_Top";
+    public const string Lore_Tablet__Pilgrims_Rest = "Lore_Tablet-Pilgrims_Rest";
+    public const string Lore_Tablet__Weavenest_Cindril = "Lore_Tablet-Weavenest_Cindril";
+    public const string Lore_Tablet__Verdania_End = "Lore_Tablet-Verdania_End";
+    public const string Lore_Tablet__Verdania_Fountains = "Lore_Tablet-Verdania_Fountains";
+    public const string Lore_Tablet__Blasted_Steps_Start = "Lore_Tablet-Blasted_Steps_Start";
+    public const string Lore_Tablet__Karak_Entrance = "Lore_Tablet-Karak_Entrance";
+    public const string Lore_Tablet__Blasted_Steps_Nursery = "Lore_Tablet-Blasted_Steps_Nursery";
+    public const string Lore_Tablet__Coral_Tower = "Lore_Tablet-Coral_Tower";
+    public const string Lore_Tablet__Cradle_Cage_1 = "Lore_Tablet-Cradle_Cage_1";
+    public const string Lore_Tablet__Cradle_Cage_2 = "Lore_Tablet-Cradle_Cage_2";
+    public const string Lore_Tablet__Cradle_Cage_3 = "Lore_Tablet-Cradle_Cage_3";
+    public const string Lore_Tablet__Greymoor_Orders_Above_Home = "Lore_Tablet-Greymoor_Orders_Above_Home";
+    public const string Lore_Tablet__Greymoor_Bottom = "Lore_Tablet-Greymoor_Bottom";
+    public const string Lore_Tablet__Nuu_Scroll = "Lore_Tablet-Nuu_Scroll";
+    public const string Lore_Tablet__Trobbio_Sign = "Lore_Tablet-Trobbio_Sign";
+    public const string Lore_Tablet__Trobbio_Notes = "Lore_Tablet-Trobbio_Notes";  // Typically should roll into the quill location like world sense in HK
+    // public const string Lore_Tablet__Trobbio_Notes_Act_3 = "Lore_Tablet-Trobbio_Notes_Act_3";  // This should be the same location as the act 2 one
+    public const string Lore_Tablet__Mosshome_Below_Silkspear = "Lore_Tablet-Mosshome_Below_Silkspear";  // No needolin needed
+    public const string Lore_Tablet__Mosshome_Below_Silkspear_Harp = "Lore_Tablet-Mosshome_Below_Silkspear_Harp";  // Needs needolin
+    public const string Lore_Tablet__Mount_Fay_Bottom = "Lore_Tablet-Mount_Fay_Bottom";
+    public const string Lore_Tablet__Deep_Docks_Forge = "Lore_Tablet-Deep_Docks_Forge";
+    public const string Lore_Tablet__Bilewater_Shortcut = "Lore_Tablet-Bilewater_Shortcut";
+    public const string Lore_Tablet__Bilewater_Above_Groal = "Lore_Tablet-Bilewater_Above_Groal";
+    public const string Lore_Tablet__Weavenest_Murglin = "Lore_Tablet-Weavenest_Murglin";
+    public const string Lore_Tablet__Shellwood_West = "Lore_Tablet-Shellwood_West";
+    public const string Lore_Tablet__Shellwood_Harp = "Lore_Tablet-Shellwood_Harp";
+    public const string Lore_Tablet__Nyleth = "Lore_Tablet-Nyleth";
+    public const string Lore_Tablet__Slab_Orders_1 = "Lore_Tablet-Slab_Orders_1";
+    public const string Lore_Tablet__Slab_Orders_2 = "Lore_Tablet-Slab_Orders_2";
+    public const string Lore_Tablet__First_Sinner = "Lore_Tablet-First_Sinner";
+    public const string Lore_Tablet__Ventrica_Hub = "Lore_Tablet-Ventrica_Hub";
+    public const string Lore_Tablet__Moss_Grotto_Chapel_Entrance = "Lore_Tablet-Moss_Grotto_Chapel_Entrance";
+    public const string Lore_Tablet__Moss_Grotto_Chapel_Inner = "Lore_Tablet-Moss_Grotto_Chapel_Inner";
+    public const string Lore_Tablet__Whiteward_Oath = "Lore_Tablet-Whiteward_Oath";
+    public const string Lore_Tablet__Weavenest_Atla_East = "Lore_Tablet-Weavenest_Atla_East";
+
+    public const string Journal_Entry__Void_Tendrils = "Journal_Entry-Void_Tendrils";
+    public const string Materium__Flintstone = "Materium-Flintstone";
+    public const string Materium__Roach Guts = "Materium-Roach Guts";
+    public const string Materium__Voltridian = "Materium-Voltridian";
+    public const string Materium__Magnetite = "Materium-Magnetite";
 
     // TODO: Styx/Skynx
 }
