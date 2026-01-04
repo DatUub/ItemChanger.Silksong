@@ -124,6 +124,52 @@ public static class LocationNames
     public const string Weighted_Belt__Mort_Dead = "Weighted_Belt-Mort_Dead";
 
     // TODO: collectable items
+    // silk hearts
+    public const string Silk_Heart__Bell_Beast = "Silk_Heart-Bell_Beast";
+    public const string Silk_Heart__Lace = "Silk_Heart-Lace";
+    public const string Silk_Heart__Unravelled = "Silk_Heart-Unravelled";
+
+    // pale oil
+    public const string Pale_Oil__Fleatopia = "Pale_Oil-Fleatopia"; // Quest reward
+    public const string Pale_Oil__Grand_Gourmet = "Pale_Oil-Grand_Gourmet"; // Quest reward
+    public const string Pale_Oil__Whispering_Vaults = "Pale_Oil-Whispering_Vaults";
+
+    // mask shards - 14 objects, 4 quest rewards, 2 in shops
+    public const string Mask_Shard__Bilewater = "Mask_Shard-Bilewater";
+    public const string Mask_Shard__Blasted_Steps = "Mask_Shard-Blasted_Steps";
+    public const string Mask_Shard__Brightvein = "Mask_Shard-Savage_Brightvein";
+    public const string Mask_Shard__Cogwork_Core = "Mask_Shard-Cogwork_Core";
+    public const string Mask_Shard__Dark_Hearts = "Mask_Shard-Dark_Hearts"; // Quest reward
+    public const string Mask_Shard__Deep_Docks = "Mask_Shard-Deep_Docks";
+    public const string Mask_Shard__Far_Fields = "Mask_Shard-Far_Fields";
+    public const string Mask_Shard__Gurr = "Mask_Shard-Gurr"; // Quest reward
+    public const string Mask_Shard__Lava_Arena = "Mask_Shard-Lava_Arena";
+    public const string Mask_Shard__Mount_Fay = "Mask_Shard-Mount_Fay";
+    public const string Mask_Shard__Sprintmaster = "Mask_Shard-Sprintmaster"; // Quest reward
+    public const string Mask_Shard__Savage_Beastfly = "Mask_Shard-Savage_Beastfly"; // Quest reward
+    public const string Mask_Shard__Shellwood = "Mask_Shard-Shellwood";
+    public const string Mask_Shard__The_Slab = "Mask_Shard-The_Slab";
+    public const string Mask_Shard__Weavenest_Atla = "Mask_Shard-Weavenest_Atla"; // Technically not in Weavenest though? Open to other names.
+    public const string Mask_Shard__Whispering_Vaults = "Mask_Shard-Whispering_Vaults";
+    public const string Mask_Shard__Wisp_Thicket = "Mask_Shard-Wisp_Thicket";
+    public const string Mask_Shard__Wormways = "Mask_Shard-Wormways";
+    
+    // spool fragments - 13 objects, 3 at shops, 1 quest, 1 flea reward
+    public const string Spool_Fragment__Cogwork_Core = "Spool_Fragment-Cogwork_Core";
+    public const string Spool_Fragment__Deep_Docks_East = "Spool_Fragment-Deep_Docks_East";
+    public const string Spool_Fragment__Deep_Docks_West = "Spool_Fragment-Deep_Docks_West";
+    public const string Spool_Fragment__Flea_Caravan = "Spool_Fragment-Flea_Caravan"; // Not sure how this one's handled
+    public const string Spool_Fragment__Grand_Gate = "Spool_Fragment-Grand_Gate";
+    public const string Spool_Fragment__Greymoor = "Spool_Fragment-Greymoor";
+    public const string Spool_Fragment__High_Halls = "Spool_Fragment-High_Halls";
+    public const string Spool_Fragment__Memorium = "Spool_Fragment-Memorium";
+    public const string Spool_Fragment__Mosshome = "Spool_Fragment-Mosshome";
+    public const string Spool_Fragment__Sherma = "Spool_Fragment-Sherma"; // Quest location
+    public const string Spool_Fragment__Underworks_Arena = "Spool_Fragment-Underworks_Arena";
+    public const string Spool_Fragment__Underworks_Spikes = "Spool_Fragment-Underworks_Spikes";
+    public const string Spool_Fragment__The_Slab = "Spool_Fragment-The_Slab"; // Potentially Mount Fay
+    public const string Spool_Fragment__Weavenest_Atla = "Spool_Fragment-Weavenest_Atla";
+    public const string Spool_Fragment__Whiteward = "Spool_Fragment-Whiteward";
 
     // keys (note: architect's key and two simple keys are shop items)
       //public const string Architect_s_Key = "Architect's_Key";
@@ -143,7 +189,7 @@ public static class LocationNames
     public const string Bone_Scroll__Burning_Bug = "Bone_Scroll-Burning_Bug"; // Bone Record Wisp Top
     public const string Bone_Scroll__Lost_Pilgrim = "Bone_Scroll-Lost_Pilgrim"; // Bone Record Greymoor_flooded_corridor
     public const string Bone_Scroll__Singed_Pilgrim = "Bone_Scroll-Singed_Pilgrim"; // Bone Record Bone_East_14
-    public const string Bone_Scroll__Underwprker = "Bone_Scroll-Underworker"; // Bone Record Understore_Map_Room
+    public const string Bone_Scroll__Underworker = "Bone_Scroll-Underworker"; // Bone Record Understore_Map_Room
     public const string Choral_Commandment__Eternity = "Choral_Commandment-Eternity"; // Seal Chit City Merchant
     public const string Choral_Commandment__Light = "Choral_Commandment-Light"; // Seal Chit Silk Siphon
     public const string Choral_Commandment__Surgeon = "Choral_Commandment-Surgeon"; // Seal Chit Ward Corpse
