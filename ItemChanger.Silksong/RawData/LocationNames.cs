@@ -15,7 +15,7 @@ public static class LocationNames
     // Silk skills
     public const string Cross_Stitch = "Cross_Stitch";
     public const string Pale_Nails = "Pail_Nails";
-    public const string Rune_Rage = "Rune_Range";
+    public const string Rune_Rage = "Rune_Rage";
     public const string Sharpdart = "Sharpdart";
     public const string Silkspear = "Silkspear";
     public const string Thread_Storm = "Thread_Storm";
@@ -75,6 +75,8 @@ public static class LocationNames
     public const string Silkshot__Forge_Daughter = "Silkshot-Forge_Daughter";
     public const string Silkshot__Original = "Silkshot-Original";
     public const string Silkshot__Twelfth_Architect = "Silkshot-Twelfth_Architect";
+    public const string Silkshot__Mount_Fay = "Silkshot-Mount_Fay";
+    public const string Ruined_Tool = "Ruined_Tool";  // Bilewater - Weavenest Murglin
     public const string Snare_Setter = "Snare_Setter";
       //public const string Sting_Shard = "Sting_Shard";
     public const string Straight_Pin = "Straight_Pin";
@@ -87,7 +89,7 @@ public static class LocationNames
     public const string Claw_Mirror = "Claw_Mirror";
     public const string Claw_Mirrors = "Claw_Mirrors";
     public const string Druid_s_Eye = "Druid's_Eye";
-    public const string Druid_s_Eyes = "Druid's_Eues";
+    public const string Druid_s_Eyes = "Druid's_Eyes";
     public const string Egg_of_Flealia = "Egg_of_Flealia";
       //public const string Fractured_Mask = "Fractured_Mask";
     public const string Injector_Band = "Injector_Band";
@@ -257,6 +259,22 @@ public static class LocationNames
     public const string Materium = "Materium";
 
     // TODO: finite quest items
+
+    // rosary necklaces (pickup locations)
+    public const string Rosary_Necklace__Hunters_March = "Rosary_Necklace-Hunters_March";
+    public const string Rosary_Necklace__Choral_Chambers_1 = "Rosary_Necklace-Choral_Chambers_1";
+    public const string Rosary_Necklace__Choral_Chambers_2 = "Rosary_Necklace-Choral_Chambers_2";
+    public const string Rosary_Necklace__Wisp_Thicket = "Rosary_Necklace-Wisp_Thicket";
+    public const string Rosary_Necklace__Frey = "Rosary_Necklace-Frey";
+
+    // heavy rosary necklaces
+    public const string Heavy_Rosary_Necklace__Skull_Tyrant = "Heavy_Rosary_Necklace-Skull_Tyrant";  // Quest reward
+    public const string Heavy_Rosary_Necklace__Loddie_Challenge_2 = "Heavy_Rosary_Necklace-Loddie_Challenge_2";  // Quest reward
+    public const string Heavy_Rosary_Necklace__Cloaks_of_Choir = "Heavy_Rosary_Necklace-Cloaks_of_Choir";  // Quest reward
+    public const string Heavy_Rosary_Necklace__Fine_Pins = "Heavy_Rosary_Necklace-Fine_Pins";  // Quest reward
+    public const string Heavy_Rosary_Necklace__Wailing_Mother = "Heavy_Rosary_Necklace-Wailing_Mother";  // Quest reward
+    public const string Heavy_Rosary_Necklace__Choral_Chambers = "Heavy_Rosary_Necklace-Choral_Chambers";
+    public const string Heavy_Rosary_Necklace__Whispering_Vaults = "Heavy_Rosary_Necklace-Whispering_Vaults";
 
     // rosary deposits
     public const string Rosary_Set__Tutorial = "Rosary_Set-Tutorial";
@@ -468,6 +486,15 @@ public static class LocationNames
     public const string Quest_Reward__Mask_Shard_Beastfly = "Quest_Reward-Mask_Shard_Beastfly";  // Savage Beastfly
     public const string Quest_Reward__Spool_Fragment_Sherma = "Quest_Reward-Spool_Fragment_Sherma";  // Balm for the Wounded
     public const string Quest_Reward__Crest_of_Witch = "Quest_Reward-Crest_of_Witch";  // Infestation Operation (Yarnaby)
+    public const string Quest_Reward__Crafting_Kit_Crawbugs = "Quest_Reward-Crafting_Kit_Crawbugs";  // Crawbug Clearing
+    public const string Quest_Reward__Rosary_Necklace_Pilgrims = "Quest_Reward-Rosary_Necklace_Pilgrims";  // Garb of the Pilgrims
+    public const string Quest_Reward__Memory_Locket_Flintbeetles = "Quest_Reward-Memory_Locket_Flintbeetles";  // Volatile Flintbeetles
+    public const string Quest_Reward__Rosary_120_Queens_Egg = "Quest_Reward-Rosary_120_Queens_Egg";  // Queen's Egg delivery
+    public const string Quest_Reward__Needle_Upgrade_Pinmaster = "Quest_Reward-Needle_Upgrade_Pinmaster";  // Pinmaster's Oil
+
+    // rosary string banking service locations
+    public const string Rosary_String__Pebb = "Rosary_String-Pebb";  // Converts 80 Rosaries to 60 banking item
+    public const string Rosary_String__Frey = "Rosary_String-Frey";
 
     // Novelty/cursed locations
     public const string Flea_Shop = "Flea_Shop";  // threshold shop; should consume the mooshka silk spool, fleatopia tool pouch, egg of flealia
