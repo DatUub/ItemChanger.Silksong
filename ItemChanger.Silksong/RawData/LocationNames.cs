@@ -271,7 +271,7 @@ public static class LocationNames
     public const string Shell_Shard_Fossil__Under_17_1 = "Shell_Shard_Fossil-Under_17_1";
     public const string Shell_Shard_Fossil__Under_17_2 = "Shell_Shard_Fossil-Under_17_2";
     public const string Shell_Shard_Fossil__Under_17_3 = "Shell_Shard_Fossil-Under_17_3";
-    
+
     */
 
     // beast shards - 9 total (6 boss drops, 2 glowing spots, 1 quest reward)
@@ -608,7 +608,7 @@ public static class LocationNames
     public const string Memory_Locket__Bilewater_Cocoon_Corpse = "Memory_Locket-Bilewater_Cocoon_Corpse";
     public const string Memory_Locket__Bilewater_Hidden_Room_West_Bench = "Memory_Locket-Bilewater_Hidden_Room_West_Bench";
     public const string Memory_Locket__Blasted_Steps = "Memory_Locket-Blasted_Steps";
-    public const string Memory_Locket__Coral_Chambers = "Memory_Locket-Underworks_2";
+    public const string Memory_Locket__Coral_Chambers = "Memory_Locket-Coral_Chambers";
     public const string Memory_Locket__Deep_Docks = "Memory_Locket-Deep_Docks";
     public const string Memory_Locket__Far_Fields_Secret = "Memory_Locket-Far_Fields_Secret";
     public const string Memory_Locket__Greymoor_HH = "Memory_Locket-Greymoor_HH";
