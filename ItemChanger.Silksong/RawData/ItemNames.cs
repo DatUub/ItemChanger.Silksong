@@ -226,9 +226,9 @@ public static class ItemNames
 
     // materium types (submenu items for Materium)
     public const string Materium__Flintstone = "Materium-Flintstone";
-    public const string Materium__Magnetite = "Materium-Magnetite";
     public const string Materium__Roach_Guts = "Materium-Roach_Guts";
     public const string Materium__Voltridian = "Materium-Voltridian";
+    public const string Materium__Magnetite = "Materium-Magnetite";
 
     // rosary items
     public const string Rosary_Bell = "Rosary_Bell";
@@ -249,9 +249,26 @@ public static class ItemNames
     public const string Rosary_Necklace = "Rosary_Necklace";
     public const string Rosary_String = "Rosary_String";
 
-    // fast travel (generic items)
-    public const string Bellway = "Bellway";
-    public const string Ventrica = "Ventrica";
+    // Fast travel
+    public const string Bellway__Bone_Bottom = "Bellway-Bone_Bottom";
+    public const string Bellway__The_Marrow = "Bellway-The_Marrow";
+    public const string Bellway__Deep_Docks = "Bellway-Deep_Docks";
+    public const string Bellway__Far_Fields = "Bellway-Far_Fields";
+    public const string Bellway__Greymoor = "Bellway-Greymoor";
+    public const string Bellway__Bellhart = "Bellway-Bellhart";
+    public const string Bellway__Shellwood = "Bellway-Shellwood";
+    public const string Bellway__Blasted_Steps = "Bellway-Blasted_Steps";
+    public const string Bellway__The_Slab = "Bellway-The_Slab";
+    public const string Bellway__Grand_Bellway = "Bellway-Grand_Bellway";
+    public const string Bellway__Bilewater = "Bellway-Bilewater";
+    public const string Bellway__Putrified_Ducts = "Bellway-Putrified_Ducts";
+    public const string Ventrica__Terminus = "Ventrica-Terminus";
+    public const string Ventrica__Memorium = "Ventrica-Memorium";
+    public const string Ventrica__High_Halls = "Ventrica-High_Halls";
+    public const string Ventrica__First_Shrine = "Ventrica-First_Shrine";
+    public const string Ventrica__Choral_Chambers = "Ventrica-Choral_Chambers";
+    public const string Ventrica__Grand_Bellway = "Ventrica-Grand_Bellway";
+    public const string Ventrica__Underworks = "Ventrica-Underworks";
 
     // maps
     public const string Bellhart_Map = "Bellhart_Map";
@@ -283,8 +300,53 @@ public static class ItemNames
     public const string Whiteward_Map = "Whiteward_Map";
     public const string Wormways_Map = "Wormways_Map";
 
-    // lore tablets (generic item)
-    public const string Lore_Tablet = "Lore_Tablet";
+    // Lore tablets
+    public const string Lore_Tablet__Abyss_Void_Cleanse = "Lore_Tablet-Abyss_Void_Cleanse";
+    public const string Lore_Tablet__Abyss_Void_Prayer = "Lore_Tablet-Abyss_Void_Prayer";
+    public const string Lore_Tablet__Fleatopia_Weaver_Harp = "Lore_Tablet-Fleatopia_Weaver_Harp";
+    public const string Lore_Tablet__Memorium_Entrance = "Lore_Tablet-Memorium_Entrance";
+    public const string Lore_Tablet__Memorium_Containment = "Lore_Tablet-Memorium_Containment";
+    public const string Lore_Tablet__Bellhart_Pilgrim_East = "Lore_Tablet-Bellhart_Pilgrim_East";
+    public const string Lore_Tablet__Bellhart_Pilgrim_West = "Lore_Tablet-Bellhart_Pilgrim_West";
+    public const string Lore_Tablet__Bellhart_Plinney = "Lore_Tablet-Bellhart_Plinney";
+    public const string Lore_Tablet__Marrow_Pilgrim = "Lore_Tablet-Marrow_Pilgrim";
+    public const string Lore_Tablet__Marrow_Twisted_Shells = "Lore_Tablet-Marrow_Twisted_Shells";
+    public const string Lore_Tablet__Far_Fields_Pilgrim = "Lore_Tablet-Far_Fields_Pilgrim";
+    public const string Lore_Tablet__Weavenest_Murglin = "Lore_Tablet-Weavenest_Murglin";
+    public const string Lore_Tablet__Verdania_Twins = "Lore_Tablet-Verdania_Twins";
+    public const string Lore_Tablet__Verdania_Fountains = "Lore_Tablet-Verdania_Fountains";
+    public const string Lore_Tablet__Verdania_Shrine = "Lore_Tablet-Verdania_Shrine";
+    public const string Lore_Tablet__Blasted_Steps_Arbiter = "Lore_Tablet-Blasted_Steps_Arbiter";
+    public const string Lore_Tablet__Blasted_Steps_Pilgrim = "Lore_Tablet-Blasted_Steps_Pilgrim";
+    public const string Lore_Tablet__Blasted_Steps_Pinstress = "Lore_Tablet-Blasted_Steps_Pinstress";
+    public const string Lore_Tablet__Coral_Tower = "Lore_Tablet-Coral_Tower";
+    public const string Lore_Tablet__Cradle_Blackbarrens = "Lore_Tablet-Cradle_Blackbarrens";
+    public const string Lore_Tablet__Cradle_Sandsea = "Lore_Tablet-Cradle_Sandsea";
+    public const string Lore_Tablet__Cradle_Steel_City = "Lore_Tablet-Cradle_Steel_City";
+    public const string Lore_Tablet__Greymoor_Orders = "Lore_Tablet-Greymoor_Orders";
+    public const string Lore_Tablet__Greymoor_Litany = "Lore_Tablet-Greymoor_Litany";
+    public const string Lore_Tablet__Whispering_Vaults_Trobbio = "Lore_Tablet-Whispering_Vaults_Trobbio";
+    public const string Lore_Tablet__Whispering_Vaults_Trobbio_Act_2 = "Lore_Tablet-Whispering_Vaults_Trobbio_Act_2";
+    public const string Lore_Tablet__Whispering_Vaults_Tormented = "Lore_Tablet-Whispering_Vaults_Tormented";
+    public const string Lore_Tablet__Moss_Grotto_Chapel_Anguished = "Lore_Tablet-Moss_Grotto_Chapel_Anguished";
+    public const string Lore_Tablet__Moss_Grotto_Chapel_Flickering = "Lore_Tablet-Moss_Grotto_Chapel_Flickering";
+    public const string Lore_Tablet__Mount_Fay = "Lore_Tablet-Mount_Fay";
+    public const string Lore_Tablet__Deep_Docks = "Lore_Tablet-Deep_Docks";
+    public const string Lore_Tablet__Bilewater_Hate = "Lore_Tablet-Bilewater_Hate";
+    public const string Lore_Tablet__Bilewater_Punish = "Lore_Tablet-Bilewater_Punish";
+    public const string Lore_Tablet__Shellwood_Pilgrim = "Lore_Tablet-Shellwood_Pilgrim";
+    public const string Lore_Tablet__Shellwood_Weaver = "Lore_Tablet-Shellwood_Weaver";
+    public const string Lore_Tablet__Bone_Bottom_Weaver = "Lore_Tablet-Bone_Bottom_Weaver";
+    public const string Lore_Tablet__Bone_Bottom_Weaver_Harp = "Lore_Tablet-Bone_Bottom_Weaver_Harp";
+    public const string Lore_Tablet__Slab_Penance_Fourth = "Lore_Tablet-Slab_Penance_Fourth";
+    public const string Lore_Tablet__Slab_Penance_Eighth = "Lore_Tablet-Slab_Penance_Eighth";
+    public const string Lore_Tablet__Slab_First_Sinner = "Lore_Tablet-Slab_First_Sinner";
+    public const string Lore_Tablet__Terminus_Ventrica = "Lore_Tablet-Terminus_Ventrica";
+    public const string Lore_Tablet__Grand_Gate = "Lore_Tablet-Grand_Gate";
+    public const string Lore_Tablet__Whiteward_Oath = "Lore_Tablet-Whiteward_Oath";
+    public const string Lore_Tablet__Weavenest_Atla = "Lore_Tablet-Weavenest_Atla";
+    public const string Lore_Tablet__Putrified_Ducts_Mr_Mushroom = "Lore_Tablet-Putrified_Ducts_Mr_Mushroom";
+    public const string Lore_Tablet__Putrified_Ducts_Pale_Lake = "Lore_Tablet-Putrified_Ducts_Pale_Lake";
 
     // memory lockets
     public const string Memory_Locket = "Memory_Locket";
@@ -331,8 +393,8 @@ public static class ItemNames
     public const string Ruined_Tool = "Ruined_Tool";
     public const string Vintage_Nectar = "Vintage_Nectar";
 
-    // journal entries (generic item)
-    public const string Journal_Entry = "Journal_Entry";
+    // journal entries
+    public const string Journal_Entry__Void_Tendrils = "Journal_Entry-Void_Tendrils";
 
     // map markers
     public const string Bronze_Marker = "Bronze_Marker";
