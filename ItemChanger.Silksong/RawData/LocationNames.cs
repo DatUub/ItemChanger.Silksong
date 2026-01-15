@@ -664,20 +664,6 @@ public static class LocationNames
     public const string Twisted_Bud = "Twisted_Bud";
     public const string Vintage_Nectar = "Vintage_Nectar";
 
-    // From Respawnable Enemies
-
-    public const string Choir_Cloak = "Choir_Cloak"; //Max of 16
-    public const string Fine_Pin = "Fine_Pin"; //Max of 12
-    public const string Pilgrim_Shawl = "Pilgrim_Shawl"; //Max of 12
-    public const string Plasmified_Blood = "Plasmified_Blood"; //Max of 10 not technically picked up though
-    public const string Ragpelt = "Ragpelt"; //Max of 25 Craws drop 1 Tall and Squatcraws drop 2-5 so possible extras
-    public const string Roach_Guts = "Roach_Guts"; //Max of 10
-    public const string Seared_Organ = "Seared_Organ"; // Max of 15
-    public const string Shredded_Organ = "Shredded_Organ"; // Max of 35 Drops in terms of 3 so one extra
-    public const string Skewered_Organ = "Skewered_Organ"; // Max of 10
-    public const string Silver_Bell = "Silver_Bell"; //Max of 8
-    public const string Spine_Core = "Spine_Core"; //Max of 25
-
     // Deliveries from the Couriers
 
     public const string Courier_s_Rasher = "Courier's_Rasher";
