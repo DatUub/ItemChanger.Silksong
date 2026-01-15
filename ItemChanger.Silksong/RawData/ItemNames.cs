@@ -357,18 +357,18 @@ public static class ItemNames
     */
 
     // Novelty/cursed items
-    public const string Double_Mask_Shard = "Double_Mask_Shard";
+    public const string Left_Cling_Grip = "Left_Cling_Grip";
+    public const string Right_Cling_Grip = "Right_Cling_Grip";
+    public const string Left_Clawline = "Left_Clawline";
+    public const string Right_Clawline = "Right_Clawline";
+    public const string Left_Swift_Step = "Left_Swift_Step";
+    public const string Right_Swift_Step = "Right_Swift_Step";
+    public const string Leftslash = "Leftslash";
+    public const string Rightslash = "Rightslash";
+    public const string Upslash = "Upslash";
     public const string Downslash = "Downslash";
+    public const string Taunt = "Taunt";
+    public const string Double_Mask_Shard = "Double_Mask_Shard";
     public const string Full_Mask = "Full_Mask";
     public const string Full_Spool = "Full_Spool";
-    public const string Left_Clawline = "Left_Clawline";
-    public const string Left_Cling_Grip = "Left_Cling_Grip";
-    public const string Left_Swift_Step = "Left_Swift_Step";
-    public const string Leftslash = "Leftslash";
-    public const string Right_Clawline = "Right_Clawline";
-    public const string Right_Cling_Grip = "Right_Cling_Grip";
-    public const string Right_Swift_Step = "Right_Swift_Step";
-    public const string Rightslash = "Rightslash";
-    public const string Taunt = "Taunt";
-    public const string Upslash = "Upslash";
 }
