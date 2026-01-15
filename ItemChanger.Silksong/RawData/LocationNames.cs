@@ -379,7 +379,7 @@ public static class LocationNames
     public const string Farsight = "Farsight";
     public const string Materium = "Materium";
 
- // materium types (submenu items for Materium)
+    // materium types (submenu items for Materium)
     public const string Materium__Flintstone = "Materium-Flintstone";
     public const string Materium__Magnetite = "Materium-Magnetite";
     public const string Materium__Roach_Guts = "Materium-Roach_Guts";
