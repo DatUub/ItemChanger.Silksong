@@ -4,12 +4,16 @@ namespace ItemChanger.Silksong.Util;
 
 public static class MessageUtil
 {
-    private static readonly Queue<ICMsg> messages = [];
+    private static readonly Queue<ColorMsg> messages = [];
 
     public static void EnqueueMessage(string text, Sprite? sprite = null, Color? modifyTextColor = null)
     {
-        GlobalRefs.Logger.LogInfo("Received message: " + text);
-        messages.Enqueue(new(text, sprite ?? SpriteUtil.Empty, modifyTextColor ?? Color.white));
+        messages.Enqueue(new(new ICMsg(text, sprite ?? SpriteUtil.Empty), modifyTextColor ?? Color.white));
+    }
+
+    public static void EnqueueMessage(ICollectableUIMsgItem msg, Color? modifyTextColor = null)
+    {
+        messages.Enqueue(new(msg, modifyTextColor ?? Color.white));
     }
 
     public static void Error()
@@ -43,11 +47,11 @@ public static class MessageUtil
 
         public void Update()
         {
-            if (canSendMessage && messages.TryDequeue(out ICMsg msg))
+            if (canSendMessage && messages.TryDequeue(out ColorMsg msg))
             {
                 try
                 {
-                    CollectableUIMsg.Spawn(msg, msg.TextColor, replacing: null, forceReplacingEffect: false);
+                    CollectableUIMsg.Spawn(msg.Message, msg.Color, replacing: null, forceReplacingEffect: false);
                     canSendMessage = false;
                     this.ExecuteDelayed(3f, () => canSendMessage = true); // messages have a normal duration of ~4.75f
                 }
@@ -67,15 +71,21 @@ public static class MessageUtil
         }
     }
 
-    private class ICMsg(string message, Sprite sprite, Color textColor) : ICollectableUIMsgItem
+    private readonly struct ColorMsg(ICollectableUIMsgItem message, Color color)
+    {
+        public ColorMsg(ICollectableUIMsgItem message) : this(message, Color.white) { }
+        public ICollectableUIMsgItem Message { get; } = message;
+        public Color Color { get; } = color;
+    }
+
+    private class ICMsg(string message, Sprite sprite) : ICollectableUIMsgItem
     {
         public string Message { get; } = message;
         public Sprite Sprite { get; } = sprite;
-        public Color TextColor { get; } = textColor;
 
         public UObject GetRepresentingObject()
         {
-            return GameManager.instance.gameObject;
+            return MessageController.Instance;
         }
 
         public float GetUIMsgIconScale() => 1f;
