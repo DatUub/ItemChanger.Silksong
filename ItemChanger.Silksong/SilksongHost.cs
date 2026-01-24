@@ -4,12 +4,16 @@ using ItemChanger.Logging;
 using ItemChanger.Modules;
 using ItemChanger.Silksong.Modules;
 using ItemChanger.Silksong.StartDefs;
+using ItemChanger.Silksong.Util;
 
 namespace ItemChanger.Silksong
 {
     public class SilksongHost : ItemChangerHost
     {
-        internal SilksongHost() { }
+        internal SilksongHost() 
+        {
+            MessageUtil.Setup();
+        }
 
         public override ILogger Logger { get; } = new PluginLogger();
 
