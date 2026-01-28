@@ -3,6 +3,7 @@ using ItemChanger.Events;
 using ItemChanger.Logging;
 using ItemChanger.Modules;
 using ItemChanger.Silksong.Modules;
+using ItemChanger.Silksong.RawData;
 
 namespace ItemChanger.Silksong
 {
@@ -18,7 +19,17 @@ namespace ItemChanger.Silksong
             DefaultMultiItemContainer = Containers.ChestContainer.Instance,
         };
 
-        public override Finder Finder { get; } = new();
+        public override Finder Finder { get; } = CreateFinder();
+
+        private static Finder CreateFinder()
+        {
+            var finder = new Finder();
+            foreach (var item in BaseItemList.GetItems())
+            {
+                finder.DefineItem(item);
+            }
+            return finder;
+        }
 
         public override IEnumerable<Module> BuildDefaultModules()
         {
@@ -62,7 +73,7 @@ namespace ItemChanger.Silksong
                 return;
             }
 
-            gameInvoker?.NotifyPersistentUpdate(); // TODO: move to execute before IC.Core
+            gameInvoker?.NotifyPersistentUpdate();
         }
 
         private void OnResetSemiPersistentItems(On.GameManager.orig_ResetSemiPersistentItems orig, GameManager self)

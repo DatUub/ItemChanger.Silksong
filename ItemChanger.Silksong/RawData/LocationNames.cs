@@ -629,8 +629,5 @@ public static class LocationNames
 
 
 
-    // TODOs
 
-    
-    // Shard Deposits
 }

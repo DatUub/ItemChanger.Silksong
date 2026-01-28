@@ -15,23 +15,9 @@ namespace ItemChanger.Silksong
             new SilksongHost();
             Logger.LogInfo($"Plugin {Name} ({Id}) has loaded!");
 
-            //StartCoroutine(WaitToDo());
+            
         }
 
-        private System.Collections.IEnumerator WaitToDo()
-        {
-            while (true)
-            {
-                try
-                {
-                    yield break;
-                }
-                catch (Exception e)
-                {
-                    Logger.LogError(e);
-                }
-                yield return null;
-            }
-        }
+
     }
 }
