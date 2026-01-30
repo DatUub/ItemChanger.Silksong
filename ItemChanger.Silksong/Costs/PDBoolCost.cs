@@ -1,6 +1,7 @@
-﻿using ItemChanger.Costs;
+using ItemChanger.Costs;
 using ItemChanger.Serialization;
-using System;
+using ItemChanger.Silksong.Serialization;
+using TeamCherry.Localization;
 
 namespace ItemChanger.Silksong.Costs
 {
@@ -8,12 +9,12 @@ namespace ItemChanger.Silksong.Costs
     {
         public override string GetCostText()
         {
-            throw new NotImplementedException();
+            return string.Format(Language.Get("COST_PDBOOL", "Fmt"), BoolName);
         }
 
         protected override IBool GetValueSource()
         {
-            throw new NotImplementedException();
+            return new PDBool(BoolName);
         }
     }
 }

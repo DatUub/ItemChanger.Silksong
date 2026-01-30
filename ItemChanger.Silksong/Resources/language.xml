@@ -1,3 +1,4 @@
-﻿<Language>
+<Language>
   <entry sheet="Fmt" key="PAY_ROSARIES">{0} Rosaries</entry>
+  <entry sheet="Fmt" key="COST_PDBOOL">Requires {0}</entry>
 </Language>
