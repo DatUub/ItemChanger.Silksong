@@ -1,4 +1,5 @@
 ﻿using ItemChanger.Costs;
+using System;
 using TeamCherry.Localization;
 
 namespace ItemChanger.Silksong.Costs
@@ -8,9 +9,9 @@ namespace ItemChanger.Silksong.Costs
         /// <summary>
         /// Amount after accounting for any discount rate.
         /// </summary>
-        public int ActualAmount => (int)(Amount * base.DiscountRate);
+        public int ActualAmount => Math.Max(0, (int)(Amount * base.DiscountRate));
 
-        public override bool CanPay() => PlayerData.instance.GetInt(nameof(PlayerData.geo)) >= ActualAmount;
+        public override bool CanPay() => PlayerData.instance.geo >= ActualAmount;
 
         public override string GetCostText() => string.Format(Language.Get("PAY_ROSARIES", "Fmt"), ActualAmount);
         
