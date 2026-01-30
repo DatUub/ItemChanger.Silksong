@@ -10,7 +10,8 @@ namespace ItemChanger.Silksong.Costs
         /// </summary>
         public int ActualAmount => (int)(Amount * base.DiscountRate);
 
-        public override bool CanPay() => PlayerData.instance.GetInt(nameof(PlayerData.geo)) >= ActualAmount;
+        // Optimization: Access geo directly to avoid string lookup overhead in GetInt
+        public override bool CanPay() => PlayerData.instance.geo >= ActualAmount;
 
         public override string GetCostText() => string.Format(Language.Get("PAY_ROSARIES", "Fmt"), ActualAmount);
         
