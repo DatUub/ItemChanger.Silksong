@@ -37,7 +37,14 @@ namespace ItemChanger.Silksong.Modules
             }
         }
 
-        public void AddPDEdit(string fieldName, object value) => PDEdits.Enqueue(new(fieldName, value));
+        public void AddPDEdit(string fieldName, object value)
+        {
+            if (string.IsNullOrWhiteSpace(fieldName))
+            {
+                throw new ArgumentException("Field name cannot be null or empty", nameof(fieldName));
+            }
+            PDEdits.Enqueue(new(fieldName, value));
+        }
 
         public record PDEdit(string FieldName, object Value)
         {
