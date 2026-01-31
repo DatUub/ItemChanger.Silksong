@@ -1,4 +1,5 @@
 using ItemChanger.Items;
+using ItemChanger.Silksong;
 
 namespace ItemChanger.Silksong.Items
 {
@@ -15,14 +16,14 @@ namespace ItemChanger.Silksong.Items
                 return;
             }
 
-            pd.SetBool("hasMarker", true);
-            pd.SetBool(MarkerFieldName, true);
+            PlayerDataAccessor.SetBool(pd, "hasMarker", true);
+            PlayerDataAccessor.SetBool(pd, MarkerFieldName, true);
         }
 
         public override bool Redundant()
         {
             var pd = GameManager.instance?.playerData;
-            return pd?.GetBool(MarkerFieldName) ?? false;
+            return pd != null && PlayerDataAccessor.GetBool(pd, MarkerFieldName);
         }
     }
 }

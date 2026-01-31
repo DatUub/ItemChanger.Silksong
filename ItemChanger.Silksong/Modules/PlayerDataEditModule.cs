@@ -1,4 +1,5 @@
 ﻿using ItemChanger.Modules;
+using ItemChanger.Silksong;
 
 namespace ItemChanger.Silksong.Modules
 {
@@ -46,7 +47,7 @@ namespace ItemChanger.Silksong.Modules
                 switch (Value)
                 {
                     case bool b:
-                        PlayerData.instance.SetBool(FieldName, b);
+                        PlayerDataAccessor.SetBool(PlayerData.instance, FieldName, b);
                         return;
                     case int i:
                         PlayerData.instance.SetInt(FieldName, i);

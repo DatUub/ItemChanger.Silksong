@@ -1,4 +1,5 @@
 using ItemChanger.Items;
+using ItemChanger.Silksong;
 
 namespace ItemChanger.Silksong.Items
 {
@@ -15,13 +16,13 @@ namespace ItemChanger.Silksong.Items
                 return;
             }
 
-            pd.SetBool(FieldName, true);
+            PlayerDataAccessor.SetBool(pd, FieldName, true);
         }
 
         public override bool Redundant()
         {
             var pd = GameManager.instance?.playerData;
-            return pd?.GetBool(FieldName) ?? false;
+            return pd != null && PlayerDataAccessor.GetBool(pd, FieldName);
         }
     }
 }

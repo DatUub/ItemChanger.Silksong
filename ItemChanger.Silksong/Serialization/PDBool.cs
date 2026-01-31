@@ -1,4 +1,5 @@
 ﻿using ItemChanger.Serialization;
+using ItemChanger.Silksong;
 using Newtonsoft.Json;
 
 namespace ItemChanger.Silksong.Serialization
@@ -10,11 +11,11 @@ namespace ItemChanger.Silksong.Serialization
         {
             get
             {
-                return PlayerData.instance.GetBool(BoolName);
+                return PlayerDataAccessor.GetBool(PlayerData.instance, BoolName);
             }
             set
             {
-                PlayerData.instance.SetBool(BoolName, value);
+                PlayerDataAccessor.SetBool(PlayerData.instance, BoolName, value);
             }
         }
 
