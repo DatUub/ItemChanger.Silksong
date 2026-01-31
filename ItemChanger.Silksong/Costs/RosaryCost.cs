@@ -10,9 +10,16 @@ namespace ItemChanger.Silksong.Costs
         /// </summary>
         public int ActualAmount => (int)(Amount * base.DiscountRate);
 
-        public override bool CanPay() => PlayerData.instance.GetInt(nameof(PlayerData.geo)) >= ActualAmount;
+        public override bool CanPay() => PlayerData.instance.geo >= ActualAmount;
 
-        public override string GetCostText() => string.Format(Language.Get("PAY_ROSARIES", "Fmt"), ActualAmount);
+        public override string GetCostText()
+        {
+            if (ActualAmount == 1)
+            {
+                return string.Format(Language.Get("PAY_ROSARY", "Fmt"), ActualAmount);
+            }
+            return string.Format(Language.Get("PAY_ROSARIES", "Fmt"), ActualAmount);
+        }
         
         public override bool HasPayEffects() => true;
 

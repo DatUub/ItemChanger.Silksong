@@ -1,3 +1,4 @@
 ﻿<Language>
   <entry sheet="Fmt" key="PAY_ROSARIES">{0} Rosaries</entry>
+  <entry sheet="Fmt" key="PAY_ROSARY">{0} Rosary</entry>
 </Language>
