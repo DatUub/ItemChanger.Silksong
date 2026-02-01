@@ -30,12 +30,7 @@ namespace ItemChanger.Silksong
 
         public override IEnumerable<Module> BuildDefaultModules()
         {
-            PlayerDataEditModule pde = new();
-            pde.AddPDEdit(nameof(PlayerData.bindCutscenePlayed), true);
-
-            return [
-                pde,
-                ];
+            return [];
         }
 
         private LifecycleEvents.Invoker? lifecycleInvoker;
@@ -114,6 +109,7 @@ namespace ItemChanger.Silksong
 
             if (ActiveProfile!.Modules.Get<StartDefModule>() is StartDefModule { StartDef: StartDef start })
             {
+                pd.bindCutscenePlayed = true; // so that entering Tut_01 later does not trigger the wakeup sequence
                 start.GetRespawnInfo().SetRespawn();
                 self.StartCoroutine(self.RunContinueGame(self.IsMenuScene()));
             }
