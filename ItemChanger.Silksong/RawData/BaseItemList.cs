@@ -28,6 +28,14 @@ namespace ItemChanger.Silksong.RawData
         public static Item Vendor_Pins => new PlayerDataBoolItem { Name = ItemNames.Vendor_Pins, FieldName = "hasPinShop" };
         public static Item Ventrica_Pins => new PlayerDataBoolItem { Name = ItemNames.Ventrica_Pins, FieldName = "hasPinTube" };
 
+        // Flea Pins (regional)
+        public static Item Flea_Pins_Marrowlands => new PlayerDataBoolItem { Name = "Flea_Pins_Marrowlands", FieldName = "hasPinFleaMarrowlands" };
+        public static Item Flea_Pins_Midlands => new PlayerDataBoolItem { Name = "Flea_Pins_Midlands", FieldName = "hasPinFleaMidlands" };
+        public static Item Flea_Pins_Blastedlands => new PlayerDataBoolItem { Name = "Flea_Pins_Blastedlands", FieldName = "hasPinFleaBlastedlands" };
+        public static Item Flea_Pins_Citadel => new PlayerDataBoolItem { Name = "Flea_Pins_Citadel", FieldName = "hasPinFleaCitadel" };
+        public static Item Flea_Pins_Peaklands => new PlayerDataBoolItem { Name = "Flea_Pins_Peaklands", FieldName = "hasPinFleaPeaklands" };
+        public static Item Flea_Pins_Mucklands => new PlayerDataBoolItem { Name = "Flea_Pins_Mucklands", FieldName = "hasPinFleaMucklands" };
+
         // Area Maps
         public static Item Bellhart_Map => new PlayerDataBoolItem { Name = ItemNames.Bellhart_Map, FieldName = "HasBellhartMap" };
         public static Item Bilewater_Map => new PlayerDataBoolItem { Name = ItemNames.Bilewater_Map, FieldName = "HasBilewaterMap" };
