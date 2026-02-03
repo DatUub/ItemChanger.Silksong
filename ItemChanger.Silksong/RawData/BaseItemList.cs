@@ -1,6 +1,8 @@
 ﻿using ItemChanger.Items;
+using ItemChanger.Serialization;
 using ItemChanger.Silksong.Items;
-using static ItemChanger.Silksong.RawData.ItemNames;
+using ItemChanger.Silksong.Serialization;
+using ItemChanger.Silksong.UIDefs;
 
 namespace ItemChanger.Silksong.RawData
 {
@@ -27,6 +29,16 @@ namespace ItemChanger.Silksong.RawData
             yield return new PlayerDataBoolItem { Name = Ventrica__High_Halls, FieldName = "UnlockedHangTube" };
             yield return new PlayerDataBoolItem { Name = Ventrica__First_Shrine, FieldName = "UnlockedEnclaveTube" };
             yield return new PlayerDataBoolItem { Name = Ventrica__Memorium, FieldName = "UnlockedArboriumTube" };
+        public static Item Surgeon_s_Key => new ItemChangerCollectableItem
+        {
+            Name = ItemNames.Surgeon_s_Key,
+            CollectableName = "Ward Boss Key",
+            UIDef = new CollectableUIDef { CollectableName = "Ward Boss Key" },
+        };
+
+        public static Dictionary<string, Item> GetBaseItems()
+        {
+            return typeof(BaseItemList).GetProperties().Select(p => (Item)p.GetValue(null)).ToDictionary(i => i.Name);
         }
     }
 }
