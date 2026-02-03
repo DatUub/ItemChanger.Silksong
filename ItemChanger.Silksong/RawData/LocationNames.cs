@@ -21,7 +21,8 @@ public static class LocationNames
     public const string Shakra__Global = "Shakra-Global";
     public const string Twelfth_Architect = "Twelfth_Architect";
     // Sells: Cogwork_Wheel, Scuttlebrace, Silkshot, Crafting_Kit, Architect's_Key
-
+    public const string Vog = "Vog";
+    // Sells: Flea Findings
     // Shop items:
     // - No separate per-item location constants. Shop names are at the top (see Shops).
     // - Shop-sold items are noted in comments for the relevant pools below.
@@ -84,7 +85,7 @@ public static class LocationNames
     public const string Crest_of_Shaman = "Crest_of_Shaman";
     public const string Crest_of_Wanderer = "Crest_of_Wanderer";
     public const string Crest_of_Witch = "Crest_of_Witch";
-    public const string Vesticrest_Blue__Expansion = "Vesticrest_Blue-Expansion"; // Unlock 20 slots, adds Blue Tool slot
+    public const string Vesticrest_Blue = "Vesticrest_Blue"; // Unlock 20 slots, adds Blue Tool slot
     public const string Vesticrest_Yellow = "Vesticrest_Yellow"; // Unlock 12 slots, adds Yellow Tool slot
     // red tools (note: Ruined_Tool is listed with quest items; shop items: Curveclaw (Mottled_Skarr), Sting_Shard (Forge Daughter); Cogwork_Wheel is a craftmetal shop item (Twelfth Architect))
     public const string Cogfly = "Cogfly";
@@ -221,7 +222,6 @@ public static class LocationNames
     public const string Growstone = "Growstone";
     public const string Hornet_Statuette = "Hornet_Statuette";
 
-    /*
     // Shell Shard Fossils (breakable rocks that drop shards)
     public const string Shell_Shard_Fossil__Tut_01 = "Shell_Shard_Fossil-Tut_01";
     public const string Shell_Shard_Fossil__Tut_01b_1 = "Shell_Shard_Fossil-Tut_01b_1";
@@ -275,8 +275,6 @@ public static class LocationNames
     public const string Shell_Shard_Fossil__Under_17_1 = "Shell_Shard_Fossil-Under_17_1";
     public const string Shell_Shard_Fossil__Under_17_2 = "Shell_Shard_Fossil-Under_17_2";
     public const string Shell_Shard_Fossil__Under_17_3 = "Shell_Shard_Fossil-Under_17_3";
-
-    */
 
     // beast shards - 9 total (6 boss drops, 2 glowing spots, 1 quest reward)
     public const string Beast_Shard__Blasted_Steps_Statue = "Beast_Shard-Blasted_Steps_Statue"; // Shard statue behind breakable wall
@@ -471,7 +469,6 @@ public static class LocationNames
     public const string Pale_Rosary_Necklace__Far_Fields = "Pale_Rosary_Necklace-Far_Fields"; // Northeastern Far Fields, guarded by Skarr Stalker
     public const string Pale_Rosary_Necklace__High_Halls = "Pale_Rosary_Necklace-High_Halls"; // Rosary Bank chest west of Ventrica station
 
-    /*
     // ROSARY POUCHES (Destructible Sacks)
     public const string Rosary_Pouch__Coral_12 = "Rosary_Pouch-Coral_12";
     public const string Rosary_Pouch__Dust_02 = "Rosary_Pouch-Dust_02";
@@ -499,7 +496,6 @@ public static class LocationNames
     public const string Rosary_Npc__Pilgrim_Bonegrave_Act3 = "Rosary_Npc-Pilgrim_Bonegrave_Act3";
     public const string Rosary_Npc__Pilgrim_Shadow_23 = "Rosary_Npc-Pilgrim_Shadow_23";
     public const string Rosary_Npc__Pilgrim_Shellgrave = "Rosary_Npc-Pilgrim_Shellgrave";
-    */
 
     // Fast travel
     public const string Bellway__Bone_Bottom = "Bellway-Bone_Bottom";
