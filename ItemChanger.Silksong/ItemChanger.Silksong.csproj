@@ -11,6 +11,10 @@
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AnalysisMode>recommended</AnalysisMode>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <!-- CA1711 disallows *Flags for enums. Others are perf improvements not on older .net -->
+    <NoWarn>$(NoWarn);CA1510;CA1711;CA1847;CA1864</NoWarn>
     <RestoreAdditionalProjectSources>
         https://nuget.bepinex.dev/v3/index.json
     </RestoreAdditionalProjectSources>
