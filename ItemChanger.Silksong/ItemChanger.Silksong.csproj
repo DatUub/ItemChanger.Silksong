@@ -13,8 +13,8 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AnalysisMode>recommended</AnalysisMode>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
-    <!-- CA1711 disallows *Flags for enums. Others are perf improvements not on older .net -->
-    <NoWarn>$(NoWarn);CA1510;CA1711;CA1847;CA1864</NoWarn>
+    <!-- CA1510: ThrowIfNull not in netstandard2.1. CA1711: disallows *Flags for enums -->
+    <NoWarn>$(NoWarn);CA1510;CA1711</NoWarn>
     <RestoreAdditionalProjectSources>
         https://nuget.bepinex.dev/v3/index.json
     </RestoreAdditionalProjectSources>
@@ -27,6 +27,7 @@
   <PropertyGroup>
     <!--These properties will control the generated plugin info. Version is also used by various parts of the build system.-->
     <AssemblyTitle>ItemChanger.Silksong</AssemblyTitle>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>

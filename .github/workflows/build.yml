@@ -39,6 +39,11 @@ jobs:
       with:
         name: ItemChanger.Silksong
         path: ItemChanger.Silksong/bin/Publish/*.zip
+    - name: Upload NuGet package
+      uses: actions/upload-artifact@v4
+      with:
+        name: NuGet
+        path: ItemChanger.Silksong/bin/Release/**/*.nupkg
     - name: Check if release needed
       id: needs-release
       uses: mukunku/tag-exists-action@v1.6.0
@@ -75,24 +80,19 @@ jobs:
     if: github.event_name == 'push' && needs.build.outputs.is-new-version == 'true'
 
     steps:
-    - uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 10.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Pack
-      run: dotnet pack ItemChanger.Silksong/ItemChanger.Silksong.csproj -c Release -o nuget/
-    - name: NuGet Login
-      id: login
-      uses: NuGet/login@v1
+    - name: Download NuGet package
+      uses: actions/download-artifact@v4
       with:
-        user: ${{ secrets.NUGET_USER }}
+        name: NuGet
+        path: nuget/
     - name: Publish NuGet
       run: |
         dotnet nuget push nuget/*.nupkg \
-          --api-key ${{ steps.login.outputs.NUGET_API_KEY }} \
+          --api-key ${{ secrets.NUGET_API_KEY }} \
           --source https://api.nuget.org/v3/index.json
       continue-on-error: true
 
