@@ -21,7 +21,7 @@ internal class RemoveComponentTag<T> : Tag where T : Component
 
     protected override void DoUnload(TaggableObject parent)
     {
-        ItemChangerHost.Singleton.GameEvents.AddSceneEdit(SceneName, DoRemoveComponent);
+        ItemChangerHost.Singleton.GameEvents.RemoveSceneEdit(SceneName, DoRemoveComponent);
     }
 
     private void DoRemoveComponent(Scene scene)
