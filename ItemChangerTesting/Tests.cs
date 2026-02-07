@@ -9,7 +9,6 @@ using ItemChanger.Silksong.RawData;
 using ItemChanger.Silksong.StartDefs;
 using ItemChanger.Silksong.UIDefs;
 using System.ComponentModel;
-using UnityEngine;
 
 namespace ItemChangerTesting;
 
@@ -23,6 +22,8 @@ public enum Tests
     FleaLocations,
     [Description("Tests putting a bunch of flea items in Tut_02")]
     FleaItems,
+    [Description($"Tests putting a flea at the {LocationNames.Flea__Slab_Cell} location")]
+    FleaAtFlea,
     [Description("Tests modifying the Pale_Oil-Whispering_Vaults shiny in-place")]
     Surgeon_s_Key_at_Whispering_Vaults,
 }
@@ -97,6 +98,11 @@ public static class TestDispatcher
                     ct++;
                 }
 
+                break;
+
+            case Tests.FleaAtFlea:
+                StartNear(SceneNames.Slab_13, PrimitiveGateNames.right1);
+                prof.AddPlacement(finder.GetLocation(LocationNames.Flea__Slab_Cell)!.Wrap().Add(finder.GetItem(ItemNames.Flea)!));
                 break;
 
             case Tests.Surgeon_s_Key_from_spawned_shiny:
