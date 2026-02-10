@@ -543,7 +543,7 @@ public static class LocationNames
     public const string Map__High_Halls = "Map-High_Halls";  // 70 rosary
     public const string Map__Memorium = "Map-Memorium";  // 70 rosary
     public const string Map__Cradle = "Map-Cradle";  // 70 rosary in Act 2, free in Act 3
-    
+
     // Maps - Free/Other sources
     public const string Map__Underworks = "Map-Underworks";  // From Lore Tablet
     public const string Map__Putrified_Ducts = "Map-Putrified_Ducts";  // From desk
