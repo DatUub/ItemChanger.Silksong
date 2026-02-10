@@ -4,16 +4,22 @@ using ItemChanger.Silksong.Items;
 using ItemChanger.Silksong.Serialization;
 using ItemChanger.Silksong.UIDefs;
 
-namespace ItemChanger.Silksong.RawData
+namespace ItemChanger.Silksong.RawData;
+
+internal static partial class BaseItemList
 {
-    internal static class BaseItemList
+    public static Item Flea => new FleaItem
     {
-        public static Item Surgeon_s_Key => new ItemChangerCollectableItem
+        Name = ItemNames.Flea,
+        UIDef = new MsgUIDef()
         {
-            Name = ItemNames.Surgeon_s_Key,
-            CollectableName = "Ward Boss Key",
-            UIDef = new CollectableUIDef { CollectableName = "Ward Boss Key" },
-        };
+            // TODO - improve the shopdesc
+            Name = new CountedString() { Prefix = new LanguageString("UI", "KEY_FLEA"), Amount = new FleaCount() },
+            Sprite = new FleaSprite(),
+            ShopDesc = new BoxedString("Flea flea flea flea flea"),
+            PreviewName = new LanguageString("UI", "KEY_FLEA")
+        },
+    };
 
         // Resources (stat upgrades)
         public static Item Silk_Heart => new PlayerDataIntItem { Name = ItemNames.Silk_Heart, FieldName = "silkRegenMax" };
@@ -36,9 +42,8 @@ namespace ItemChanger.Silksong.RawData
         public static Item Conductor_s_Melody => new PDBoolItem { Name = "Conductor's_Melody", BoolName = "HasMelodyConductor" };
         public static Item Vaultkeeper_s_Melody => new PDBoolItem { Name = "Vaultkeeper's_Melody", BoolName = "HasMelodyLibrarian" };
 
-        public static Dictionary<string, Item> GetBaseItems()
-        {
-            return typeof(BaseItemList).GetProperties().Select(p => (Item)p.GetValue(null)).ToDictionary(i => i.Name);
-        }
+    public static Dictionary<string, Item> GetBaseItems()
+    {
+        return typeof(BaseItemList).GetProperties().Select(p => (Item)p.GetValue(null)).ToDictionary(i => i.Name);
     }
 }
