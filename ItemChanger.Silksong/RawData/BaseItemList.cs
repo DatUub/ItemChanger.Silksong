@@ -2,9 +2,8 @@
 using ItemChanger.Silksong.Items;
 using static ItemChanger.Silksong.RawData.ItemNames;
 
-namespace ItemChanger.Silksong.RawData
+namespace ItemChanger.Silksong.RawData;
+
+internal static partial class BaseItemList
 {
-    internal static class BaseItemList
-    {
-    }
 }
