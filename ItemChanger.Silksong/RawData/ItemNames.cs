@@ -333,10 +333,10 @@ public static class ItemNames
     public const string Lore_Tablet__Verdania_Fountains = "Lore_Tablet-Verdania_Fountains";
     public const string Lore_Tablet__Verdania_Shrine = "Lore_Tablet-Verdania_Shrine";
     public const string Lore_Tablet__Blasted_Steps_Arbiter = "Lore_Tablet-Blasted_Steps_Arbiter";
+    public const string Lore_Tablet__Sands_of_Karak = "Lore_Tablet-Sands_of_Karak";
     public const string Lore_Tablet__Blasted_Steps_Pilgrim = "Lore_Tablet-Blasted_Steps_Pilgrim";
     public const string Lore_Tablet__Blasted_Steps_Pinstress = "Lore_Tablet-Blasted_Steps_Pinstress";
     public const string Lore_Tablet__Coral_Tower = "Lore_Tablet-Coral_Tower";
-    public const string Lore_Tablet__Sands_of_Karak = "Lore_Tablet-Sands_of_Karak";
     public const string Lore_Tablet__Cradle_Blackbarrens = "Lore_Tablet-Cradle_Blackbarrens";
     public const string Lore_Tablet__Cradle_Sandsea = "Lore_Tablet-Cradle_Sandsea";
     public const string Lore_Tablet__Cradle_Steel_City = "Lore_Tablet-Cradle_Steel_City";
