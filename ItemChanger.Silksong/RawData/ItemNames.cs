@@ -238,7 +238,7 @@ public static class ItemNames
     public const string Flea_Findings__Midlands = "Flea_Findings-Midlands";
     public const string Flea_Findings__Mount_Fay = "Flea_Findings-Mount_Fay";
     public const string Flea_Findings__The_Citadel = "Flea_Findings-The_Citadel";
-    
+
     // mossberries
     public const string Mossberry = "Mossberry";
 
