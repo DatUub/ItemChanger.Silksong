@@ -295,12 +295,6 @@ public static class ItemNames
     public const string Materium = "Materium";
     public const string Personal_Spa = "Personal_Spa";
 
-    // materium types (submenu items for Materium)
-    public const string Materium__Flintstone = "Materium-Flintstone";
-    public const string Materium__Roach_Guts = "Materium-Roach_Guts";
-    public const string Materium__Voltridian = "Materium-Voltridian";
-    public const string Materium__Magnetite = "Materium-Magnetite";
-
     // Fast travel
     public const string Bellway__Bone_Bottom = "Bellway-Bone_Bottom";
     public const string Bellway__The_Marrow = "Bellway-The_Marrow";
@@ -422,6 +416,56 @@ public static class ItemNames
     // journal entries
     public const string Journal_Entry__Void_Tendrils = "Journal_Entry-Void_Tendrils";
 
+    // materium types (submenu items for Materium)
+    public const string Materium__Flintstone = "Materium-Flintstone";
+    public const string Materium__Voltridian = "Materium-Voltridian";
+    public const string Materium__Magnetite = "Materium-Magnetite";
+
+    // memory lockets
+    public const string Memory_Locket = "Memory_Locket";
+
+    // craftmetal
+    public const string Craftmetal = "Craftmetal";
+
+    // tradables and deliverables
+    public const string Broodmother_s_Eye = "Broodmother's_Eye";
+    public const string Crustnut = "Crustnut";
+    public const string Flintgem = "Flintgem";
+    public const string Grass_Doll = "Grass_Doll";
+    public const string Horn_Fragment = "Horn_Fragment";
+    public const string Mossberry_Stew = "Mossberry_Stew";
+    public const string Pickled_Muckmaggot = "Pickled_Muckmaggot";
+    public const string Steel_Spines = "Steel_Spines";
+    public const string Twisted_Bud = "Twisted_Bud";
+
+    // respawning quest drops
+    public const string Choir_Cloak = "Choir_Cloak"; //Max of 16
+    public const string Fine_Pin = "Fine_Pin"; //Max of 12
+    public const string Pilgrim_Shawl = "Pilgrim_Shawl"; //Max of 12
+    public const string Plasmified_Blood = "Plasmified_Blood"; //Max of 10 not technically picked up though
+    public const string Plasmium = "Plasmium";
+    public const string Ragpelt = "Ragpelt"; //Max of 25 Craws drop 1 Tall and Squatcraws drop 2-5 so possible extras
+    public const string Roach_Guts = "Roach_Guts"; //Max of 10
+    public const string Seared_Organ = "Seared_Organ"; // Max of 15
+    public const string Shredded_Organ = "Shredded_Organ"; // Max of 35 Drops in terms of 3 so one extra
+    public const string Silver_Bell = "Silver_Bell"; //Max of 8
+    public const string Skewered_Organ = "Skewered_Organ"; // Max of 10
+    public const string Spine_Core = "Spine_Core"; //Max of 25
+
+    // deliveries
+    public const string Courier_s_Rasher = "Courier's_Rasher";
+    public const string Courier_s_Swag = "Courier's_Swag";
+    public const string Liquid_Lacquer = "Liquid_Lacquer";
+    public const string Queen_s_Egg = "Queen's_Egg";
+
+    // other quest items
+    public const string Cogheart_Piece = "Cogheart_Piece";
+    public const string Crown_Fragment = "Crown_Fragment";
+    public const string Plasmium_Bud = "Plasmium_Bud";
+    public const string Plasmium_Gland = "Plasmium_Gland";
+    public const string Ruined_Tool = "Ruined_Tool";
+    public const string Vintage_Nectar = "Vintage_Nectar";
+
     // Novelty/cursed items
     public const string Left_Cling_Grip = "Left_Cling_Grip";
     public const string Right_Cling_Grip = "Right_Cling_Grip";
@@ -437,4 +481,7 @@ public static class ItemNames
     public const string Double_Mask_Shard = "Double_Mask_Shard";
     public const string Full_Mask = "Full_Mask";
     public const string Full_Spool = "Full_Spool";
+
+    // Flea
+    public const string Flea = "Flea";
 }

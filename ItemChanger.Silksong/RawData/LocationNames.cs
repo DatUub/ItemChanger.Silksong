@@ -21,7 +21,8 @@ public static class LocationNames
     public const string Shakra__Global = "Shakra-Global";
     public const string Twelfth_Architect = "Twelfth_Architect";
     // Sells: Cogwork_Wheel, Scuttlebrace, Silkshot, Crafting_Kit, Architect's_Key
-
+    public const string Vog = "Vog";
+    // Sells: Flea Findings
     // Shop items:
     // - No separate per-item location constants. Shop names are at the top (see Shops).
     // - Shop-sold items are noted in comments for the relevant pools below.
@@ -84,7 +85,7 @@ public static class LocationNames
     public const string Crest_of_Shaman = "Crest_of_Shaman";
     public const string Crest_of_Wanderer = "Crest_of_Wanderer";
     public const string Crest_of_Witch = "Crest_of_Witch";
-    public const string Vesticrest_Blue__Expansion = "Vesticrest_Blue-Expansion"; // Unlock 20 slots, adds Blue Tool slot
+    public const string Vesticrest_Blue = "Vesticrest_Blue"; // Unlock 20 slots, adds Blue Tool slot
     public const string Vesticrest_Yellow = "Vesticrest_Yellow"; // Unlock 12 slots, adds Yellow Tool slot
     // red tools (note: Ruined_Tool is listed with quest items; shop items: Curveclaw (Mottled_Skarr), Sting_Shard (Forge Daughter); Cogwork_Wheel is a craftmetal shop item (Twelfth Architect))
     public const string Cogfly = "Cogfly";
@@ -221,7 +222,6 @@ public static class LocationNames
     public const string Growstone = "Growstone";
     public const string Hornet_Statuette = "Hornet_Statuette";
 
-    /*
     // Shell Shard Fossils (breakable rocks that drop shards)
     public const string Shell_Shard_Fossil__Tut_01 = "Shell_Shard_Fossil-Tut_01";
     public const string Shell_Shard_Fossil__Tut_01b_1 = "Shell_Shard_Fossil-Tut_01b_1";
@@ -275,8 +275,6 @@ public static class LocationNames
     public const string Shell_Shard_Fossil__Under_17_1 = "Shell_Shard_Fossil-Under_17_1";
     public const string Shell_Shard_Fossil__Under_17_2 = "Shell_Shard_Fossil-Under_17_2";
     public const string Shell_Shard_Fossil__Under_17_3 = "Shell_Shard_Fossil-Under_17_3";
-
-    */
 
     // beast shards - 9 total (6 boss drops, 2 glowing spots, 1 quest reward)
     public const string Beast_Shard__Blasted_Steps_Statue = "Beast_Shard-Blasted_Steps_Statue"; // Shard statue behind breakable wall
@@ -379,12 +377,6 @@ public static class LocationNames
     public const string Farsight = "Farsight";
     public const string Materium = "Materium";
 
-    // materium types (submenu items for Materium)
-    public const string Materium__Flintstone = "Materium-Flintstone";
-    public const string Materium__Magnetite = "Materium-Magnetite";
-    public const string Materium__Roach_Guts = "Materium-Roach_Guts";
-    public const string Materium__Voltridian = "Materium-Voltridian";
-    
     // Rosary Rocks
     public const string Rosary_Rock__Aqueduct_08 = "Rosary_Rock-Aqueduct_08";
     public const string Rosary_Rock__Aspid_01 = "Rosary_Rock-Aspid_01";
@@ -477,7 +469,6 @@ public static class LocationNames
     public const string Pale_Rosary_Necklace__Far_Fields = "Pale_Rosary_Necklace-Far_Fields"; // Northeastern Far Fields, guarded by Skarr Stalker
     public const string Pale_Rosary_Necklace__High_Halls = "Pale_Rosary_Necklace-High_Halls"; // Rosary Bank chest west of Ventrica station
 
-    /*
     // ROSARY POUCHES (Destructible Sacks)
     public const string Rosary_Pouch__Coral_12 = "Rosary_Pouch-Coral_12";
     public const string Rosary_Pouch__Dust_02 = "Rosary_Pouch-Dust_02";
@@ -505,7 +496,6 @@ public static class LocationNames
     public const string Rosary_Npc__Pilgrim_Bonegrave_Act3 = "Rosary_Npc-Pilgrim_Bonegrave_Act3";
     public const string Rosary_Npc__Pilgrim_Shadow_23 = "Rosary_Npc-Pilgrim_Shadow_23";
     public const string Rosary_Npc__Pilgrim_Shellgrave = "Rosary_Npc-Pilgrim_Shellgrave";
-    */
 
     // Fast travel
     public const string Bellway__Bone_Bottom = "Bellway-Bone_Bottom";
@@ -584,17 +574,18 @@ public static class LocationNames
     public const string Lore_Tablet__Blasted_Steps_Pilgrim = "Lore_Tablet-Blasted_Steps_Pilgrim";
     public const string Lore_Tablet__Blasted_Steps_Pinstress = "Lore_Tablet-Blasted_Steps_Pinstress";
     public const string Lore_Tablet__Coral_Tower = "Lore_Tablet-Coral_Tower";
-    public const string Lore_Tablet__Sands_of_Karak = "Lore_Tablet-Sands_of_Karak";
-    public const string Lore_Tablet__Cradle_Blackbarrens = "Lore_Tablet-Cradle_Blackbarrens";
-    public const string Lore_Tablet__Cradle_Sandsea = "Lore_Tablet-Cradle_Sandsea";
-    public const string Lore_Tablet__Cradle_Steel_City = "Lore_Tablet-Cradle_Steel_City";
-    public const string Lore_Tablet__Greymoor_Orders = "Lore_Tablet-Greymoor_Orders";
-    public const string Lore_Tablet__Greymoor_Litany = "Lore_Tablet-Greymoor_Litany";
-    public const string Lore_Tablet__Whispering_Vaults_Trobbio = "Lore_Tablet-Whispering_Vaults_Trobbio";
-    public const string Lore_Tablet__Whispering_Vaults_Trobbio_Act_2 = "Lore_Tablet-Whispering_Vaults_Trobbio_Act_2";
-    public const string Lore_Tablet__Whispering_Vaults_Tormented = "Lore_Tablet-Whispering_Vaults_Tormented";
-    public const string Lore_Tablet__Moss_Grotto_Chapel_Anguished = "Lore_Tablet-Moss_Grotto_Chapel_Anguished";
-    public const string Lore_Tablet__Moss_Grotto_Chapel_Flickering = "Lore_Tablet-Moss_Grotto_Chapel_Flickering";
+    public const string Lore_Tablet__Cradle_Top_Left = "Lore_Tablet-Cradle_Top_Left";
+    public const string Lore_Tablet__Cradle_Bottom_Left = "Lore_Tablet-Cradle_Bottom_Left";
+    public const string Lore_Tablet__Cradle_Bottom_Right = "Lore_Tablet-Cradle_Bottom_Right";
+    public const string Lore_Tablet__Greymoor_Orders_Above_Home = "Lore_Tablet-Greymoor_Orders_Above_Home";
+    public const string Lore_Tablet__Greymoor_Bottom = "Lore_Tablet-Greymoor_Bottom";
+    public const string Lore_Tablet__Whispering_Vaults_Trobbio_Sign = "Lore_Tablet-Whispering_Vaults_Trobbio_Sign";
+    public const string Lore_Tablet__Whispering_Vaults_Trobbio_Notes = "Lore_Tablet-Whispering_Vaults_Trobbio_Notes";
+    public const string Lore_Tablet__Whispering_Vaults_Tormented_Trobbio_Notes = "Lore_Tablet-Whispering_Vaults_Tormented_Trobbio_Notes";
+    public const string Lore_Tablet__Moss_Grotto_Below_Silkspear = "Lore_Tablet-Moss_Grotto_Below_Silkspear";
+    public const string Lore_Tablet__Underworks_Confessional = "Lore_Tablet-Underworks_Confessional";
+    public const string Lore_Tablet__Moss_Grotto_Chapel_Anguished = "Lore_Tablet-Moss_Grotto_Chapel_Entrance";
+    public const string Lore_Tablet__Moss_Grotto_Chapel_Flickering = "Lore_Tablet-Moss_Grotto_Chapel_Inner";
     public const string Lore_Tablet__Mount_Fay = "Lore_Tablet-Mount_Fay";
     public const string Lore_Tablet__Deep_Docks = "Lore_Tablet-Deep_Docks";
     public const string Lore_Tablet__Bilewater_Hate = "Lore_Tablet-Bilewater_Hate";
@@ -607,13 +598,49 @@ public static class LocationNames
     public const string Lore_Tablet__Slab_Penance_Eighth = "Lore_Tablet-Slab_Penance_Eighth";
     public const string Lore_Tablet__Slab_First_Sinner = "Lore_Tablet-Slab_First_Sinner";
     public const string Lore_Tablet__Terminus_Ventrica = "Lore_Tablet-Terminus_Ventrica";
-    public const string Lore_Tablet__Underworks_Confessional = "Lore_Tablet-Underworks_Confessional";
     public const string Lore_Tablet__Grand_Gate = "Lore_Tablet-Grand_Gate";
     public const string Lore_Tablet__Whiteward_Oath = "Lore_Tablet-Whiteward_Oath";
     public const string Lore_Tablet__Weavenest_Atla = "Lore_Tablet-Weavenest_Atla";
     public const string Lore_Tablet__Putrified_Ducts_Mr_Mushroom = "Lore_Tablet-Putrified_Ducts_Mr_Mushroom";
-    public const string Lore_Tablet__Putrified_Ducts_Pale_Lake = "Lore_Tablet-Putrified_Ducts_Pale_Lake";
+    public const string Lore_Tablet__Putrified_Ducts_Pale_Lake = "Lore_Tablet-Putrif
 
+    // journal entries
+    public const string Journal_Entry__Void_Tendrils = "Journal_Entry-Void_Tendrils";
+
+    // materium types (submenu items for Materium)
+    public const string Materium__Flintstone = "Materium-Flintstone";
+    public const string Materium__Magnetite = "Materium-Magnetite";
+    public const string Materium__Roach_Guts = "Materium-Roach_Guts";
+    public const string Materium__Voltridian = "Materium-Voltridian";
+
+    // Fleas
+    public const string Flea__Pilgrim_s_Rest = "Flea-Pilgrim's_Rest";
+    public const string Flea__Docks_Bellway = "Flea-Docks_Bellway";
+    public const string Flea__Slab_Cell = "Flea-Slab_Cell";
+    public const string Flea__Slab_Bellway = "Flea-Slab_Bellway";
+    public const string Flea__Wormways_Aknid = "Flea-Wormways_Aknid";
+    public const string Flea__Underworks_Lava = "Flea-Underworks_Lava";
+    public const string Flea__Underworks_Wisp = "Flea-Underworks_Wisp";
+    public const string Flea__Shellwood_Central = "Flea-Shellwood_Central";
+    public const string Flea__Whispering_Vaults = "Flea-Whispering_Vaults";
+    public const string Flea__Songclave_East = "Flea-Songclave_East";
+    public const string Flea__Exhaust_Organ = "Flea-Exhaust_Organ";
+    public const string Flea__Sands_of_Karak = "Flea-Sands_of_Karak";
+    public const string Flea__Bellhart_Upper = "Flea-Bellhart_Upper";
+    public const string Flea__Hunter_s_March = "Flea-Hunter's_March";
+    public const string Flea__Sinner_s_Road = "Flea-Sinner'_'s_Road";
+    public const string Flea__Mount_Fay = "Flea-Mount_Fay";
+    public const string Flea__Bilewater_Upper = "Flea-Bilewater_Upper";
+    public const string Flea__Bilewater_Lower = "Flea-Bilewater_Lower";
+    public const string Flea__Marrow_Upper = "Flea-Marrow_Upper";
+    public const string Flea__Greymoor_West = "Flea-Greymoor_West";
+    public const string Flea__Greymoor_Craws = "Flea-Greymoor_Craws";
+    public const string Flea__Docks_East = "Flea-Docks_East";
+    public const string Flea__Docks_Upper = "Flea-Docks_Upper";
+    public const string Flea__Far_Fields_West = "Flea-Far_Fields_West";
+    public const string Flea__Blasted_Steps_Upper = "Flea-Blasted_Steps_Upper";
+    public const string Flea__Songclave_Wind_Column = "Flea-Songclave_Wind_Column";
+    public const string Flea__Songclave_West = "Flea-Songclave_West";
 
     // Memory lockets (20 total)
     // public const string Memory_Locket__Mort = "Memory_Locket-Mort";
@@ -645,10 +672,6 @@ public static class LocationNames
     public const string Craftmetal__The_Marrow = "Craftmetal-The_Marrow";
     public const string Craftmetal__Underworks = "Craftmetal-Underworks";
     public const string Craftmetal__Wisp_Thicket = "Craftmetal-Wisp_Thicket";
-
-
-
-
 
     // Novelty/cursed locations
     public const string Flea_Shop = "Flea_Shop";  // threshold shop; should consume the mooshka silk spool, fleatopia tool pouch, egg of flealia
