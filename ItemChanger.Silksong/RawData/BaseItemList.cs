@@ -23,18 +23,18 @@ namespace ItemChanger.Silksong.RawData
         public static Item Crafting_Kit => new PlayerDataIntItem { Name = ItemNames.Crafting_Kit, FieldName = "ToolKitUpgrades" };
 
         // Vesticrests
-        public static Item Vesticrest_Blue_Expansion => new PlayerDataBoolItem { Name = "Vesticrest_Blue-Expansion", FieldName = "UnlockedExtraBlueSlot" };
-        public static Item Vesticrest_Yellow => new PlayerDataBoolItem { Name = "Vesticrest_Yellow", FieldName = "UnlockedExtraYellowSlot" };
+        public static Item Vesticrest_Blue_Expansion => new PDBoolItem { Name = "Vesticrest_Blue-Expansion", BoolName = "UnlockedExtraBlueSlot" };
+        public static Item Vesticrest_Yellow => new PDBoolItem { Name = "Vesticrest_Yellow", BoolName = "UnlockedExtraYellowSlot" };
 
         // Keys (PlayerData)
-        public static Item Key_of_Apostate => new PlayerDataBoolItem { Name = "Key_of_Apostate", FieldName = "HasSlabKeyA" };
-        public static Item Key_of_Heretic => new PlayerDataBoolItem { Name = "Key_of_Heretic", FieldName = "HasSlabKeyB" };
-        public static Item Key_of_Indolent => new PlayerDataBoolItem { Name = "Key_of_Indolent", FieldName = "HasSlabKeyC" };
+        public static Item Key_of_Apostate => new PDBoolItem { Name = "Key_of_Apostate", BoolName = "HasSlabKeyA" };
+        public static Item Key_of_Heretic => new PDBoolItem { Name = "Key_of_Heretic", BoolName = "HasSlabKeyB" };
+        public static Item Key_of_Indolent => new PDBoolItem { Name = "Key_of_Indolent", BoolName = "HasSlabKeyC" };
 
         // Melodies
-        public static Item Architect_s_Melody => new PlayerDataBoolItem { Name = "Architect's_Melody", FieldName = "HasMelodyArchitect" };
-        public static Item Conductor_s_Melody => new PlayerDataBoolItem { Name = "Conductor's_Melody", FieldName = "HasMelodyConductor" };
-        public static Item Vaultkeeper_s_Melody => new PlayerDataBoolItem { Name = "Vaultkeeper's_Melody", FieldName = "HasMelodyLibrarian" };
+        public static Item Architect_s_Melody => new PDBoolItem { Name = "Architect's_Melody", BoolName = "HasMelodyArchitect" };
+        public static Item Conductor_s_Melody => new PDBoolItem { Name = "Conductor's_Melody", BoolName = "HasMelodyConductor" };
+        public static Item Vaultkeeper_s_Melody => new PDBoolItem { Name = "Vaultkeeper's_Melody", BoolName = "HasMelodyLibrarian" };
 
         public static Dictionary<string, Item> GetBaseItems()
         {
