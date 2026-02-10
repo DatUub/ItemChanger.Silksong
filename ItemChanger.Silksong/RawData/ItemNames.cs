@@ -374,7 +374,7 @@ public static class ItemNames
     public const string Materium__Flintstone = "Materium-Flintstone";
     public const string Materium__Voltridian = "Materium-Voltridian";
     public const string Materium__Magnetite = "Materium-Magnetite";
-    
+
     // memory lockets
     public const string Memory_Locket = "Memory_Locket";
 
