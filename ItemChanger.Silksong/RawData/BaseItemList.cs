@@ -29,7 +29,6 @@ internal static partial class BaseItemList
 
     public static Item Flea => new FleaItem
     {
-        // TODO - improve the shopdesc
         Name = ItemNames.Flea,
         UIDef = new MsgUIDef()
         {
