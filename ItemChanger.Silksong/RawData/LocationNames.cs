@@ -582,36 +582,34 @@ public static class LocationNames
     public const string Lore_Tablet__Whispering_Vaults_Trobbio_Sign = "Lore_Tablet-Whispering_Vaults_Trobbio_Sign";
     public const string Lore_Tablet__Whispering_Vaults_Trobbio_Notes = "Lore_Tablet-Whispering_Vaults_Trobbio_Notes";
     public const string Lore_Tablet__Whispering_Vaults_Tormented_Trobbio_Notes = "Lore_Tablet-Whispering_Vaults_Tormented_Trobbio_Notes";
-    public const string Lore_Tablet__Moss_Grotto_Below_Silkspear = "Lore_Tablet-Moss_Grotto_Below_Silkspear";
-    public const string Lore_Tablet__Underworks_Confessional = "Lore_Tablet-Underworks_Confessional";
-    public const string Lore_Tablet__Moss_Grotto_Chapel_Anguished = "Lore_Tablet-Moss_Grotto_Chapel_Entrance";
-    public const string Lore_Tablet__Moss_Grotto_Chapel_Flickering = "Lore_Tablet-Moss_Grotto_Chapel_Inner";
+    public const string Lore_Tablet__Bone_Bottom_Weaver = "Lore_Tablet-Bone_Bottom_Weaver";
+    public const string Lore_Tablet__Bone_Bottom_Weaver_Harp = "Lore_Tablet-Bone_Bottom_Weaver_Harp";
     public const string Lore_Tablet__Mount_Fay = "Lore_Tablet-Mount_Fay";
     public const string Lore_Tablet__Deep_Docks = "Lore_Tablet-Deep_Docks";
     public const string Lore_Tablet__Bilewater_Hate = "Lore_Tablet-Bilewater_Hate";
     public const string Lore_Tablet__Bilewater_Punish = "Lore_Tablet-Bilewater_Punish";
     public const string Lore_Tablet__Shellwood_Pilgrim = "Lore_Tablet-Shellwood_Pilgrim";
     public const string Lore_Tablet__Shellwood_Weaver = "Lore_Tablet-Shellwood_Weaver";
-    public const string Lore_Tablet__Bone_Bottom_Weaver = "Lore_Tablet-Bone_Bottom_Weaver";
-    public const string Lore_Tablet__Bone_Bottom_Weaver_Harp = "Lore_Tablet-Bone_Bottom_Weaver_Harp";
     public const string Lore_Tablet__Slab_Penance_Fourth = "Lore_Tablet-Slab_Penance_Fourth";
     public const string Lore_Tablet__Slab_Penance_Eighth = "Lore_Tablet-Slab_Penance_Eighth";
     public const string Lore_Tablet__Slab_First_Sinner = "Lore_Tablet-Slab_First_Sinner";
     public const string Lore_Tablet__Terminus_Ventrica = "Lore_Tablet-Terminus_Ventrica";
+    public const string Lore_Tablet__Underworks_Confessional = "Lore_Tablet-Underworks_Confessional";
     public const string Lore_Tablet__Grand_Gate = "Lore_Tablet-Grand_Gate";
+    public const string Lore_Tablet__Moss_Grotto_Chapel_Anguished = "Lore_Tablet-Moss_Grotto_Chapel_Entrance";
+    public const string Lore_Tablet__Moss_Grotto_Chapel_Flickering = "Lore_Tablet-Moss_Grotto_Chapel_Inner";
     public const string Lore_Tablet__Whiteward_Oath = "Lore_Tablet-Whiteward_Oath";
     public const string Lore_Tablet__Weavenest_Atla = "Lore_Tablet-Weavenest_Atla";
     public const string Lore_Tablet__Putrified_Ducts_Mr_Mushroom = "Lore_Tablet-Putrified_Ducts_Mr_Mushroom";
-    public const string Lore_Tablet__Putrified_Ducts_Pale_Lake = "Lore_Tablet-Putrif
+    public const string Lore_Tablet__Putrified_Ducts_Pale_Lake = "Lore_Tablet-Putrified_Ducts_Pale_Lake";
 
     // journal entries
     public const string Journal_Entry__Void_Tendrils = "Journal_Entry-Void_Tendrils";
 
     // materium types (submenu items for Materium)
     public const string Materium__Flintstone = "Materium-Flintstone";
-    public const string Materium__Magnetite = "Materium-Magnetite";
-    public const string Materium__Roach_Guts = "Materium-Roach_Guts";
     public const string Materium__Voltridian = "Materium-Voltridian";
+    public const string Materium__Magnetite = "Materium-Magnetite";
 
     // Fleas
     public const string Flea__Pilgrim_s_Rest = "Flea-Pilgrim's_Rest";
