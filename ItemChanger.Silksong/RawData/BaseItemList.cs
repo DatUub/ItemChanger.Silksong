@@ -4,16 +4,22 @@ using ItemChanger.Silksong.Items;
 using ItemChanger.Silksong.Serialization;
 using ItemChanger.Silksong.UIDefs;
 
-namespace ItemChanger.Silksong.RawData
+namespace ItemChanger.Silksong.RawData;
+
+internal static partial class BaseItemList
 {
-    internal static class BaseItemList
+    public static Item Flea => new FleaItem
     {
-        public static Item Surgeon_s_Key => new ItemChangerCollectableItem
+        Name = ItemNames.Flea,
+        UIDef = new MsgUIDef()
         {
-            Name = ItemNames.Surgeon_s_Key,
-            CollectableName = "Ward Boss Key",
-            UIDef = new CollectableUIDef { CollectableName = "Ward Boss Key" },
-        };
+            // TODO - improve the shopdesc
+            Name = new CountedString() { Prefix = new LanguageString("UI", "KEY_FLEA"), Amount = new FleaCount() },
+            Sprite = new FleaSprite(),
+            ShopDesc = new BoxedString("Flea flea flea flea flea"),
+            PreviewName = new LanguageString("UI", "KEY_FLEA")
+        },
+    };
 
         // Map Markers
         public static Item Shell_Marker => new MarkerItem { Name = ItemNames.Shell_Marker, FieldName = "hasMarker_a" };
@@ -50,10 +56,9 @@ namespace ItemChanger.Silksong.RawData
         public static Item The_Slab_Map => new PDBoolItem { Name = ItemNames.The_Slab_Map, BoolName = "HasTheSlabMap" };
         public static Item Underworks_Map => new PDBoolItem { Name = ItemNames.Underworks_Map, BoolName = "HasUnderworksMap" };
         public static Item Verdania_Map => new PDBoolItem { Name = ItemNames.Verdania_Map, BoolName = "HasVerdaniaMap" };
-
-        public static Dictionary<string, Item> GetBaseItems()
-        {
-            return typeof(BaseItemList).GetProperties().Select(p => (Item)p.GetValue(null)).ToDictionary(i => i.Name);
-        }
+  
+    public static Dictionary<string, Item> GetBaseItems()
+    {
+        return typeof(BaseItemList).GetProperties().Select(p => (Item)p.GetValue(null)).ToDictionary(i => i.Name);
     }
 }

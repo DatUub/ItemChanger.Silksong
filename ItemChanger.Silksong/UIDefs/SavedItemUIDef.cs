@@ -1,16 +1,13 @@
 ﻿using ItemChanger.Enums;
+using ItemChanger.Silksong.Serialization;
 using ItemChanger.Silksong.Util;
-using Newtonsoft.Json;
 using UnityEngine;
 
 namespace ItemChanger.Silksong.UIDefs
 {
-    public class CollectableUIDef : UIDef
+    public class SavedItemUIDef : UIDef
     {
-        public required string CollectableName { get; init; }
-
-        [JsonIgnore]
-        public CollectableItem Item { get => field ? field : (field = CollectableItemManager.GetItemByName(CollectableName)); }
+        public required BaseGameSavedItem Item { get; init; }
 
         public override string? GetLongDescription()
         {
@@ -19,19 +16,19 @@ namespace ItemChanger.Silksong.UIDefs
 
         public override string GetPostviewName()
         {
-            return Item.GetPopupName();
+            return Item.GetCollectionName();
         }
 
         public override Sprite GetSprite()
         {
-            return Item.GetPopupIcon();
+            return Item.GetCollectionSprite();
         }
 
         public override void SendMessage(MessageType type, Action? callback = null)
         {
             if (type.HasFlag(MessageType.SmallPopup))
             {
-                MessageUtil.EnqueueMessage(Item);
+                MessageUtil.EnqueueMessage(Item.Value);
             }
             callback?.Invoke();
         }
