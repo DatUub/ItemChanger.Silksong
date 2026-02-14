@@ -7,13 +7,13 @@ namespace ItemChanger.Silksong.Modules
     {
         public bool CanBind { get; private set; }
 
-        public override void DoLoad()
+        protected override void DoLoad()
         {
             CanBind = PlayerData.instance.GetBool(BindItem.BindSkillKey);
             PlayerDataVariableEvents.OnSetBool += OnSetPlayerData;
         }
 
-        public override void DoUnload()
+        protected override void DoUnload()
         {
             PlayerDataVariableEvents.OnSetBool -= OnSetPlayerData;
         }
