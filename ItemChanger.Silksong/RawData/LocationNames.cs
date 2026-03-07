@@ -1,8 +1,9 @@
-﻿using System.Runtime.CompilerServices;
+﻿namespace ItemChanger.Silksong.RawData;
 
-namespace ItemChanger.Silksong.RawData;
 public static class LocationNames
 {
+    public const string Start = "Start";
+
     // Shops
     public const string Forge_Daughter = "Forge_Daughter";
     // Sells: Sting_Shard, Magma_Bell, Crafting_Kit, Silkshot

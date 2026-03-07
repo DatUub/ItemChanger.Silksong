@@ -5,6 +5,7 @@ using ItemChanger.Containers;
 using ItemChanger.Events;
 using ItemChanger.Logging;
 using ItemChanger.Modules;
+using ItemChanger.Silksong.Extensions;
 using ItemChanger.Silksong.Modules;
 using ItemChanger.Silksong.StartDefs;
 using ItemChanger.Silksong.Util;
@@ -111,6 +112,11 @@ namespace ItemChanger.Silksong
                 return;
             }
 
+            if (from.name == SceneNames.Menu_Title)
+            {
+                GameManager.instance.DoNextFrame(() => lifecycleInvoker?.NotifyOnSafeToGiveItems());
+            }
+
             gameInvoker?.NotifyPersistentUpdate(); // TODO: move to execute before IC.Core
         }
 
@@ -142,7 +148,6 @@ namespace ItemChanger.Silksong
                 }
 
                 Host.lifecycleInvoker?.NotifyAfterStartNewGame();
-                Host.lifecycleInvoker?.NotifyOnSafeToGiveItems(); // TODO: move
                 return false;
             }
 
@@ -160,7 +165,6 @@ namespace ItemChanger.Silksong
             private static void AfterContinueGame()
             {
                 Host.lifecycleInvoker?.NotifyAfterContinueGame();
-                Host.lifecycleInvoker?.NotifyOnSafeToGiveItems(); // TODO: move
             }
 
             [HarmonyPrefix]

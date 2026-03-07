@@ -9,6 +9,13 @@ namespace ItemChanger.Silksong.RawData
 {
     internal static partial class BaseLocationList
     {
+        public static Location Start => new StartLocation
+        {
+            Name = LocationNames.Start,
+            FlingType = Enums.FlingType.DirectDeposit,
+            MessageType = Enums.MessageType.SmallPopup,
+        };
+
         public static Location Pale_Oil__Whispering_Vaults => new ObjectLocation
         {
             Name = LocationNames.Pale_Oil__Whispering_Vaults,
