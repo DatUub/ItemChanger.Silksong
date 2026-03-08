@@ -2,5 +2,5 @@
 
 internal static partial class BaseItemList
 {
-    //TODO: implement ItemChanger class that supports lore tablet locations
+    //TODO: implement ItemChanger class that supports fast travel stations (bell beast + ventrica)
 }

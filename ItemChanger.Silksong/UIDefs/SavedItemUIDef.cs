@@ -28,7 +28,7 @@ namespace ItemChanger.Silksong.UIDefs
         {
             if (type.HasFlag(MessageType.SmallPopup))
             {
-                MessageUtil.EnqueueMessage(Item.Value);
+                MessageUtil.EnqueueMessage(GetPostviewName(), GetSprite());
             }
             callback?.Invoke();
         }

@@ -1,6 +1,9 @@
-﻿namespace ItemChanger.Silksong.RawData;
+﻿using ItemChanger.Items;
+using ItemChanger.Silksong.Items;
+
+namespace ItemChanger.Silksong.RawData;
 
 internal static partial class BaseItemList
 {
-    //TODO: implement ItemChanger class that supports fast travel stations (bell beast + ventrica)
+    //TODO: implement ItemChanger class that supports lore tablet locations
 }
