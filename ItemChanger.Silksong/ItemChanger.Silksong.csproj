@@ -64,6 +64,8 @@
     <PackageReference Include="Harmonize" Version="1.0.6" PrivateAssets="all" />
     <PackageReference Include="Hamunii.BepInEx.AutoPlugin" Version="2.1.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Unity.Analyzers" Version="1.26.0" PrivateAssets="all" />
+    <PackageReference Include="MonoDetour" Version="0.7.13" />
+    <PackageReference Include="MonoDetour.HookGen" Version="0.7.13" />
     <PackageReference Include="PolySharp" Version="1.15.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -90,6 +92,10 @@
       <HintPath>$(SilksongFolder)/BepInEx/plugins/MMHOOK/Managed/MMHOOK_TeamCherry.Localization.dll</HintPath>
     </Reference>
   </ItemGroup>
+
+  <PropertyGroup Condition="'$(CI)' == 'true'">
+    <MonoDetourHookGenStripUnusedHooks>true</MonoDetourHookGenStripUnusedHooks>
+  </PropertyGroup>
 
   <Target Name="CopyAndPackageMod" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
     <ItemGroup>
