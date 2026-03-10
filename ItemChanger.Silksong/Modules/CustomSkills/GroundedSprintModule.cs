@@ -59,7 +59,7 @@ public class GroundedSprintModule : CustomSkillModule
         if (!InputHandler.Instance.inputActions.Dash.IsPressed) return;
 
         Rigidbody2D rb = __instance.GetComponent<Rigidbody2D>();
-        if (rb == null) return;
+        if (rb == null || rb.bodyType == RigidbodyType2D.Static) return;
 
         float dir = __instance.cState.facingRight ? 1f : -1f;
         rb.velocity = new Vector2(dir * __instance.DASH_SPEED, rb.velocity.y);
