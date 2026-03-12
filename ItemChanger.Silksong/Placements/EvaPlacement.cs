@@ -19,6 +19,36 @@ public class EvaPlacement(string Name) : Placement(Name), IMultiCostPlacement, I
 
     Location IPrimaryLocationPlacement.Location => Location;
 
+    public bool AllObtainedIncludingDefault()
+    {
+        if ((DefaultItems & DefaultEvaItems.HunterCrestUpgrade1) != 0
+            && !ToolItemManager.GetCrestByName("Hunter_v2").IsUnlocked)
+        {
+            return false;
+        }
+        if ((DefaultItems & DefaultEvaItems.VesticrestYellow) != 0
+            && !PlayerData.instance.GetBool(nameof(PlayerData.UnlockedExtraYellowSlot)))
+        {
+            return false;
+        }
+        if ((DefaultItems & DefaultEvaItems.VesticrestBlue) != 0
+            && !PlayerData.instance.GetBool(nameof(PlayerData.UnlockedExtraBlueSlot)))
+        {
+            return false;
+        }
+        if ((DefaultItems & DefaultEvaItems.HunterCrestUpgrade2) != 0
+            && !ToolItemManager.GetCrestByName("Hunter_v3").IsUnlocked)
+        {
+            return false;
+        }
+        if ((DefaultItems & DefaultEvaItems.Sylphsong) != 0
+            && !PlayerData.instance.GetBool(nameof(PlayerData.HasBoundCrestUpgrader)))
+        {
+            return false;
+        }
+        return AllObtained();
+    }
+
     /// <inheritdoc/>
     protected override void DoLoad()
     {

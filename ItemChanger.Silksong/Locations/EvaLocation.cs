@@ -66,66 +66,51 @@ public class EvaLocation : AutoLocation
 
     private void HookEva(PlayMakerFSM fsm)
     {
-        var initState = fsm.MustGetState("Init");
-        initState.ReplaceFirstActionOfType<PlayerDataVariableTest>(new LambdaAction { Method = () =>
+        var placement = (EvaPlacement)Placement!;
+
+        void ReplaceBrokenCheck(string stateName)
         {
-            if (Placement!.AllObtained())
+            fsm.MustGetState(stateName).ReplaceFirstActionOfType<PlayerDataVariableTest>(new LambdaAction { Method = () =>
             {
-                fsm.SendEvent("BROKEN");
-            }
-        }});
-
-        var setPreDlgState = fsm.MustGetState("Set Pre Dlg");
-        setPreDlgState.RemoveTransitions();
-        setPreDlgState.AddTransition("FINISHED", "Crest Upg 1 Dlg");
-
-        var crestUpg1DlgState = fsm.MustGetState("Crest Upg 1 Dlg");
-        var dialogueIndex = crestUpg1DlgState.IndexLastActionOfType<RunDialogue>();
-        if (dialogueIndex == -1)
-        {
-            throw new InvalidOperationException("RunDialogue not found");
+                if (placement.AllObtainedIncludingDefault())
+                {
+                    fsm.SendEvent("BROKEN");
+                }
+            }});
         }
-        var dialogue = (RunDialogue)crestUpg1DlgState.actions[dialogueIndex];
-        var modSheet = $"Mods.{ItemChangerPlugin.Id}";
-        var modKey = "EVA_ITEM_DESCRIPTION";
-        dialogue.Sheet = new() { Value = modSheet };
-        dialogue.Key = new() { Value = modKey };
-        crestUpg1DlgState.InsertMethod(dialogueIndex, () =>
-        {
-            Language._currentEntrySheets[modSheet][modKey] = BuildDescription();
-        });
 
-        var crestUpgState = fsm.MustGetState("Crest Upg?");
-        var i = crestUpgState.IndexLastActionOfType<DialogueYesNo>();
-        if (i == -1)
+        ReplaceBrokenCheck("Init");
+        ReplaceBrokenCheck("End Dialogue");
+
+        void SkipIfNotDefaulted(string stateName, DefaultEvaItems items)
         {
-            throw new InvalidOperationException("DialogueYesNo not found");
-        }
-        crestUpgState.InsertMethod(i, () =>
-        {
-            var hasPayableItems = Placement!.Items.Any(it => !it.GetTag<CostTag>(out var c) || (!c.Cost.Paid && c.Cost.CanPay()));
-            if (!hasPayableItems)
+            fsm.MustGetState(stateName).InsertMethod(0, () =>
             {
-                fsm.SendEvent("FALSE");
-                return;
+                if ((placement.DefaultItems & items) == 0)
+                {
+                    fsm.SendEvent("FINISHED");
+                }
+            });
+        }
+
+        SkipIfNotDefaulted("Check Combo 1", DefaultEvaItems.HunterCrestUpgrade1);
+        SkipIfNotDefaulted("Check Slot1", DefaultEvaItems.VesticrestYellow);
+        SkipIfNotDefaulted("Check Slot2", DefaultEvaItems.VesticrestBlue);
+        SkipIfNotDefaulted("Check Hunter v3", DefaultEvaItems.HunterCrestUpgrade2);
+        SkipIfNotDefaulted("Check Final Upgrade", DefaultEvaItems.Sylphsong);
+
+        FsmState getUpgradePointsState = fsm.MustGetState("Get Upgrade Points");
+        int i = getUpgradePointsState.IndexLastActionOfType<IntCompare>();
+        getUpgradePointsState.InsertMethod(i, () =>
+        {
+            if ((placement.DefaultItems & DefaultEvaItems.Sylphsong) == 0)
+            {
+                fsm.SendEvent("FINISHED");
             }
         });
 
-        var upgradeSequence = fsm.MustGetState("Upgrade Sequence");
-        upgradeSequence.RemoveTransitions();
-        // bypasses the actions that actually give the evolved Hunter Crest
-        upgradeSequence.AddTransition("FINISHED", "Crest Change Antic");
-
-        FsmState crestChangeAnticState = fsm.MustGetState("Crest Change Antic");
-        crestChangeAnticState.RemoveLastActionOfType<Wait>();
-        crestChangeAnticState.RemoveLastActionMatching(act => 
-            act is SendEventByName send
-            && send.sendEvent.Value == "CREST CHANGE ANTIC");
-
-        FsmState crestChangeState = fsm.MustGetState("Crest Change");
-        crestChangeState.RemoveFirstActionOfType<AutoEquipCrestV4>();
-        crestChangeState.RemoveFirstActionOfType<SendToolEquipChanged>();
-        crestChangeState.InsertMethod(0, GivePayableItems);
+        FsmState setPreDlgState = fsm.MustGetState("Set Pre Dlg");
+        setPreDlgState.InsertMethod(0, GivePayableItems);
     }
 
     private void GivePayableItems()
