@@ -1,0 +1,6 @@
+{
+    "ITEM_GET_PROMPT": {
+        "AssetName": "Assets/Prefabs/UI/Messages/UI Msg Get Item.prefab",
+        "BundleName": "prompts_assets_all"
+    }
+}

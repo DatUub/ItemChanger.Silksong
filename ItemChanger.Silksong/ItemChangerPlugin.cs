@@ -3,7 +3,7 @@ using ItemChanger.Silksong.Containers;
 using ItemChanger.Silksong.Serialization;
 using Silksong.DataManager;
 using ItemChanger.Serialization;
-using System.IO;
+using ItemChanger.Silksong.Assets;
 
 namespace ItemChanger.Silksong
 {
@@ -25,9 +25,8 @@ namespace ItemChanger.Silksong
             {
                 Logger.LogInfo("Loading ItemChanger...");
                 Instance = this;
-                RequestAssets();
                 CreateHost();
-                ICObjectCache.Init(SilksongHost.Instance);
+                AssetCache.Init(SilksongHost.Instance);
                 Logger.LogInfo($"Plugin {Name} ({Id}) has loaded!");
             }
             catch (Exception e)

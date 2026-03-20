@@ -1,0 +1,10 @@
+{
+    "JOURNAL_BORDER_NORMAL": {
+        "AssetName": "Assets/Sprites/UI/Bestiary/Hornet_images/bestiary_icon__0001_frame_empty.png",
+        "BundleName": "textures_assets_shared.bundle"
+    },
+    "JOURNAL_BACKGROUND": {
+        "AssetName": "Assets/Sprites/Scenery/black_solid.png",
+        "BundleName": "textures_assets_.bundle"
+    }
+}

@@ -1,16 +1,14 @@
-﻿using Benchwarp.Data;
-using HutongGames.PlayMaker;
+﻿using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
 using ItemChanger.Containers;
 using ItemChanger.Extensions;
 using ItemChanger.Items;
 using ItemChanger.Placements;
+using ItemChanger.Silksong.Assets;
 using ItemChanger.Silksong.Components;
-using ItemChanger.Silksong.Extensions;
 using ItemChanger.Silksong.FsmStateActions;
 using ItemChanger.Silksong.Modules;
 using ItemChanger.Silksong.Tags;
-using Silksong.AssetHelper.ManagedAssets;
 using Silksong.FsmUtil;
 using UnityEngine;
 
@@ -70,25 +68,25 @@ public enum FleaContainerType
 /// </summary>
 public class FleaContainer : Container
 {
-    private record FleaPrefabData(ManagedAsset<GameObject> Prefab, float Offset);
+    private record FleaPrefabData(string PrefabKey, float Offset);
 
     private static readonly Dictionary<FleaContainerType, FleaPrefabData> _prefabs = new()
     {
         [FleaContainerType.Sleeping] = new(
-            ManagedAsset<GameObject>.FromSceneAsset(SceneNames.Dust_12, "Flea Rescue Sleeping"),
+            SceneGameObjectKeys.FLEA_SLEEPING,
             // asset y - hornet y
             -0.29f
         ),
         [FleaContainerType.Barrel] = new(
-            ManagedAsset<GameObject>.FromSceneAsset(SceneNames.Bone_East_05, "Flea Rescue Barrel"),
+            SceneGameObjectKeys.FLEA_BARREL,
             0f
         ),
         [FleaContainerType.AntCage] = new(
-            ManagedAsset<GameObject>.FromSceneAsset(SceneNames.Ant_03, "Flea Rescue Cage"),
+            SceneGameObjectKeys.FLEA_ANT_CAGE,
             0.67f
         ),
         [FleaContainerType.CitadelCage] = new(
-            ManagedAsset<GameObject>.FromSceneAsset(SceneNames.Library_01, "Flea Rescue CitadelCage"),
+            SceneGameObjectKeys.FLEA_CITADEL_CAGE,
             3.42f
         ),
     };
@@ -137,10 +135,7 @@ public class FleaContainer : Container
         FleaContainerType fleaType = SelectContainerType(info);
         FleaPrefabData data = _prefabs[fleaType];
 
-        // This should be a no-op
-        data.Prefab.EnsureLoaded();
-
-        GameObject spawnedFlea = data.Prefab.InstantiateInScene(info.ContainingScene);
+        GameObject spawnedFlea = info.ContainingScene.Instantiate(data.PrefabKey.GetAsset<GameObject>());
         ModifyFlea(spawnedFlea, info, fleaType);
 
         spawnedFlea.name = $"ItemChanger Flea for {info.GiveInfo.Placement.Name}";
@@ -261,19 +256,7 @@ public class FleaContainer : Container
         // get.InsertMethodAfter(/* code to spawn and fling shinies goes here */);
     }
 
-    protected override void DoLoad()
-    {
-        foreach (FleaPrefabData data in _prefabs.Values)
-        {
-            data.Prefab.Load();
-        }
-    }
+    protected override void DoLoad() { }
     
-    protected override void DoUnload()
-    {
-        foreach (FleaPrefabData data in _prefabs.Values)
-        {
-            data.Prefab.Unload();
-        }
-    }
+    protected override void DoUnload() { }
 }

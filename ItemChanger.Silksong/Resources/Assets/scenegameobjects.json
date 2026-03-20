@@ -1,0 +1,18 @@
+{
+    "FLEA_BARREL": {
+        "SceneName": "Bone_East_05",
+        "ObjPath": "Flea Rescue Barrel"
+    },
+    "FLEA_SLEEPING": {
+        "SceneName": "Dust_12",
+        "ObjPath": "Flea Rescue Sleeping"
+    },
+    "FLEA_ANT_CAGE": {
+        "SceneName": "Ant_03",
+        "ObjPath": "Flea Rescue Cage"
+    },
+    "FLEA_CITADEL_CAGE": {
+        "SceneName": "Library_01",
+        "ObjPath": "Flea Rescue CitadelCage"
+    }
+}
