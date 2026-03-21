@@ -229,7 +229,7 @@ namespace ItemChanger.Silksong.Containers
             }
             catch (Exception e)
             {
-                Logger().LogWarn($"[Chest] Failed to play chest animation: {e.GetType().Name}");
+                LogWarn($"[Chest] Failed to play chest animation: {e.GetType().Name}");
                 return false;
             }
         }
@@ -336,7 +336,7 @@ namespace ItemChanger.Silksong.Containers
             }
 
             spawnedShinies = true;
-            Logger().LogInfo($"[Chest] Open event for {Info.GiveInfo.Placement.Name}; spawned {items.Count} shinies.");
+            LogInfo($"[Chest] Open event for {Info.GiveInfo.Placement.Name}; spawned {items.Count} shinies.");
         }
 
         private void EnsurePersistentBool()
@@ -352,7 +352,7 @@ namespace ItemChanger.Silksong.Containers
                 PersistentItemData<bool>? data = persistentBoolItem.ItemData;
                 if (data == null)
                 {
-                    Logger().LogWarn("[Chest] PersistentBoolItem.ItemData was null.");
+                    LogWarn("[Chest] PersistentBoolItem.ItemData was null.");
                     persistentBoolInitialized = true;
                     return;
                 }
@@ -366,7 +366,7 @@ namespace ItemChanger.Silksong.Containers
             }
             catch (Exception e)
             {
-                Logger().LogWarn($"[Chest] Failed to initialize PersistentBoolItem: {e.GetType().Name}");
+                LogWarn($"[Chest] Failed to initialize PersistentBoolItem: {e.GetType().Name}");
             }
             finally
             {
@@ -416,7 +416,7 @@ namespace ItemChanger.Silksong.Containers
             }
             catch (Exception e)
             {
-                Logger().LogWarn($"[Chest] Failed setting PersistentBoolItem value: {e.GetType().Name}");
+                LogWarn($"[Chest] Failed setting PersistentBoolItem value: {e.GetType().Name}");
             }
         }
 
@@ -469,7 +469,5 @@ namespace ItemChanger.Silksong.Containers
 
             return col.gameObject == player || col.transform.IsChildOf(player.transform);
         }
-
-        private static ILogger Logger() => ItemChangerHost.Singleton.Logger;
     }
 }
