@@ -14,5 +14,35 @@
     "FLEA_CITADEL_CAGE": {
         "SceneName": "Library_01",
         "ObjPath": "Flea Rescue CitadelCage"
+    },
+    "HALLS_CHEST": {
+        "SceneName": "Hang_06_bank",
+        "ObjPath": "Thief Scene Control/Thieves Not Here/Chest"
     }
+/*
+    "HALLS_CHEST_1": {
+        "SceneName": "Hang_06_bank",
+        "ObjPath": "Thief Scene Control/Thieves Not Here/Chest (1)"
+    },
+    "HALLS_CHEST_2": {
+        "SceneName": "Hang_06_bank",
+        "ObjPath": "Thief Scene Control/Thieves Not Here/Chest (2)"
+    },
+    "HALLS_THIEVES_CHEST": {
+        "SceneName": "Hang_06_bank",
+        "ObjPath": "Thief Scene Control/Thieves Here/Chest"
+    },
+    "HALLS_THIEVES_CHEST_1": {
+        "SceneName": "Hang_06_bank",
+        "ObjPath": "Thief Scene Control/Thieves Here/Chest (1)"
+    },
+    "HALLS_THIEVES_CHEST_2": {
+        "SceneName": "Hang_06_bank",
+        "ObjPath": "Thief Scene Control/Thieves Here/Chest (2)"
+    },
+    "MOSS_BONE_CHEST": {
+        "SceneName": "Tut_01",
+        "ObjPath": "Bone Chest"
+    }
+    */
 }
