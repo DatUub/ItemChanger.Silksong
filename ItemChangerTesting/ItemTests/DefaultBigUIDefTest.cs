@@ -6,6 +6,7 @@ using ItemChanger.Locations;
 using ItemChanger.Placements;
 using ItemChanger.Serialization;
 using ItemChanger.Silksong.RawData;
+using ItemChanger.Silksong.Serialization;
 using ItemChanger.Silksong.Serialization.ModifiedSprites;
 using ItemChanger.Silksong.StartDefs;
 using ItemChanger.Silksong.UIDefs;
@@ -84,10 +85,32 @@ internal class DefaultBigUIDefTest : Test
             Managed = false,
         }.Wrap();
 
+        Placement upper = new CoordinateLocation()
+        {
+            Name = "Upper",
+            SceneName = SceneNames.Coral_34,
+            Y = 42.52f,
+            X = 110.49f,
+            FlingType = ItemChanger.Enums.FlingType.Everywhere,
+            ForceDefaultContainer = true,
+            Managed = false,
+        }.Wrap();
 
-        AddUIDefs(lowerLeft, lowerMid, lowerRight, across, inside);
+        Placement shellwood = new CoordinateLocation()
+        {
+            Name = "Shellwood",
+            SceneName = SceneNames.Shellwood_02,
+            Y = 23.40f,
+            X = 18.40f,
+            FlingType = ItemChanger.Enums.FlingType.Everywhere,
+            ForceDefaultContainer = true,
+            Managed = false,
+        }.Wrap();
 
-        foreach (Placement pmt in new Placement[] { lowerLeft, lowerMid, lowerRight, inside, across })
+
+        AddUIDefs(lowerLeft, lowerMid, lowerRight, across, inside, upper, shellwood);
+
+        foreach (Placement pmt in new Placement[] { lowerLeft, lowerMid, lowerRight, inside, across, upper, shellwood })
         {
             if (pmt.Items.Count > 0)
             {
@@ -108,9 +131,16 @@ internal class DefaultBigUIDefTest : Test
         pmt.Add(item);
     }
 
-    private void AddUIDefs(Placement lowerLeft, Placement lowerMid, Placement lowerRight, Placement across, Placement inside)
+    private void AddUIDefs(
+        Placement lowerLeft, 
+        Placement lowerMid, 
+        Placement lowerRight, 
+        Placement across, 
+        Placement inside,
+        Placement upper,
+        Placement shellwood)
     {
-        UIDef big = new DefaultBigUiDef()
+        UIDef big = new DefaultBigUIDef()
         {
             Fallback = new MsgUIDef()
             {
@@ -138,7 +168,7 @@ internal class DefaultBigUIDefTest : Test
             }
         };
 
-        UIDef big2 = new DefaultBigUiDef()
+        UIDef big2 = new DefaultBigUIDef()
         {
             Fallback = new MsgUIDef()
             {
@@ -158,6 +188,41 @@ internal class DefaultBigUIDefTest : Test
                     ["Msg 1"] = new BoxedString("emm ess gee one"),
                     ["Msg 2"] = new BoxedString("emm ess gee two"),
                 },
+            }
+        };
+
+        UIDef defaultDash = new DefaultBigUIDef()
+        {
+            Fallback = new MsgUIDef()
+            {
+                Name = BaseLanguageStrings.Swift_Step_Name,
+                ShopDesc = BaseLanguageStrings.Swift_Step_Desc,
+                Sprite = BaseAtlasSprites.Swift_Step,
+            },
+            ItemStringVariable = "Sprint",
+            Data = new() { Sprite = BaseAtlasSprites.Swift_Step_Big },
+        };
+        UIDef defaultDashNonDefault = new DefaultBigUIDef()
+        {
+            Fallback = new MsgUIDef()
+            {
+                Name = BaseLanguageStrings.Swift_Step_Name,
+                ShopDesc = BaseLanguageStrings.Swift_Step_Desc,
+                Sprite = BaseAtlasSprites.Swift_Step,
+            },
+            Data = new()
+            {
+                ActionString = HeroActionButton.DASH.ToString(),
+                Sprite = BaseAtlasSprites.Swift_Step_Big,
+                TextSetters = new()
+                {
+                    ["Item Name"] = BaseLanguageStrings.Swift_Step_Name,
+                    ["Item Name Prefix"] = new LanguageString("Prompts", "GET_ITEM_INTRO1"),
+                    ["Single Prompt/Press"] = new LanguageString("Prompts", "BUTTON_DESC_HOLD"),
+                    ["Msg 1"] = new LanguageString("Prompts", "GET_SPRINT_1"),
+                    ["Msg 2"] = new LanguageString("Prompts", "GET_SPRINT_2"),
+                },
+
             }
         };
 
@@ -181,5 +246,14 @@ internal class DefaultBigUIDefTest : Test
         
         AddUIDef(lowerRight, big);
         AddUIDef(lowerRight, small);
+
+        // Test if you take damage
+        AddUIDef(shellwood, big);
+        AddUIDef(shellwood, small);
+        AddUIDef(shellwood, big2);
+
+        // Test the default UI def (this not actually used for dash in-game)
+        AddUIDef(upper, defaultDash);
+        AddUIDef(upper, defaultDashNonDefault);
     }
 }

@@ -8,13 +8,30 @@ using Silksong.UnityHelper.Extensions;
 using TMProOld;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.TextCore.Text;
 
 namespace ItemChanger.Silksong.UIDefs;
 
-public class DefaultBigUiDef : CascadingUIDef
+public class DefaultBigUIDef : CascadingUIDef
 {
-    public required DefaultBigUiDefData Data { get; init; }
+    private const string ITEMCHANGER_ITEM_STRING_VARIABLE = "ItemChanger Custom";
+    private const string ITEMCHANGER_EVENT = "ITEMCHANGER_CUSTOM";
+    private const string ITEMCHANGER_STATE = "ItemChanger Custom";
+
+    /// <summary>
+    /// The data used to control the popup.
+    /// </summary>
+    public required DefaultBigUIDefData Data { get; init; }
+
+    /// <summary>
+    /// Set this variable to use one of the base game item paths.
+    /// 
+    /// If this is not supplied, then all of <see cref="Data"/> will
+    /// be used to control the popup.
+    /// 
+    /// If this is supplied, then all of <see cref="Data"/> will
+    /// be ignored, except for the value off <see cref="DefaultBigUIDefData.Sprite"/>.
+    /// </summary>
+    public string? ItemStringVariable { get; init; } = null;
 
     public override MessageType RequiredMessageType => MessageType.LargePopup;
 
@@ -23,40 +40,82 @@ public class DefaultBigUiDef : CascadingUIDef
         GameObject spawnedMessage = GameObjectKeys.ITEM_GET_PROMPT.InstantiateAsset(SceneManager.GetActiveScene());
         spawnedMessage.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
 
-        DefaultBigUiDefDataComponent cpt = spawnedMessage.GetOrAddComponent<DefaultBigUiDefDataComponent>();
+        DefaultBigUIDefDataComponent cpt = spawnedMessage.GetOrAddComponent<DefaultBigUIDefDataComponent>();
         cpt.Data = Data;
-        cpt.Callback = callback;
 
         PlayMakerFSM fsm = spawnedMessage.LocateMyFSM("Msg Control");
-        if (fsm.GetState("ItemChanger Custom") is null)
+
+        fsm.FindStringVariable("Item")!.Value = ItemStringVariable ?? ITEMCHANGER_ITEM_STRING_VARIABLE;
+
+        if (Data.Sprite is not null)
         {
-            ModifyFsm(fsm);
-            HastenFsm(fsm);
+            spawnedMessage.FindChild("Icon")!.GetComponent<SpriteRenderer>().sprite = Data.Sprite.Value;
         }
-        fsm.FindStringVariable("Item")!.Value = "ItemChanger Custom";
+
+        if (fsm.GetState(ITEMCHANGER_STATE) is null)
+        {
+            // This can be done regardless of whether we want to show a custom or base game display
+            EnableCustomDisplay(fsm);
+        }
+
+        // Speed up the animation
+        HastenFsm(fsm);
+
+        // The item has to be the one to give/take control so that multiple big item popups at the same location
+        // are supported
+        RemoveControlManagement(fsm);
+
+        // Execute the callback when the animation finishes
+        ExecuteCallbackOnComplete(fsm, callback);
+
+        // Remove the black background - not sure if we want to keep this
+        // HideBackground(fsm);
+    }
+
+    private void ExecuteCallbackOnComplete(PlayMakerFSM fsm, Action? callback)
+    {
+        fsm.MustGetState("Done").InsertMethod(0, _ => callback?.Invoke());
+
+    }
+
+    private void RemoveControlManagement(PlayMakerFSM fsm)
+    {
+        foreach (string stateName in new[] { "Top Up", "Done" })
+        {
+            fsm.MustGetState(stateName).RemoveFirstActionMatching(
+                a => a is CallMethodProper p
+                && p.methodName.Value == nameof(UIMsgProxy.SetIsInMsg));
+        }
+    }
+
+    private void HideBackground(PlayMakerFSM fsm)
+    {
+        fsm.MustGetState("Top Up").RemoveFirstActionMatching(a => a is SendEventByName sebn && sebn.eventTarget.gameObject.GameObject.Value.name == "BG");
     }
 
     private void HastenFsm(PlayMakerFSM fsm)
     {
-        fsm.MustGetState("Audio Play").GetLastActionOfType<Wait>()!.time.value = 0.25f;
+        FsmState audioPlay = fsm.MustGetState("Audio Play");
+        audioPlay.GetLastActionOfType<Wait>()!.time.value = 0.5f;
+
         fsm.MustGetState("Bot Up").GetLastActionOfType<Wait>()!.time.value = 0.25f;
         fsm.MustGetState("Down").GetLastActionOfType<Wait>()!.time.value = 0.25f;
     }
 
-    private void ModifyFsm(PlayMakerFSM fsm)
+    private void EnableCustomDisplay(PlayMakerFSM fsm)
     {
-        FsmState newState = fsm.AddState("ItemChanger Custom");
+        FsmState newState = fsm.AddState(ITEMCHANGER_STATE);
         newState.AddTransition("FINISHED", "Top Up");
-        FsmEvent newEvent = fsm.AddTransition("Init", "ITEMCHANGER_CUSTOM", "ItemChanger Custom");
+        FsmEvent newEvent = fsm.AddTransition("Init", ITEMCHANGER_EVENT, ITEMCHANGER_STATE);
 
         StringSwitch sw = fsm.MustGetState("Init").GetFirstActionOfType<StringSwitch>()!;
-        sw.compareTo = sw.compareTo.Append("ItemChanger Custom").ToArray();
+        sw.compareTo = sw.compareTo.Append(ITEMCHANGER_ITEM_STRING_VARIABLE).ToArray();
         sw.sendEvent = sw.sendEvent.Append(newEvent).ToArray();
 
         newState.AddMethod(static a =>
         {
             GameObject go = a.fsmComponent.gameObject;
-            DefaultBigUiDefData? data = go.GetComponent<DefaultBigUiDefDataComponent>().Data;
+            DefaultBigUIDefData? data = go.GetComponent<DefaultBigUIDefDataComponent>().Data;
 
             if (data?.ActionString is not null)
             {
@@ -68,7 +127,7 @@ public class DefaultBigUiDef : CascadingUIDef
                 GameObject? child = go.FindChild(objPath);
                 if (child == null)
                 {
-                    LogWarn($"Did not find child {objPath}");
+                    LogWarn($"{nameof(DefaultBigUIDef)}: did not find child {objPath}");
                 }
                 else
                 {
@@ -80,7 +139,7 @@ public class DefaultBigUiDef : CascadingUIDef
                 GameObject? child = go.FindChild(objPath);
                 if (child == null)
                 {
-                    LogWarn($"Did not find child {objPath}");
+                    LogWarn($"{nameof(DefaultBigUIDef)}: did not find child {objPath}");
                 }
                 else
                 {
@@ -92,25 +151,13 @@ public class DefaultBigUiDef : CascadingUIDef
                 GameObject? child = go.FindChild(objPath);
                 if (child == null)
                 {
-                    LogWarn($"Did not find child {objPath}");
+                    LogWarn($"{nameof(DefaultBigUIDef)}: did not find child {objPath}");
                 }
                 else
                 {
                     child.SetActive(false);
                 }
             }
-
-            if (data?.Sprite?.Value is Sprite sprite && sprite != null)
-            {
-                go.FindChild("Icon")!.GetComponent<SpriteRenderer>().sprite = sprite;
-            }
-        });
-
-        fsm.MustGetState("Done").InsertMethod(0, static a =>
-        {
-            GameObject go = a.fsmComponent.gameObject;
-            Action? callback = go.GetComponent<DefaultBigUiDefDataComponent>().Callback;
-            callback?.Invoke();
         });
     }
 }

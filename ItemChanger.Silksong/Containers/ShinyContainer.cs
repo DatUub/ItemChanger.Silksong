@@ -95,6 +95,7 @@ public class ShinyContainer : Container
         SavedContainerItem item = ScriptableObject.CreateInstance<SavedContainerItem>();
         item.ContainerInfo = info;
         item.ContainerTransform = shiny.transform;
+        item.SupportedMessageTypes = Enums.MessageType.Any;
         shiny.SetItem(item);
 
         ShinyControlInfo shinyInfo = GetShinyControlInfo(info);
