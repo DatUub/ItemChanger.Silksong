@@ -28,7 +28,7 @@ internal class DefaultBigUIDefTest : Test
     public override void Setup(TestArgs args)
     {
         // Start near pinstress to verify the base game uidef is not modified
-        StartAt(new CoordinateStartDef() { MapZone = MapZone.CORAL_CAVERNS, SceneName = SceneNames.Coral_34, X = 130.07f, Y = 26.82f});
+        StartAt(new CoordinateStartDef() { MapZone = MapZone.JUDGE_STEPS, SceneName = SceneNames.Coral_34, X = 130.07f, Y = 26.82f});
 
         Placement inside = new CoordinateLocation()
         {
@@ -96,21 +96,21 @@ internal class DefaultBigUIDefTest : Test
             Managed = false,
         }.Wrap();
 
-        Placement shellwood = new CoordinateLocation()
+        Placement damage = new CoordinateLocation()
         {
-            Name = "Shellwood",
-            SceneName = SceneNames.Shellwood_02,
-            Y = 23.40f,
-            X = 18.40f,
+            Name = "Damage",
+            SceneName = SceneNames.Bone_East_17,
+            Y = 81.57f,
+            X = 62.10f,
             FlingType = ItemChanger.Enums.FlingType.Everywhere,
             ForceDefaultContainer = true,
             Managed = false,
         }.Wrap();
 
 
-        AddUIDefs(lowerLeft, lowerMid, lowerRight, across, inside, upper, shellwood);
+        AddUIDefs(lowerLeft, lowerMid, lowerRight, across, inside, upper, damage);
 
-        foreach (Placement pmt in new Placement[] { lowerLeft, lowerMid, lowerRight, inside, across, upper, shellwood })
+        foreach (Placement pmt in new Placement[] { lowerLeft, lowerMid, lowerRight, inside, across, upper, damage })
         {
             if (pmt.Items.Count > 0)
             {
@@ -138,7 +138,7 @@ internal class DefaultBigUIDefTest : Test
         Placement across, 
         Placement inside,
         Placement upper,
-        Placement shellwood)
+        Placement damage)
     {
         UIDef big = new DefaultBigUIDef()
         {
@@ -249,9 +249,9 @@ internal class DefaultBigUIDefTest : Test
         AddUIDef(lowerRight, small);
 
         // Test if you take damage
-        AddUIDef(shellwood, big);
-        AddUIDef(shellwood, small);
-        AddUIDef(shellwood, big2);
+        AddUIDef(damage, big);
+        AddUIDef(damage, small);
+        AddUIDef(damage, big2);
 
         // Test the default UI def (this not actually used for dash in-game)
         AddUIDef(upper, defaultDash);
