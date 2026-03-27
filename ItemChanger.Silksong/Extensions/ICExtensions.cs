@@ -2,6 +2,7 @@
 using ItemChanger.Items;
 using ItemChanger.Placements;
 using ItemChanger.Serialization;
+using Newtonsoft.Json;
 
 namespace ItemChanger.Silksong.Extensions;
 
@@ -36,6 +37,15 @@ internal static class ICExtensions
 
         return $"{prefix}-{placement.Name}-{itemSuffix}";
     }
+
+    /// <summary>
+    /// Return a value provider that returns the same object as self but strongly typed as a subclass.
+    /// </summary>
+    public static IValueProvider<TDerived> Downcast<TBase, TDerived>(this IValueProvider<TBase> self) where TDerived : TBase
+    {
+        return new CastingProvider<TBase, TDerived>() { Inner = self };
+    }
+
 }
 
 file class Box<T> : IValueProvider<object> where T : struct
@@ -47,4 +57,11 @@ file class Box<T> : IValueProvider<object> where T : struct
 file class LiftedT<T> : IWritableValueProvider<T>
 {
     public required T Value { get; set; }
+}
+
+file class CastingProvider<TBase, TDerived> : IValueProvider<TDerived> where TDerived : TBase
+{
+    public required IValueProvider<TBase> Inner { get; init; }
+
+    [JsonIgnore] public TDerived Value => (TDerived)Inner.Value!;
 }
