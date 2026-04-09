@@ -1,6 +1,7 @@
 ﻿using Benchwarp.Data;
 using ItemChanger.Locations;
 using ItemChanger.Silksong.Containers;
+using ItemChanger.Silksong.Tags;
 using ItemChanger.Tags;
 
 namespace ItemChanger.Silksong.RawData;
@@ -301,7 +302,8 @@ internal static partial class BaseLocationList
         ObjectName = "lore_tablet/moss_bone_plaque/Inspect Region",
         Correction = default,
         Tags = [
-            new OriginalContainerTag() { ContainerType = ContainerNames.Tablet, Force = true }
+            new OriginalContainerTag() { ContainerType = ContainerNames.Tablet, Force = true },
+            new EnableMossTabletRevisitTag()
             ]
     };
 
