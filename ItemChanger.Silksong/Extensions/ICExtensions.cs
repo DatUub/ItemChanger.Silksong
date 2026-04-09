@@ -46,22 +46,21 @@ internal static class ICExtensions
         return new CastingProvider<TBase, TDerived>() { Inner = self };
     }
 
-}
+    private class Box<T> : IValueProvider<object> where T : struct
+    {
+        public required IValueProvider<T> Source { get; init; }
+        public object Value => Source.Value;
+    }
 
-file class Box<T> : IValueProvider<object> where T : struct
-{
-    public required IValueProvider<T> Source { get; init; }
-    public object Value => Source.Value;
-}
+    private class LiftedT<T> : IWritableValueProvider<T>
+    {
+        public required T Value { get; set; }
+    }
 
-file class LiftedT<T> : IWritableValueProvider<T>
-{
-    public required T Value { get; set; }
-}
+    private class CastingProvider<TBase, TDerived> : IValueProvider<TDerived> where TDerived : TBase
+    {
+        public required IValueProvider<TBase> Inner { get; init; }
 
-file class CastingProvider<TBase, TDerived> : IValueProvider<TDerived> where TDerived : TBase
-{
-    public required IValueProvider<TBase> Inner { get; init; }
-
-    [JsonIgnore] public TDerived Value => (TDerived)Inner.Value!;
+        [JsonIgnore] public TDerived Value => (TDerived)Inner.Value!;
+    }
 }
