@@ -6,6 +6,10 @@ using ItemChanger.Tags;
 
 namespace ItemChanger.Silksong.RawData;
 
+// TODO - think about how/whether the soul particles should appear for needolin tabs
+// TODO - optionally enable transfer of tablets to act 3
+// TODO - measure elevation of tablets where possible, and add the appropriate DestroyOnContainerReplace tags
+
 internal static partial class BaseLocationList
 {
     public static Location Lore_Tablet__Abyss_Top => new ObjectLocation()
@@ -436,6 +440,7 @@ internal static partial class BaseLocationList
             ]
     };
 
+    // TODO: Should this location be randomized? If yes, how do we handle it?
     public static Location Lore_Tablet__First_Sinner => new ObjectLocation()
     {
         Name = LocationNames.Lore_Tablet__First_Sinner,
