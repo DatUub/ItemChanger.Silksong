@@ -82,6 +82,13 @@ file class PluginLogger : ILogger
 
     void ILogger.LogFine(string? message)
     {
+#if DEBUG 
+        ItemChangerPlugin.Instance.Logger.LogDebug(message);
+#endif
+    }
+
+    void ILogger.LogDebug(string? message)
+    {
         ItemChangerPlugin.Instance.Logger.LogDebug(message);
     }
 
