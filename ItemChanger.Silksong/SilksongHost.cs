@@ -33,6 +33,7 @@ public partial class SilksongHost : ItemChangerHost
     public override IEnumerable<Module> BuildDefaultModules()
     {
         return [
+            new ExactLanguageStrings(),
             new ConsistentRandomnessModule(),
             new ObstacleHandlerModule(),
             new ChapelDoorObstacleModule(),
