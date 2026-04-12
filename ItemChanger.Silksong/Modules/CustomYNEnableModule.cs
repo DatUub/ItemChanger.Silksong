@@ -38,6 +38,7 @@ public class CustomYNEnableModule : Module
 
         self.icon.sprite = null;
         self.amountText.text = owner.Cost.GetCostText();
+        self.amountText.alignment = TMProOld.TextAlignmentOptions.Bottom;
 
         return ReturnFlow.SkipOriginal;
     }
