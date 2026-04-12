@@ -4,6 +4,7 @@ using ItemChanger.Costs;
 using ItemChanger.Locations;
 using ItemChanger.Serialization;
 using ItemChanger.Silksong.Costs;
+using ItemChanger.Silksong.RawData;
 using ItemChanger.Silksong.StartDefs;
 using ItemChanger.Tags;
 using System;
@@ -53,8 +54,8 @@ internal class YNShinyTest : Test
         TestCost(new RosaryCost(1000));
         TestCost(new RosaryCost(10000));
 
-        TestCost(new PDBoolCost(nameof(PlayerData.hasNeedolin), new BoxedString("Have Needolin")));
+        TestCost(new PDBoolCost(nameof(PlayerData.hasNeedolin), new BoxedString("Have Needolin"), BaseAtlasSprites.Needolin));
 
-        TestCost(new RosaryCost(100) + new PDBoolCost(nameof(PlayerData.hasNeedolin), new BoxedString("Have Needolin")));
+        TestCost(new RosaryCost(100) + new PDBoolCost(nameof(PlayerData.hasNeedolin), new BoxedString("Have Needolin"), BaseAtlasSprites.Needolin));
     }
 }

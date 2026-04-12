@@ -31,6 +31,11 @@ public class CustomYNEnableModule : Module
             return ReturnFlow.None;
         }
 
+        if (owner.Cost is IDisplayCost { DisplayEnabled: true })
+        {
+            return ReturnFlow.None;
+        }
+
         self.icon.sprite = null;
         self.amountText.text = owner.Cost.GetCostText();
 
@@ -57,11 +62,35 @@ public class CustomYNEnableModule : Module
         if (cost is ICurrencyCost currencyCost)
         {
             DialogueYesNoBox.Open(yes, no, true, text, currencyCost.CurrencyType, currencyCost.Amount, consumeCurrency: false);
+            return;
         }
-        else
+
+        // Check if the costs are all displayable
+
+        List<Cost> costs = (new MultiCost(cost)).ToList();
+        List<Cost> displayableCosts = [];
+        List<Cost> nonDisplayableCosts = [];
+        foreach (Cost inner in new MultiCost(cost))
+        {
+            if (inner is IDisplayCost { DisplayEnabled: true })
+            {
+                displayableCosts.Add(inner);
+            }
+            else
+            {
+                nonDisplayableCosts.Add(inner);
+            }
+        }
+
+        if (nonDisplayableCosts.Count > 0)
         {
             ItemChangerCostOwner costOwner = ItemChangerCostOwner.FromCost(cost);
             DialogueYesNoBox.Open(yes, no, true, text, [costOwner], [1], displayHudPopup: true, consumeCurrency: false, null);
+            return;
         }
+
+        List<ItemChangerCostOwner> displays = displayableCosts.Select(x => ItemChangerCostOwner.FromCost(x)).ToList();
+        List<int> amounts = displayableCosts.Cast<IDisplayCost>().Select(x => x.Amount).ToList();
+        DialogueYesNoBox.Open(yes, no, true, text, displays, amounts, true, false, null);
     }
 }

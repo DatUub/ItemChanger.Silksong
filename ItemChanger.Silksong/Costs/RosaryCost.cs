@@ -3,8 +3,10 @@ using ItemChanger.Silksong.Extensions;
 
 namespace ItemChanger.Silksong.Costs;
 
-public class RosaryCost(int Amount) : Cost, ICurrencyCost
+public class RosaryCost(int amount) : Cost, ICurrencyCost
 {
+    public int Amount { get; init; } = amount;
+
     /// <summary>
     /// Amount after accounting for any discount rate.
     /// </summary>

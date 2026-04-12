@@ -1,4 +1,5 @@
 ﻿using ItemChanger.Costs;
+using ItemChanger.Silksong.Costs;
 using UnityEngine;
 
 namespace ItemChanger.Silksong.Components;
@@ -16,11 +17,27 @@ public class ItemChangerCostOwner : SavedItem
 
     public override bool CanGetMore()
     {
-        return Cost.CanPay();
+        return true;
     }
 
     public override void Get(bool showPopup = true)
     {
         Cost.Pay();
+    }
+
+    // CanPay is effectively equivalent to GetSavedAmount >= the number passed to DialogueYNBox.Open
+    public override int GetSavedAmount()
+    {
+        if (Cost is IDisplayCost displayCost && displayCost.DisplayEnabled)
+        {
+            return displayCost.Amount;
+        }
+
+        return Cost.CanPay() ? 1 : 0;
+    }
+
+    public override Sprite? GetPopupIcon()
+    {
+        return Cost is IDisplayCost displayCost && displayCost.DisplayEnabled ? displayCost.DisplaySprite : null;
     }
 }
