@@ -34,7 +34,6 @@ public partial class SilksongHost : ItemChangerHost
     public override IEnumerable<Module> BuildDefaultModules()
     {
         return [
-            new ExactLanguageStrings(),
             new CustomYNEnableModule(),
             new YNBoxDamageControlModule(),
             new UIProxyControlBlockerModule(),

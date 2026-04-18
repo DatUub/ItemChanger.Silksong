@@ -1,5 +1,4 @@
-﻿using ItemChanger.Silksong.Modules;
-using TeamCherry.Localization;
+﻿using TeamCherry.Localization;
 
 namespace ItemChanger.Silksong.Components;
 
@@ -11,6 +10,6 @@ internal class SingleLocalizedText : ILocalisedTextCollection
 
     public LocalisedString GetRandom(LocalisedString skipString)
     {
-        return new(sheet: ExactLanguageStrings.ITEMCHANGER_EXACT_SHEET, key: text);
+        return new(sheet: SilksongHost.ITEMCHANGER_EXACT_SHEET, key: text);
     }
 }
