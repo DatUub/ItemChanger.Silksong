@@ -1,5 +1,6 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
+using HutongGames.PlayMaker.Actions;
 using ItemChanger;
 using ItemChanger.Events;
 using ItemChanger.Silksong;
@@ -32,7 +33,22 @@ namespace ItemChangerTesting
                 configDescription: new ConfigDescription("The index of the test to launch, within its folder."));
 
             LogLifecycleEvents();
+
+
+            ItemChangerHost.Singleton.LifecycleEvents.OnEnterGame += () =>
+            {
+                inGame = true;
+                testMethods?.VisibleSelf = true;
+            };
+            ItemChangerHost.Singleton.LifecycleEvents.OnLeaveGame += () =>
+            {
+                inGame = false;
+                testMethods?.VisibleSelf = false;
+            };
         }
+
+        private bool inGame = false;
+        private TextButton? testMethods;
 
         public AbstractMenuScreen BuildCustomMenu()
         {
@@ -51,8 +67,9 @@ namespace ItemChangerTesting
             TextButton run = new("Erase save slot and launch test.");
             run.OnSubmit += Run;
 
-            TextButton testMethods = new("Test Methods");
+            testMethods = new("Test Methods");
             testMethods.OnSubmit += ShowTestMethods;
+            testMethods.VisibleSelf = inGame;
 
             screen.Add(saveSlotSelector!);
             screen.Add(testFolderSelector!);
