@@ -63,7 +63,7 @@ public class NuuMementoLocation : AutoLocation
 
     private string GetProgressText()
     {
-        return CompositeString.Create(ItemChangerLanguageStrings.FMT_HUNTER_FAN_COMPLETION_RESULT, new Dictionary<string, IValueProvider<object>>()
+        return CompositeString.Create(ItemChangerLanguageStrings.FMT_HUNTER_FAN_COMPLETION_RESULT(), new Dictionary<string, IValueProvider<object>>()
         {
             { "COUNTER", ActiveProfile!.Modules.GetOrAdd<BossKillsCounterModule>().GetKillCount().ToValueProvider().Embox() },
             { "TARGET", RequiredBossKills.ToValueProvider().Embox() },

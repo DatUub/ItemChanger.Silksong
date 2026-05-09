@@ -24,7 +24,7 @@ public class ElegyOfTheDeepLocation : AutoLocation
     /// <summary>
     /// Dialog to be displayed if when <see cref="LocationPreconditions"/> is not met.
     /// </summary>
-    public LanguageString? PreconditionHint { get; init; } = ItemChangerLanguageStrings.SNAILS_ACT3_DESCEND_HINT;
+    public LanguageString? PreconditionHint { get; init; } = ItemChangerLanguageStrings.SNAILS_ACT3_DESCEND_HINT();
 
     protected override void DoLoad()
     {
