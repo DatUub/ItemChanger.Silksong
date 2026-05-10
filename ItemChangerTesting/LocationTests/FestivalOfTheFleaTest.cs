@@ -18,7 +18,7 @@ internal class FestivalOfTheFleaTest : Test
         Folder = TestFolder.LocationTests,
         MenuName = "Festival of the Flea locations",
         MenuDescription = "Pale Oil (Festival Pinata) and Guardian's Memento (Seth) slots. Pick up the 'Festival on' shiny in Aqueduct_03 to force the festival state, warp to Aqueduct_05_festival, then strike the pinata / beat Seth.",
-        Revision = 2026051000,
+        Revision = 2026051002,
     };
 
     public override void Setup(TestArgs args)

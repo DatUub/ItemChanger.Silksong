@@ -1,26 +1,23 @@
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
 using ItemChanger.Locations;
-using QuestPlaymakerActions;
 using Silksong.FsmUtil;
 
 namespace ItemChanger.Silksong.Locations;
 
 // Festival Pinata 10th-strike Pale Oil grant in Aqueduct_05_festival.
-// Vanilla: strikes 1-9 spawn Rosaries / Shell Shards, strike 10 runs the
-// "Ecstasy of the End" quest reward and spawns Pale Oil. We strip the
-// reward-grant actions on the 10th-strike state and drop in GiveAll.
-// EndQuest stays in whatever sibling state runs it so the wish resolves.
-// TODO: confirm — GameObject path "Pinata", FSM name "Control", and
-// reward state name "Reward" are best-guesses inferred from CreigeLocation
-// / PinstressLocation. Needs Apollo runtime FSM dump.
+// Strikes 1-9 use Money! / Reward 1 / Reward 2 to spawn rosaries + shards;
+// strike 10 enters Reward Final which flings four Pale Oil pickups via
+// FlingObjectsFromGlobalPoolV2. Strip the flings and grant through IC.
+// Verified from aqueduct_05_festival.bundle: object "Flea Festival Pinata",
+// FSM "Rewards", state "Reward Final".
 public class FleaPinataLocation : AutoLocation
 {
     protected override void DoLoad()
     {
         Using(new FsmEditGroup()
         {
-            { new(SceneName!, "Pinata", "Control"), HookPinata },
+            { new(SceneName!, "Flea Festival Pinata", "Rewards"), HookPinata },
         });
     }
 
@@ -28,10 +25,8 @@ public class FleaPinataLocation : AutoLocation
 
     private void HookPinata(PlayMakerFSM fsm)
     {
-        FsmState rewardState = fsm.MustGetState("Reward");
-        rewardState.RemoveActionsOfType<GetQuestReward>();
-        rewardState.RemoveActionsOfType<SavedItemGetV2>();
-        rewardState.RemoveActionsOfType<CollectableItemGetDataV2>();
-        rewardState.InsertLambdaMethod(0, GiveAll);
+        FsmState rewardFinal = fsm.MustGetState("Reward Final");
+        rewardFinal.RemoveActionsOfType<FlingObjectsFromGlobalPoolV2>();
+        rewardFinal.InsertLambdaMethod(0, GiveAll);
     }
 }
