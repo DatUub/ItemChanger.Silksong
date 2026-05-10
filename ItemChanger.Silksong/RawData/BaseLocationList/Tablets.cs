@@ -12,7 +12,6 @@ namespace ItemChanger.Silksong.RawData;
 // TODO - think about how/whether the soul particles should appear for needolin tabs
 // TODO - measure elevation of tablets where possible, and add the appropriate DestroyOnContainerReplace tags
 // TODO - custom handling of lib-13b checks? (with plinks at "Desk Inspect and Quill/Group/desk_inspect/inspect plink")
-// TODO - Mushroom tablet (most likely a special location)
 
 internal static partial class BaseLocationList
 {
@@ -67,6 +66,19 @@ internal static partial class BaseLocationList
                     .WithTag(new FleaFestivalTabletTag()),
         }
     };
+
+    public static Location Lore_Tablet__Mr_Mushroom => new ObjectLocation()
+    {
+        Name = LocationNames.Lore_Tablet__Mr_Mushroom,
+        SceneName = SceneNames.Aqueduct_05,
+        ObjectName = "Black Thread States Thread Only Variant/Normal World/Mr Mushroom Tablet",
+        Correction = default,
+        Tags = [
+            new OriginalContainerTag() { ContainerType = ContainerNames.Tablet, Force = true },
+            new MrMushroomTabletTag(),
+            new DisableObjectOnCheckTag() { ObjectPath = "Black Thread States Thread Only Variant/Normal World/Mr Mushroom Tablet/inspect plink" },
+            ]
+    }.ToAct3DualLocation(/* TODO confirm coords from runtime probe */ 0f, 0f);
 
     public static Location Lore_Tablet__Memorium_Entrance => new ObjectLocation()
     {

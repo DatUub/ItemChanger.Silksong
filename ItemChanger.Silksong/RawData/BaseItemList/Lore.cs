@@ -41,6 +41,11 @@ internal static partial class BaseItemList
     public static Item Lore_Tablet__Fleatopia_Weaver_Harp
         => CreateLoreItem(ItemNames.Lore_Tablet__Fleatopia_Weaver_Harp, "Inspect", "WEAVE_WHITE_LAKE");
 
+    // TODO: confirm sheet + key from runtime probe of Aqueduct_05 Tablet Control FSM.
+    // Riddle text starts the Passing of the Age wish; key likely lives in Wishes sheet.
+    public static Item Lore_Tablet__Mr_Mushroom
+        => CreateLoreItem(ItemNames.Lore_Tablet__Mr_Mushroom, "Wishes", "MR_MUSH_TABLET_RIDDLE");
+
     public static Item Lore_Tablet__Memorium_Entrance
         => CreateLoreItem(ItemNames.Lore_Tablet__Memorium_Entrance, "Inspect", "ARBORIUM_PLAQUE");
 
