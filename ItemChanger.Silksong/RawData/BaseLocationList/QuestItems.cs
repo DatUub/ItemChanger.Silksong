@@ -8,6 +8,18 @@ namespace ItemChanger.Silksong.RawData;
 
 internal static partial class BaseLocationList
 {
+    public static Location Pale_Oil__Fleatopia => new FleaPinataLocation()
+    {
+        SceneName = SceneNames.Aqueduct_05_festival,
+        Name = LocationNames.Pale_Oil__Fleatopia,
+    };
+
+    public static Location Guardian_s_Memento => new SethFestivalLocation()
+    {
+        SceneName = SceneNames.Aqueduct_05_festival,
+        Name = LocationNames.Guardian_s_Memento,
+    };
+
     public static Location Hermit_s_Soul => new DualLocation()
     {
         Name = LocationNames.Hermit_s_Soul,
