@@ -36,7 +36,11 @@ public abstract class MooshkaLocation : AutoLocation
         foreach (var stateName in RewardStates)
         {
             FsmState? state = fsm.GetState(stateName);
-            if (state == null) continue;
+            if (state == null)
+            {
+                GlobalRefs.LogWarn($"MooshkaLocation {Name}: state '{stateName}' missing on {NpcObjectName}");
+                continue;
+            }
 
             // Strip vanilla grant actions.
             state.RemoveActionsOfType<SavedItemGetV2>();
