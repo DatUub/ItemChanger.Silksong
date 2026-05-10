@@ -8,6 +8,8 @@ using Silksong.ModMenu.Elements;
 using Silksong.ModMenu.Models;
 using Silksong.ModMenu.Plugin;
 using Silksong.ModMenu.Screens;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace ItemChangerTesting
 {
@@ -18,6 +20,8 @@ namespace ItemChangerTesting
         public required ConfigEntry<int> cfgSaveSlot;
         public required ConfigEntry<TestFolder> cfgTestFolder;
         public required ConfigEntry<int> cfgTestIndex;
+        public required ConfigEntry<bool> cfgAutoRun;
+        public required ConfigEntry<float> cfgAutoRunDelay;
 
         public static ItemChangerTestingPlugin Instance { get; private set; } = null!;
         public new BepInEx.Logging.ManualLogSource Logger => base.Logger;
@@ -25,12 +29,16 @@ namespace ItemChangerTesting
         private void Awake()
         {
             Instance = this;
-            cfgSaveSlot = Config.Bind(configDefinition: new ConfigDefinition(section: "Menu", key: "Save Slot"), defaultValue: 1, 
-                configDescription: new ConfigDescription("The save slot to use for the test.", acceptableValues: new AcceptableValueRange<int>(1, 4)));
+            cfgSaveSlot = Config.Bind(configDefinition: new ConfigDefinition(section: "Menu", key: "Save Slot"), defaultValue: 1,
+                configDescription: new ConfigDescription("The save slot to use for the test.", acceptableValues: new AcceptableValueRange<int>(1, 100)));
             cfgTestFolder = Config.Bind(configDefinition: new ConfigDefinition(section: "Menu", key: "Test Folder"), defaultValue: (TestFolder)default,
                 configDescription: new ConfigDescription("The test folder to search."));
             cfgTestIndex = Config.Bind(configDefinition: new ConfigDefinition(section: "Menu", key: "Test Index"), defaultValue: (int)default,
                 configDescription: new ConfigDescription("The index of the test to launch, within its folder."));
+            cfgAutoRun = Config.Bind(configDefinition: new ConfigDefinition(section: "AutoRun", key: "Enabled"), defaultValue: false,
+                configDescription: new ConfigDescription("If true, auto-fire the test selected by Test Folder + Test Index when the title screen is ready."));
+            cfgAutoRunDelay = Config.Bind(configDefinition: new ConfigDefinition(section: "AutoRun", key: "Delay Seconds"), defaultValue: 2.0f,
+                configDescription: new ConfigDescription("Seconds to wait after the title screen is ready before firing the auto-run test."));
 
             LogLifecycleEvents();
 
@@ -45,6 +53,46 @@ namespace ItemChangerTesting
                 inGame = false;
                 testMethods?.VisibleSelf = false;
             };
+
+            if (cfgAutoRun.Value) SceneManager.sceneLoaded += OnSceneLoadedForAutoRun;
+        }
+
+        private bool autoRunFired;
+
+        private void OnSceneLoadedForAutoRun(Scene scene, LoadSceneMode mode)
+        {
+            if (autoRunFired) return;
+            if (scene.name != "Menu_Title") return;
+            autoRunFired = true;
+            SceneManager.sceneLoaded -= OnSceneLoadedForAutoRun;
+            StartCoroutine(AutoRunCoroutine());
+        }
+
+        private System.Collections.IEnumerator AutoRunCoroutine()
+        {
+            yield return new WaitForSeconds(Mathf.Max(0f, cfgAutoRunDelay.Value));
+
+            TestFolder folder = cfgTestFolder.Value;
+            int index = cfgTestIndex.Value;
+            if (!Test.TestGroups.TryGetValue(folder, out var tests) || index < 0 || index >= tests.Count)
+            {
+                Logger.LogWarning($"[TestingAutoRun] no test at folder={folder} index={index}; aborting auto-run.");
+                AutoRunResult.Write($"{folder}[{index}]", "missing", null, "Folder/index out of range.");
+                yield break;
+            }
+
+            Test test = tests[index];
+            string menuName = test.GetMetadata().MenuName;
+            Logger.LogInfo($"[TestingAutoRun] starting {menuName}");
+            try
+            {
+                TestDispatcher.StartTest(test);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError($"[TestingAutoRun] test {menuName} failed: {e}");
+                AutoRunResult.Write(menuName, "failed", null, e.ToString());
+            }
         }
 
         private bool inGame = false;

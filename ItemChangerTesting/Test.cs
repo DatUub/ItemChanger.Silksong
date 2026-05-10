@@ -54,14 +54,24 @@ namespace ItemChangerTesting
             });
         }
 
-        protected override void DoLoad() 
+        protected override void DoLoad()
         {
             ItemChangerHost.Singleton.LifecycleEvents.OnEnterGame += OnEnterGame;
+            ItemChangerHost.Singleton.LifecycleEvents.OnSafeToGiveItems += LogTestSpawned;
         }
 
         protected override void DoUnload()
         {
             ItemChangerHost.Singleton.LifecycleEvents.OnEnterGame -= OnEnterGame;
+            ItemChangerHost.Singleton.LifecycleEvents.OnSafeToGiveItems -= LogTestSpawned;
+        }
+
+        private void LogTestSpawned()
+        {
+            string name = GetMetadata().MenuName;
+            string scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+            ItemChangerTestingPlugin.Instance.Logger.LogInfo($"[TestingAutoRun] test {name} reached scene {scene}");
+            AutoRunResult.Write(name, "loaded", scene, null);
         }
 
         protected virtual void OnEnterGame() { }
