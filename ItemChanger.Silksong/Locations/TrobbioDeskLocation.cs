@@ -1,3 +1,4 @@
+using HarmonyLib;
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
 using ItemChanger.Locations;
@@ -14,27 +15,75 @@ namespace ItemChanger.Silksong.Locations;
 /// GiveAll. Lore tablet side ("Inspect Region Act 2/3") is routed through
 /// TabletContainer independently.
 ///
-/// Per-act state is identified by the literal int value (2 or 3) written
-/// to QuillState; act 2 and act 3 share one FSM with a PD branch.
+/// FSM is matched by content (state writing QuillState == Act), not by
+/// FsmId tuple -- the FSM's exact name and which GameObject under
+/// "Desk Inspect and Quill" hosts it aren't documented in scene dumps.
+/// We piggyback on the host's PlayMakerFSM.Start prefix dispatch by
+/// registering against every (scene, *, *) tuple via a small Harmony
+/// patch local to this class.
 /// </summary>
 public class TrobbioDeskLocation : AutoLocation
 {
     /// <summary>2 for Red Quill (act 2), 3 for Purple Quill (act 3).</summary>
     public int Act { get; init; }
 
+    private static readonly List<TrobbioDeskLocation> active = [];
+    private static Harmony? harmony;
+
+    private bool hooked;
+
     protected override void DoLoad()
     {
-        Using(new FsmEditGroup()
+        lock (active)
         {
-            { new(SceneName!, "Desk Inspect and Quill", "Desk Inspect and Quill"), HookDesk },
-        });
+            active.Add(this);
+            if (harmony == null)
+            {
+                harmony = new Harmony("io.github.silksong.itemchanger.trobbiodesk");
+                harmony.Patch(
+                    typeof(PlayMakerFSM).GetMethod(nameof(PlayMakerFSM.Start)),
+                    prefix: new HarmonyMethod(typeof(TrobbioDeskLocation).GetMethod(
+                        nameof(OnFsmStart),
+                        System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic)));
+            }
+        }
     }
 
-    protected override void DoUnload() { }
-
-    private void HookDesk(PlayMakerFSM fsm)
+    protected override void DoUnload()
     {
-        FsmState? grantState = null;
+        lock (active)
+        {
+            active.Remove(this);
+            hooked = false;
+            if (active.Count == 0 && harmony != null)
+            {
+                harmony.UnpatchSelf();
+                harmony = null;
+            }
+        }
+    }
+
+    private static void OnFsmStart(PlayMakerFSM __instance)
+    {
+        string sceneName = __instance.gameObject.scene.name;
+        lock (active)
+        {
+            foreach (TrobbioDeskLocation loc in active)
+            {
+                if (loc.hooked) continue;
+                if (loc.SceneName != sceneName) continue;
+                FsmState? grantState = loc.FindGrantState(__instance);
+                if (grantState == null) continue;
+                ItemChangerPlugin.Instance.Logger.LogInfo(
+                    $"TrobbioDeskLocation Act {loc.Act}: matched FSM '{__instance.FsmName}' on '{__instance.gameObject.name}' state '{grantState.Name}'");
+                loc.ApplyEdit(grantState);
+                loc.hooked = true;
+            }
+        }
+    }
+
+    private FsmState? FindGrantState(PlayMakerFSM fsm)
+    {
         foreach (FsmState state in fsm.FsmStates)
         {
             foreach (FsmStateAction action in state.Actions)
@@ -43,15 +92,15 @@ public class TrobbioDeskLocation : AutoLocation
                     && spdi.intName?.Value == nameof(PlayerData.QuillState)
                     && spdi.value?.Value == Act)
                 {
-                    grantState = state;
-                    break;
+                    return state;
                 }
             }
-            if (grantState != null) break;
         }
+        return null;
+    }
 
-        if (grantState == null) return;
-
+    private void ApplyEdit(FsmState grantState)
+    {
         grantState.RemoveFirstActionMatching(a =>
             a is HutongGames.PlayMaker.Actions.SetPlayerDataInt s
             && s.intName?.Value == nameof(PlayerData.QuillState));
