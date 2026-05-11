@@ -20,13 +20,13 @@ internal static partial class BaseLocationList
     {
         SceneName = SceneNames.Aqueduct_05_caravan,
         Name = LocationNames.Tool_Pouch__Mooshka,
-        RewardStates = ["Award Tool Pouch", "Just Gave Tool Pouch"],
+        RewardStates = ["Award Tool Pouch"],
     };
 
     public static Location Egg_of_Flealia => new MooshkaFleatopiaLocation
     {
         SceneName = SceneNames.Aqueduct_05_caravan,
         Name = LocationNames.Egg_of_Flealia,
-        RewardStates = ["Award Flea Charm", "Has Flea Charm"],
+        RewardStates = ["Award Flea Charm"],
     };
 }
