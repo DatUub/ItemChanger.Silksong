@@ -1,5 +1,6 @@
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
+using QuestPlaymakerActions;
 using ItemChanger.Containers;
 using ItemChanger.Enums;
 using ItemChanger.Locations;
@@ -19,13 +20,14 @@ namespace ItemChanger.Silksong.Tags.SpecialLocationTags;
 /// FSM-driven inspect routes through ItemChanger instead of starting the
 /// vanilla Passing of the Age wish. The tablet is not a BasicNPC so
 /// TabletContainer's OnStartDialogue hook never catches it; we intercept the
-/// "Tablet Control" FSM directly.
+/// "Inspection" FSM directly.
 ///
-/// FSM dump from the bundle lists state names including: Pause, Init, Inspect,
-/// Inspection, Begin Quest?, BeginQuest, Dialogue, Pre Enter Effect, Show
-/// Prompt, FINISHED. Exact transition graph isn't fully known from static
-/// analysis; the patcher logs all state names on first hook and applies edits
-/// defensively (skip + warn if a state is absent).
+/// Bundle dump of aqueduct_05.bundle (GO "Mr Mushroom Tablet", FSM "Inspection"):
+///   Idle -> Prompt Up -> Weaver Dialogue (RunDialogue) -> Prompt Down ->
+///   Hornet Dialogue (RunDialogue) -> Begin Quest? (QuestYesNoV2) ->
+///   {YES: Dialogue End Yes (BeginQuestV2), NO: Dialogue End No}.
+/// IC delivery slots into Dialogue End Yes (the explicit YES-accept branch),
+/// stripping BeginQuestV2 so the Passing of the Age wish doesn't start.
 /// </summary>
 [LocationTag]
 public class MrMushroomTabletTag : Tag
@@ -37,7 +39,7 @@ public class MrMushroomTabletTag : Tag
         _location = (parent as Location)!;
         Using(new FsmEditGroup()
         {
-            { new FsmId(_location.SceneName!, "Mr Mushroom Tablet", "Tablet Control"), PatchTabletControl }
+            { new FsmId(_location.SceneName!, "Mr Mushroom Tablet", "Inspection"), PatchInspection }
         });
     }
 
@@ -46,56 +48,19 @@ public class MrMushroomTabletTag : Tag
         _location = null;
     }
 
-    private void PatchTabletControl(PlayMakerFSM fsm)
+    private void PatchInspection(PlayMakerFSM fsm)
     {
-        // Dump state names so we can see what's actually there during runtime
-        // testing. Promote/remove this once the FSM is confirmed.
-        if (SilksongHost.Instance.Logger is { } log)
-        {
-            var names = new System.Text.StringBuilder("[MrMushroomTabletTag] Tablet Control states: ");
-            foreach (FsmState s in fsm.FsmStates) { names.Append(s.Name); names.Append(", "); }
-            log.LogInfo(names.ToString());
-        }
-
-        // Bail on inspect if already obtained — short-circuits the prompt at
-        // the earliest state we can find.
-        TryInsertObtainedShortCircuit(fsm, "Pause");
-        TryInsertObtainedShortCircuit(fsm, "Init");
         TryInsertObtainedShortCircuit(fsm, "Idle");
 
-        // Find a state that runs dialogue / starts the quest and replace it
-        // with an IC delivery hand-off. Candidate state names cover the
-        // observed FSM string list.
-        string[] candidates = ["Dialogue", "Inspection", "Begin Quest?", "BeginQuest", "Inspect"];
-        FsmState? deliverState = null;
-        foreach (string n in candidates)
-        {
-            FsmState? s = TryGetState(fsm, n);
-            if (s == null) continue;
-            // Prefer a state that actually runs vanilla dialogue / quest action.
-            bool hasDialogue = false;
-            foreach (FsmStateAction a in s.Actions)
-            {
-                if (a is CallMethodProper or SendEventByName)
-                {
-                    hasDialogue = true;
-                    break;
-                }
-            }
-            if (hasDialogue) { deliverState = s; break; }
-            deliverState ??= s;
-        }
-
+        FsmState? deliverState = TryGetState(fsm, "Dialogue End Yes");
         if (deliverState == null)
         {
             SilksongHost.Instance.Logger?.LogWarn(
-                $"MrMushroomTabletTag: no candidate delivery state found in FSM 'Tablet Control'.");
+                "MrMushroomTabletTag: 'Dialogue End Yes' state missing from FSM 'Inspection'.");
             return;
         }
 
-        // Strip vanilla dialogue + quest-start actions and route through IC.
-        deliverState.RemoveActionsOfType<CallMethodProper>();
-        deliverState.RemoveActionsOfType<SendEventByName>();
+        deliverState.RemoveActionsOfType<BeginQuestV2>();
         deliverState.InsertMethod(0, () => Deliver(fsm));
     }
 
@@ -112,6 +77,8 @@ public class MrMushroomTabletTag : Tag
     {
         FsmState? s = TryGetState(fsm, stateName);
         if (s == null) return;
+        // CANCEL is the Idle->Inactive transition in the Inspection FSM,
+        // skipping the dialogue + YES/NO prompt entirely.
         s.InsertMethod(0, () =>
         {
             if (_location?.Placement?.AllObtained() == true)
