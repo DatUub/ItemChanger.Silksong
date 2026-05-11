@@ -71,14 +71,14 @@ internal static partial class BaseLocationList
     {
         Name = LocationNames.Lore_Tablet__Mr_Mushroom,
         SceneName = SceneNames.Aqueduct_05,
-        ObjectName = "Black Thread States Thread Only Variant/Normal World/Mr Mushroom Tablet",
+        ObjectName = "Mr_Mush_Tablet_St/Mr Mushroom Tablet",
         Correction = default,
         Tags = [
             new OriginalContainerTag() { ContainerType = ContainerNames.Tablet, Force = true },
             new MrMushroomTabletTag(),
-            new DisableObjectOnCheckTag() { ObjectPath = "Black Thread States Thread Only Variant/Normal World/Mr Mushroom Tablet/inspect plink" },
+            new DisableObjectOnCheckTag() { ObjectPath = "Mr_Mush_Tablet_St/Mr Mushroom Tablet/Prompt Marker" },
             ]
-    }.ToAct3DualLocation(/* TODO confirm coords from runtime probe */ 0f, 0f);
+    }.ToAct3DualLocation(/* TODO Act 3 coord fallback pending bundle dump */ 0f, 0f);
 
     public static Location Lore_Tablet__Memorium_Entrance => new ObjectLocation()
     {
