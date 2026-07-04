@@ -32,18 +32,16 @@ public class CrawSummonsLocation : ObjectLocation
     {
         // Don't call base.DoLoad since SceneName is not specified
 
+        SceneEditGroup sceneEditGroup = new();
         foreach (var scene in CrawSummonsModule.SceneNames)
         {
-            ItemChangerHost.Singleton.GameEvents.AddSceneEdit(scene, base.OnSceneLoaded);
+            sceneEditGroup.Add(scene, base.OnSceneLoaded);
         }
+        Using(sceneEditGroup);
     }
 
     protected override void DoUnload()
     {
-        foreach (var scene in CrawSummonsModule.SceneNames)
-        {
-            ItemChangerHost.Singleton.GameEvents.RemoveSceneEdit(scene, base.OnSceneLoaded);
-        }
     }
 
     public override GameObject ReplaceWithContainer(Scene scene, Container container, ContainerInfo info)
