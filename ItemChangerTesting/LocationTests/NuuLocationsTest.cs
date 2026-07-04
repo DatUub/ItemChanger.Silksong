@@ -36,15 +36,30 @@ internal class NuuLocationsTest : Test
         PlayerDataAccess.blackThreadWorld = true;
         PlayerDataAccess.act3_enclaveWakeSceneCompleted = true;
         PlayerDataAccess.act3_wokeUp = true;
+    }
+    
+    public override IEnumerable<(string, Action)> TestMethods()
+    {
+        yield return ("Grant 3 Boss Entries", () => GrantBossEntries(3));
+        yield return ("Grant 10 Boss Entries", () => GrantBossEntries(10));
+    }
 
+    private void GrantBossEntries(int killsToAdd)
+    {
         var mod = Modules.GetOrAdd<BossKillsCounterModule>();
+        
         foreach (var boss in mod.BossDefinitions)
         {
             if (boss is not JournalEntryBossDefinition entryDefinition)
                 continue;
             var killData = PlayerDataAccess.EnemyJournalKillData.GetKillData(entryDefinition.BossName);
+            if (killData.Kills > 0)
+                continue;
             killData.Kills += 1;
             PlayerDataAccess.EnemyJournalKillData.RecordKillData(entryDefinition.BossName, killData);
+            killsToAdd--;
+            if (killsToAdd == 0)
+                return;
         }
     }
 }
