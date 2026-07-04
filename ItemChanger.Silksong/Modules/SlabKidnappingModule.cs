@@ -34,18 +34,18 @@ public class SlabKidnappingModule : Module
 
     protected override void DoLoad()
     {
-        ItemChangerHost.Singleton.GameEvents.AddSceneEdit(SceneNames.Bone_East_04c, ForceJailerDocks);
-        ItemChangerHost.Singleton.GameEvents.AddSceneEdit(SceneNames.Shadow_21, ForceJailerBilewater);
-        ItemChangerHost.Singleton.GameEvents.AddSceneEdit(SceneNames.Greymoor_05, ForceJailerGreymoor);
+        Using(new SceneEditGroup()
+        {
+            { SceneNames.Bone_East_04c, ForceJailerDocks },
+            { SceneNames.Shadow_21, ForceJailerGreymoor },
+            { SceneNames.Greymoor_05, ForceJailerBilewater },
+        });
 
         Using(new FsmEditGroup { { new(SilksongHost.Wildcard, "Slab Fly Large Cage", "Control"), HookWardenfly } });
     }
 
     protected override void DoUnload()
     {
-        ItemChangerHost.Singleton.GameEvents.RemoveSceneEdit(SceneNames.Bone_East_04c, ForceJailerDocks);
-        ItemChangerHost.Singleton.GameEvents.RemoveSceneEdit(SceneNames.Shadow_21, ForceJailerBilewater);
-        ItemChangerHost.Singleton.GameEvents.RemoveSceneEdit(SceneNames.Greymoor_05, ForceJailerGreymoor);
     }
 
     private void ForceJailerDocks(Scene scene)
