@@ -12,4 +12,12 @@ public abstract class BossDefinition
     /// boss refights.
     /// </summary>
     public abstract int BossesKilledContribution { get; }
+
+    public virtual void DoLoad()
+    {
+    }
+
+    public virtual void DoUnload()
+    {
+    }
 }

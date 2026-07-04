@@ -24,7 +24,6 @@ public class BossKillsCounterModule : Module
     /// Shakra). However, these are not missable in Rando due to the ability to return to Act 2. </para>
     /// The following bosses are excluded: <br/>
     /// * Palestag - Missable unless Lost Verdania is repeatable - TODO? <br/>
-    /// * Moss Mothers - Needs unique handling due to refight being a double fight, probably cannot use journal entry
     /// </summary>
     private static IReadOnlyCollection<BossDefinition> DefaultBosses =>
     [
@@ -33,7 +32,6 @@ public class BossKillsCounterModule : Module
         new JournalEntryBossDefinition(JournalEntries.Coral_Conch_Driller_Giant, 2), // Great Conchflies
         new JournalEntryBossDefinition(JournalEntries.Last_Judge), // Last Judge
         new JournalEntryBossDefinition(JournalEntries.Vampire_Gnat), // Moorwing
-        new JournalEntryBossDefinition(JournalEntries.Mossbone_Mother), // Moss Mother - TODO refight
         new JournalEntryBossDefinition(JournalEntries.Phantom), // Phantom
         new JournalEntryBossDefinition(JournalEntries.Bone_Flyer_Giant, 2), // Savage Beastfly
         new JournalEntryBossDefinition(JournalEntries.Splinter_Queen), // Sister Splinter
@@ -68,17 +66,22 @@ public class BossKillsCounterModule : Module
         new JournalEntryBossDefinition(JournalEntries.Hunter_Queen), // Skarrsinger Karmelita
         new JournalEntryBossDefinition(JournalEntries.Tormented_Trobbio), // Tormented Trobbio
         new JournalEntryBossDefinition(JournalEntries.Coral_Warrior_Grey), // Watcher at the Edge
-        
+
         new LaceBossDefinition(), // Lace
+        new MossMotherBossDefinition(), // Moss Mother + refight
     ];
 
 
     protected override void DoLoad()
     {
+        foreach (var def in BossDefinitionsInternal)
+            def.DoLoad();
     }
 
     protected override void DoUnload()
     {
+        foreach (var def in BossDefinitionsInternal)
+            def.DoUnload();
     }
 
     internal void AddDefaultBosses()
@@ -119,4 +122,3 @@ public class BossKillsCounterModule : Module
         get { return BossDefinitions.Sum(killDef => killDef.BossesKilledContribution); }
     }
 }
-
