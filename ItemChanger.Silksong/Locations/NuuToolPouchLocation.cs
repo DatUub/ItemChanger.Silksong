@@ -52,6 +52,10 @@ public class NuuToolPouchLocation : AutoLocation
         // Replace quest reward with IC placement
         FsmState getRewardState = fsm.MustGetState("Get Reward?");
         getRewardState.GetFirstActionOfType<SavedItemGet>()!.enabled = false;
-        getRewardState.AddLambdaMethod(GiveAll);
+
+        FsmState completeConvoState = fsm.AddState("Complete Convo 5");
+        fsm.ChangeTransition("Complete Convo 4", "CONVO_END", "Complete Convo 5");
+        fsm.AddTransition("Complete Convo 5", "FINISHED", "End Dialogue");
+        completeConvoState.AddLambdaMethod(GiveAll);
     }
 }
