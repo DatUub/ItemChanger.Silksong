@@ -5,6 +5,8 @@ using ItemChanger.Silksong.Containers;
 using ItemChanger.Silksong.Serialization;
 using ItemChanger.Silksong.Tags;
 using ItemChanger.Tags;
+using ItemChanger.Enums;
+using ItemChanger.Serialization;
 
 namespace ItemChanger.Silksong.RawData;
 
@@ -171,6 +173,26 @@ internal static partial class BaseLocationList
         }
     );
 
+    public static Location Elegy_of_the_Deep => new DualLocation()
+    {
+        SceneName = SceneNames.Tut_04,
+        Name = LocationNames.Elegy_of_the_Deep,
+        Test = new QuestCompletionBool(Quests.Black_Thread_Pt4_Return),
+        TrueLocation = new CoordinateLocation()
+        {
+            SceneName = SceneNames.Tut_04,
+            Name = LocationNames.Elegy_of_the_Deep,
+            X = 37.90f,
+            Y = 6.57f,
+            Managed = false
+        },
+        FalseLocation = new ElegyOfTheDeepLocation()
+        {
+            SceneName = SceneNames.Tut_04,
+            Name = LocationNames.Elegy_of_the_Deep,
+        }
+    };
+
     public static Location Needolin => new DualLocation
     {
         Name = LocationNames.Needolin,
@@ -193,5 +215,11 @@ internal static partial class BaseLocationList
             ForceDefaultContainer = true,
             Managed = false,
         },
+    };
+    
+    public static Location Beastling_Call => new BeastlingCallLocation()
+    {
+        SceneName = SceneNames.Bellway_Centipede_Arena,
+        Name = LocationNames.Beastling_Call,
     };
 }
