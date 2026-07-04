@@ -24,7 +24,6 @@ public class BossKillsCounterModule : Module
     /// Shakra). However, these are not missable in Rando due to the ability to return to Act 2. </para>
     /// The following bosses are excluded: <br/>
     /// * Palestag - Missable unless Lost Verdania is repeatable - TODO? <br/>
-    /// * Lace (Deep Docks) - Can be skipped, not sure how this journal entry is handled in base game <br/>
     /// * Moss Mothers - Needs unique handling due to refight being a double fight, probably cannot use journal entry
     /// </summary>
     private static IReadOnlyCollection<BossDefinition> DefaultBosses =>
@@ -32,7 +31,6 @@ public class BossKillsCounterModule : Module
         new JournalEntryBossDefinition(JournalEntries.Bone_Beast), // Bell Beast
         new JournalEntryBossDefinition(JournalEntries.Song_Golem), // Fourth Chorus
         new JournalEntryBossDefinition(JournalEntries.Coral_Conch_Driller_Giant, 2), // Great Conchflies
-        new JournalEntryBossDefinition(JournalEntries.Lace), // Lace, TODO refight
         new JournalEntryBossDefinition(JournalEntries.Last_Judge), // Last Judge
         new JournalEntryBossDefinition(JournalEntries.Vampire_Gnat), // Moorwing
         new JournalEntryBossDefinition(JournalEntries.Mossbone_Mother), // Moss Mother - TODO refight
@@ -70,6 +68,8 @@ public class BossKillsCounterModule : Module
         new JournalEntryBossDefinition(JournalEntries.Hunter_Queen), // Skarrsinger Karmelita
         new JournalEntryBossDefinition(JournalEntries.Tormented_Trobbio), // Tormented Trobbio
         new JournalEntryBossDefinition(JournalEntries.Coral_Warrior_Grey), // Watcher at the Edge
+        
+        new LaceBossDefinition(), // Lace
     ];
 
 
