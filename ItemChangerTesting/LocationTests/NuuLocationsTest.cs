@@ -1,7 +1,7 @@
 using Benchwarp.Data;
 using ItemChanger;
 using ItemChanger.Enums;
-using ItemChanger.Silksong.Modules;
+using ItemChanger.Silksong.Modules.BossKillsCounter;
 using ItemChanger.Silksong.RawData;
 using ItemChanger.Tags;
 using PrepatcherPlugin;

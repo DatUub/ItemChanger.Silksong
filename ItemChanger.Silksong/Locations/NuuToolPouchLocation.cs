@@ -3,7 +3,7 @@ using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
 using ItemChanger.Locations;
 using ItemChanger.Silksong.Extensions;
-using ItemChanger.Silksong.Modules;
+using ItemChanger.Silksong.Modules.BossKillsCounter;
 using ItemChanger.Silksong.RawData;
 using MonoMod.RuntimeDetour;
 using Silksong.FsmUtil;

@@ -1,7 +1,7 @@
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
 using ItemChanger.Locations;
-using ItemChanger.Silksong.Modules;
+using ItemChanger.Silksong.Modules.BossKillsCounter;
 using Silksong.FsmUtil;
 using Silksong.FsmUtil.Actions;
 
