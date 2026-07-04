@@ -24,13 +24,13 @@ public class SlabKidnappingModule : Module
     /// An <see cref="IValueProvider{T}"/> describing whether Slab Wardens should be available throughout Pharloom.
     /// Defaults to constant true.
     /// </summary>
-    public IValueProvider<bool> SlabCaptureIsAvailable { get; set; } = new BoxedBool { Value = true };
+    public IValueProvider<bool> SlabCaptureIsAvailable { get; init; } = new BoxedBool { Value = true };
 
     /// <summary>
     /// An <see cref="IValueProvider{T}"/> describing whether Slab Wardens are able to capture Hornet while she is
     /// cursed. Defaults to constant false.
     /// </summary>
-    public IValueProvider<bool> SlabCaptureWhileCursed { get; set; } = new BoxedBool { Value = false };
+    public IValueProvider<bool> SlabCaptureWhileCursed { get; init; } = new BoxedBool { Value = false };
 
     protected override void DoLoad()
     {
@@ -98,7 +98,7 @@ public class SlabKidnappingModule : Module
         GameObject sceneControl = scene.FindGameObjectByName("Scene Control")!;
         PlayMakerFSM fsm = sceneControl.GetFsm("Scene Control")!;
 
-        // Default behaviour: spawn the jailer according to SlabCaptureIsAvailable, except when Moorwing is present.
+        // Spawn the jailer according to SlabCaptureIsAvailable, except when Moorwing is present.
         FsmState enemySuiteState = fsm.MustGetState("Enemy Suite");
         enemySuiteState.Actions = [];
         enemySuiteState.AddLambdaMethod(_ => fsm.SendEvent(SlabCaptureIsAvailable.Value ? "JAILER" : "NOT JAILER"));
