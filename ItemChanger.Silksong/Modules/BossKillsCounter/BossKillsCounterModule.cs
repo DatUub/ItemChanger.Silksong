@@ -1,7 +1,6 @@
 using ItemChanger.Modules;
 using ItemChanger.Silksong.RawData;
 using Newtonsoft.Json;
-using Module = ItemChanger.Modules.Module;
 
 namespace ItemChanger.Silksong.Modules.BossKillsCounter;
 
@@ -22,8 +21,6 @@ public class BossKillsCounterModule : Module
     /// <summary>
     /// <para>Note that several of the bosses in this list are missable in vanilla playthroughs (Garmond + Zaza,
     /// Shakra). However, these are not missable in Rando due to the ability to return to Act 2. </para>
-    /// The following bosses are excluded: <br/>
-    /// * Palestag - Missable unless Lost Verdania is repeatable - TODO? <br/>
     /// </summary>
     private static IReadOnlyCollection<BossDefinition> DefaultBosses =>
     [
@@ -69,6 +66,7 @@ public class BossKillsCounterModule : Module
 
         new LaceBossDefinition(), // Lace
         new MossMotherBossDefinition(), // Moss Mother + refight
+        new PalestagBossDefinition(), // Palestag
     ];
 
 
@@ -104,7 +102,7 @@ public class BossKillsCounterModule : Module
                 internalDef is JournalEntryBossDefinition internalJournalDef
                 && journalDef.BossName == internalJournalDef.BossName))
         {
-            throw new ArgumentException(nameof(def), $"Boss definition for {journalDef.BossName} already exists");
+            throw new ArgumentException($"Boss definition for {journalDef.BossName} already exists", nameof(def));
         }
 
         return BossDefinitionsInternal.Add(def);
