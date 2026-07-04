@@ -19,7 +19,7 @@ public class LaceBossDefinition : BossDefinition
             {
                 // Lace has left Deep Docks, the fight has been skipped
                 // - this player data is set once Lace is encountered in Blasted Steps/Sinners' Road
-                return kills + 1;
+                return 1;
             }
 
             return kills;
