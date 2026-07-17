@@ -85,6 +85,29 @@ internal static partial class BaseLocationList
             Managed = false,
         },
     };
+    
+    public static Location Crest_of_Cursed_Witch => new DualLocation
+    {
+        SceneName = SceneNames.Room_Witch,
+        Name = LocationNames.Crest_of_Cursed_Witch,
+        Test = new QuestCompletionBool(Quests.Wood_Witch_Curse),
+        FalseLocation = new GreyrootCrestLocation
+        {
+            SceneName = SceneNames.Room_Witch,
+            Name = LocationNames.Crest_of_Cursed_Witch,
+            FlingType = FlingType.DirectDeposit,
+        },
+        TrueLocation = new CoordinateLocation
+        {
+            SceneName = SceneNames.Room_Witch,
+            Name = LocationNames.Crest_of_Cursed_Witch,
+            X = 19.7f,
+            Y = 6.57f,
+            Managed = false,
+            FlingType = FlingType.DirectDeposit,
+            ForceDefaultContainer = true,
+        }.WithTag(new ChangeSceneTag { TargetScene = SceneNames.Shellwood_25b, TargetGate = PrimitiveGateNames.door_curseSequenceEnd }),
+    };
 
     public static Location Eva => new EvaLocation
     {
