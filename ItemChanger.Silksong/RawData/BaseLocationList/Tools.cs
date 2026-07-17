@@ -30,7 +30,7 @@ internal static partial class BaseLocationList
     {
         SceneName = SceneNames.Room_Witch,
         Name = LocationNames.Pollip_Pouch,
-        Test = new QuestCompletedBool { QuestName = Quests.Wood_Witch_Curse },
+        Test = new QuestCompletionBool(Quests.Wood_Witch_Curse),
         TrueLocation = new CoordinateLocation
         {
             SceneName = SceneNames.Room_Witch,
@@ -38,6 +38,7 @@ internal static partial class BaseLocationList
             X = 17.0f,
             Y = 6.57f,
             Managed = false,
+            ForceDefaultContainer = true,
         },
         FalseLocation = new GreyrootPollipLocation
         {
