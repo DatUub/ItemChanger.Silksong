@@ -17,6 +17,18 @@ namespace ItemChanger.Silksong.Modules;
 /// - Wardenflies always spawn throughout Pharloom, including after already being kidnapped
 /// - Getting kidnapped does not remove items
 /// </summary>
+/// <remarks>
+/// In vanilla, the general behavior is as follows:
+/// - Wardenflies appear after defeating Bell Beast, collecting Cling Grip, and awakening the Citadel.
+/// - Wardenflies permanently die when killed (tracked by a PD field set by EnemyDeathEffects, and separately by scenedata).
+///   - A special sequence occurs if Hornet is captured when cursed, in which the curse kills the Wardenfly.
+///   - Hornet then wakes at location and a cursed corpse appears. This is not a Hornet death.
+/// - Wardenflies otherwise disappear when: act 3 starts, upper slab is visited, or the slab sequence is finished by regaining the cloak.
+/// - Special notes on vanilla behavior:
+///   - Background Moorwing encounter or alt-location Moorwing fight takes priority over Wardenfly spawn in Greymoor_05.
+/// 
+/// By default, the module removes all conditions to trigger the Slab sequence, except that Hornet must be uncursed.
+/// </remarks>
 [SingletonModule]
 public class SlabKidnappingModule : Module
 {
@@ -24,7 +36,7 @@ public class SlabKidnappingModule : Module
     /// An <see cref="IValueProvider{T}"/> describing whether Slab Wardens should be available throughout Pharloom.
     /// Defaults to constant true.
     /// </summary>
-    public IValueProvider<bool> SlabCaptureIsAvailable { get; init; } = new BoxedBool { Value = true };
+    public IValueProvider<bool> SlabCaptureIsAvailable { get; init; } = new BoxedBool { Value = false };
 
     /// <summary>
     /// An <see cref="IValueProvider{T}"/> describing whether Slab Wardens are able to capture Hornet while she is
@@ -34,14 +46,19 @@ public class SlabKidnappingModule : Module
 
     protected override void DoLoad()
     {
-        Using(new SceneEditGroup()
+        Using(new SceneEditGroup
         {
             { SceneNames.Bone_East_04c, ForceJailerDocks },
-            { SceneNames.Shadow_21, ForceJailerGreymoor },
-            { SceneNames.Greymoor_05, ForceJailerBilewater },
+            { SceneNames.Shadow_21, ForceJailerBilewater },
+            { SceneNames.Bone_East_04c, RemoveWardenflyDeactivators },
+            { SceneNames.Shadow_21, RemoveWardenflyDeactivators },
+            { SceneNames.Greymoor_05, RemoveWardenflyDeactivators },
         });
-
-        Using(new FsmEditGroup { { new(SilksongHost.Wildcard, "Slab Fly Large Cage", "Control"), HookWardenfly } });
+        Using(new FsmEditGroup
+        {
+            { new(SilksongHost.Wildcard, "Slab Fly Large Cage", "Control"), HookWardenflyFsm } ,
+            { new(SceneNames.Greymoor_05, "Scene Control", "Scene Control"), ForceJailerGreymoor },
+        });
     }
 
     protected override void DoUnload()
@@ -51,16 +68,8 @@ public class SlabKidnappingModule : Module
     private void ForceJailerDocks(Scene scene)
     {
         // This scene uses a TestGameObjectActivator to enable the jailer + disable ant enemies
-        // based on a combination of player data, plus DeactivateIfPlayerdataTrue/False components.
-        GameObject jailerObj = scene.FindGameObjectByName("Slab Fly Large Cage")!;
-        if (SlabCaptureIsAvailable.Value)
-        {
-            jailerObj.RemoveComponents<DeactivateIfPlayerdataTrue>();
-            jailerObj.RemoveComponents<DeactivateIfPlayerdataFalse>();
-        }
-
         GameObject sceneControl = scene.FindGameObjectByName("Scene Control")!;
-        sceneControl.RemoveComponent<TestGameObjectActivator>();
+        sceneControl.RemoveComponent<TestGameObjectActivator>(); // hasWalljump && !blackThreadWorld && !boneEastJailerClearedOut && !slab_cloak_battle_completed && !visitedUpperSlab
 
         sceneControl.FindChild(name: "Slab Jailer Scene")!.SetActive(SlabCaptureIsAvailable.Value);
         sceneControl.FindChild(name: "Bone Hunters Scene")!.SetActive(!SlabCaptureIsAvailable.Value);
@@ -69,39 +78,23 @@ public class SlabKidnappingModule : Module
     private void ForceJailerBilewater(Scene scene)
     {
         // This scene uses a PlayerDataTestResponse to enable the jailer + disable bilewater enemies
-        // based on a combination of player data, plus DeactivateIfPlayerdataTrue/False components.
-        GameObject jailerObj = scene.FindGameObjectByName("Slab Fly Large Cage")!;
-        if (SlabCaptureIsAvailable.Value)
-        {
-            jailerObj.RemoveComponents<DeactivateIfPlayerdataTrue>();
-            jailerObj.RemoveComponents<DeactivateIfPlayerdataFalse>();
-        }
-
         GameObject sceneControl = scene.FindGameObjectByName("Scene Control")!;
-        sceneControl.RemoveComponent<PlayerDataTestResponse>();
+        sceneControl.RemoveComponent<PlayerDataTestResponse>(); // !(slab_cloak_battle_completed || blackThreadWorld || visitedUpperSlab)
 
         sceneControl.FindChild(name: "Slab Jailer Scene")!.SetActive(SlabCaptureIsAvailable.Value);
         sceneControl.FindChild(name: "Muckmen Control")!.SetActive(!SlabCaptureIsAvailable.Value);
     }
 
-    private void ForceJailerGreymoor(Scene scene)
+    private void ForceJailerGreymoor(PlayMakerFSM fsm)
     {
-        // This scene uses a FSM to control whether to spawn the jailer, regular enemies, or Moorwing. It additionally
-        // has DeactivateIfPlayerdataTrue/False components on the jailer itself.
-        GameObject jailerObj = scene.FindGameObjectByName("Slab Fly Large Cage")!;
-        if (SlabCaptureIsAvailable.Value)
-        {
-            jailerObj.RemoveComponents<DeactivateIfPlayerdataTrue>();
-            jailerObj.RemoveComponents<DeactivateIfPlayerdataFalse>();
-        }
-
-        GameObject sceneControl = scene.FindGameObjectByName("Scene Control")!;
-        PlayMakerFSM fsm = sceneControl.GetFsm("Scene Control")!;
-
-        // Spawn the jailer according to SlabCaptureIsAvailable, except when Moorwing is present.
+        // This scene uses a FSM to control whether to spawn the jailer, regular enemies, or Moorwing.
+        // Default behaviour: spawn the jailer according to SlabCaptureIsAvailable, except when Moorwing is present.
         FsmState enemySuiteState = fsm.MustGetState("Enemy Suite");
         enemySuiteState.Actions = [];
-        enemySuiteState.AddLambdaMethod(_ => fsm.SendEvent(SlabCaptureIsAvailable.Value ? "JAILER" : "NOT JAILER"));
+        // vanilla: if !hasWalljump || blackThreadWorld || !citadelWoken || greymoor05_killedJailer
+        //             || visitedUpperSlab || slab_cloak_battle_completed
+        //             then send FARMERS. else spawn JAILER.
+        enemySuiteState.AddLambdaMethod(_ => fsm.SendEvent(SlabCaptureIsAvailable.Value ? "JAILER" : "FARMERS"));
 
         FsmState jailCartState = fsm.MustGetState("Jail Cart?");
         jailCartState.InsertLambdaMethod(0, _ =>
@@ -119,7 +112,23 @@ public class SlabKidnappingModule : Module
         });
     }
 
-    private void HookWardenfly(PlayMakerFSM fsm)
+    private void RemoveWardenflyDeactivators(Scene scene)
+    {
+        GameObject? jailerObj = scene.FindGameObjectByName("Slab Fly Large Cage");
+        if (jailerObj == null)
+        {
+            LogWarn($"Did not find expected wardenfly in {scene.name}.");
+            return;
+        }
+
+        // remove components that may automatically deactivate the wardenfly.
+        // These run in Start, so the fsm hook is potentially too late to remove them.
+        jailerObj.RemoveComponents<DeactivateIfPlayerdataTrue>(); // visitedUpperSlab
+        jailerObj.RemoveComponents<DeactivateIfPlayerdataFalse>(); // UnlockedFastTravel
+        jailerObj.RemoveComponents<PersistentBoolItem>(); // scene data check for permanent kill
+    }
+
+    private void HookWardenflyFsm(PlayMakerFSM fsm)
     {
         // Rewire wardenflies spawn logic
         FsmState initState = fsm.MustGetState("Init");
