@@ -1,4 +1,5 @@
 using HutongGames.PlayMaker;
+using HutongGames.PlayMaker.Actions;
 using ItemChanger.Extensions;
 using ItemChanger.Modules;
 using ItemChanger.Serialization;
@@ -93,6 +94,13 @@ public class DeterministicCrawSummonsModule : Module
         FsmState sitCheck = fsm.MustGetState("Craw summons check");
         sitCheck.RemoveAction(3);
         sitCheck.InsertLambdaMethod(3, CancelIfRequirementsNotMet);
+
+        // skip black cutscene
+        respawnCheck.GetFirstActionOfType<CallMethodProper>()!.Enabled = false;
+        respawnCheck.GetFirstActionOfType<ScreenFader>()!.Enabled = false;
+        FsmState crawSummonsInBlack = fsm.MustGetState("Craw Summons In Black");
+        crawSummonsInBlack.GetFirstActionOfType<SendEventByName>()!.sendEvent = "APPEAR";
+        crawSummonsInBlack.AddTransition("FINISHED", "Start Locked?");
         return;
 
         void CancelIfRequirementsNotMet(Action cb)

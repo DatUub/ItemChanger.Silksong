@@ -3,6 +3,7 @@ using HutongGames.PlayMaker.Actions;
 using ItemChanger.Containers;
 using ItemChanger.Enums;
 using Silksong.FsmUtil;
+using Silksong.UnityHelper.Extensions;
 using UnityEngine;
 
 namespace ItemChanger.Silksong.Containers;
@@ -24,6 +25,7 @@ public class CrawSummonsContainer : Container
     public override void ModifyContainerInPlace(GameObject obj, ContainerInfo info)
     {
         info.ApplyTo(obj);
+        obj.RemoveComponent<PersistentBoolItem>();
         
         PlayMakerFSM fsm = obj.LocateMyFSM("FSM");
 
