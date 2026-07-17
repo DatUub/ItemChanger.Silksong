@@ -3,7 +3,7 @@ using ItemChanger.Enums;
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
 using Silksong.FsmUtil;
-using Silksong.FsmUtil.Actions;
+using ItemChanger.Silksong.Extensions;
 
 namespace ItemChanger.Silksong.Locations;
 
@@ -26,24 +26,17 @@ public class GreyrootPollipLocation : AutoLocation
         rewardQueryState.RemoveAction(i);
         rewardQueryState.InsertLambdaMethod(i, (finish) =>
         {
-            if (Placement!.CheckVisitedAny(VisitState.ObtainedAnyItem))
-            {
-                Placement!.GiveSome(Placement!.Items.Where(it => !it.IsObtained() && it.WasEverObtained()), GetGiveInfo(), () =>
-                {
-                    fsm.SendEvent("FINISHED");
-                    finish();
-                });
-            }
-            else
+            if (!Placement!.CheckVisitedAny(VisitState.ObtainedAnyItem))
             {
                 fsm.SendEvent("POLLIP REWARD");
-                finish();
             }
+            finish();
         });
+        rewardQueryState.AddLambdaMethod(this.GiveAll(fsm.transform)); // only reached if POLLIP REWARD was not sent.
 
         FsmState rewardState = fsm.MustGetState("Flower Quest Reward");
         i = rewardState.IndexFirstActionOfType<SetToolUnlocked>();
         rewardState.RemoveAction(i);
-        rewardState.InsertLambdaMethod(i, GiveAll);
+        rewardState.InsertLambdaMethod(i, this.GiveAll(fsm.transform));
     }
 }

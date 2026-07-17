@@ -1,8 +1,6 @@
-using Benchwarp.Data;
 using ItemChanger.Locations;
 using ItemChanger.Silksong.Modules;
 using HutongGames.PlayMaker;
-using HutongGames.PlayMaker.Actions;
 using Silksong.FsmUtil;
 
 namespace ItemChanger.Silksong.Locations;

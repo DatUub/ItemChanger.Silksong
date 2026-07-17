@@ -6,6 +6,7 @@ using ItemChanger.Placements;
 using ItemChanger.Serialization;
 using ItemChanger.Silksong.RawData;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace ItemChanger.Silksong.Extensions;
 
@@ -50,6 +51,13 @@ internal static class ICExtensions
         profile.AddPlacement(
             ItemChangerHost.Singleton.Finder.GetLocation(LocationNames.Start)!.Wrap().Add(item),
             Enums.PlacementConflictResolution.MergeKeepingOld);
+    }
+
+    public static Action<Action> GiveAll(this AutoLocation loc, Transform t)
+    {
+        GiveInfo info = loc.GetGiveInfo();
+        info.Transform = t;
+        return a => loc.Placement!.GiveAll(info, a);
     }
 
     public static string GetUIName(this Placement pmt, IEnumerable<Item> items, int maxLength = 120)
