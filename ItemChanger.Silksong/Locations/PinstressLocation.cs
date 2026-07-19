@@ -32,6 +32,10 @@ public class PinstressLocation : AutoLocation
         FsmState rewardState = fsm.MustGetState("Reward");
         rewardState.RemoveActionsOfType<GetQuestReward>();
         rewardState.RemoveActionsOfType<SavedItemGetV2>();
-        rewardState.InsertLambdaMethod(0, GiveAll);
+        rewardState.InsertLambdaMethod(0, finish =>
+        {
+            DialogueBox.EndConversation(true);
+            GiveAll(finish);
+        });
     }
 }
