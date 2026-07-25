@@ -5,6 +5,8 @@ using ItemChanger.Items;
 using ItemChanger.Placements;
 using ItemChanger.Serialization;
 using ItemChanger.Silksong.Extensions;
+using ItemChanger.Silksong.Items;
+using ItemChanger.Silksong.RawData;
 using ItemChanger.Silksong.UIDefs;
 using ItemChanger.Tags;
 using System.Reflection;
@@ -14,6 +16,28 @@ namespace ItemChangerTesting;
 
 internal static class Extensions
 {
+    public static Placement WithAllPersistent(this Placement p)
+    {
+        foreach (Item i in p.Items)
+        {
+            i.RemoveTags<IPersistenceTag>();
+            i.AddTag(new PersistentItemTag { Persistence = Persistence.Persistent });
+        }
+        return p;
+    }
+
+    public static Placement WithVariousItems(this Placement p)
+    {
+        Finder Finder = ItemChangerHost.Singleton.Finder;
+        return p
+            .WithDebugItem()
+            .Add(Finder.GetItem(ItemNames.Swift_Step)!)
+            .Add(Finder.GetItem(ItemNames.Crest_of_Architect)!)
+            .Add(Finder.GetItem(ItemNames.Lore_Tablet__Abyss_Bottom_Left)!)
+            .Add(RosariesItem.MakeRosariesItem(200))
+            ;
+    }
+
     public static Placement WithDebugItem(
         this Placement self, 
         IValueProvider<Sprite>? sprite = null,
