@@ -373,6 +373,9 @@ public static class LocationNames
     public const string Crafting_Kit__Grindle = "Crafting_Kit-Grindle";
     public const string Crafting_Kit__Twelfth_Architect = "Crafting_Kit-Twelfth_Architect";
 
+    // journal
+    public const string Hunter_s_Journal = "Hunter's_Journal";
+
     // bellhome upgrades
     public const string Crawbell = "Crawbell";
     public const string Farsight = "Farsight";
@@ -583,6 +586,7 @@ public static class LocationNames
     public const string Lore_Tablet__Cradle_Cage_3 = "Lore_Tablet-Cradle_Cage_3";
     public const string Lore_Tablet__Greymoor_Orders_Above_Home = "Lore_Tablet-Greymoor_Orders_Above_Home";
     public const string Lore_Tablet__Greymoor_Bottom = "Lore_Tablet-Greymoor_Bottom";
+    public const string Lore_Tablet__Nuu_Scroll = "Lore_Tablet-Nuu_Scroll";
     public const string Lore_Tablet__Trobbio_Sign = "Lore_Tablet-Trobbio_Sign";
     public const string Lore_Tablet__Trobbio_Notes = "Lore_Tablet-Trobbio_Notes";
     public const string Lore_Tablet__Tormented_Trobbio_Notes = "Lore_Tablet-Tormented_Trobbio_Notes";

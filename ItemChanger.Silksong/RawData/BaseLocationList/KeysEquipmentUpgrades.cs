@@ -3,6 +3,9 @@ using ItemChanger.Enums;
 using ItemChanger.Locations;
 using ItemChanger.Serialization;
 using ItemChanger.Silksong.Locations;
+using ItemChanger.Silksong.Modules;
+using ItemChanger.Silksong.Serialization;
+using ItemChanger.Silksong.Tags;
 
 namespace ItemChanger.Silksong.RawData;
 
@@ -32,4 +35,29 @@ internal static partial class BaseLocationList
             Name = LocationNames.Tool_Pouch__Nuu
         }
     };
+
+    public static Location Hunter_s_Journal => new DualLocation()
+    {
+        SceneName = SceneNames.Halfway_01,
+        Name = LocationNames.Hunter_s_Journal,
+        Test = new PDBool(nameof(PlayerData.nuuMementoAwarded)),
+        TrueLocation = new CoordinateLocation()
+        {
+            SceneName = SceneNames.Halfway_01,
+            Name = LocationNames.Hunter_s_Journal,
+            X = 29f,
+            Y = 20.57f,
+            Managed = false,
+            ForceDefaultContainer = true,
+        },
+        FalseLocation = new NuuJournalLocation()
+        {
+            SceneName = SceneNames.Halfway_01,
+            Name = LocationNames.Hunter_s_Journal,
+            Tags = [
+                new RequiredModuleTag<NuuIsHomeOverride>()
+                ]
+        },
+    };
+
 }

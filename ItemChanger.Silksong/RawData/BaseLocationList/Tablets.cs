@@ -2,6 +2,7 @@
 using ItemChanger.Locations;
 using ItemChanger.Silksong.Containers;
 using ItemChanger.Silksong.Locations.MultiLocationEnums;
+using ItemChanger.Silksong.Modules;
 using ItemChanger.Silksong.Serialization;
 using ItemChanger.Silksong.Tags;
 using ItemChanger.Silksong.Tags.SpecialLocationTags;
@@ -291,15 +292,33 @@ internal static partial class BaseLocationList
             ]
     };
 
-    /*
-     * Note - datamining found a nuu scroll with the following parameters:
-     * Location name: Lore_Tablet__Nuu_Scroll
-     * SceneName: Halfway_01
-     * ObjectName: "_NPCs/Hunter Fan Control/Nuu_Scrolls/Inspect Region"
-     * Language: ("Wanderers", "HUNTER_FAN_SCROLL_INSPECT")
-     * 
-     * I don't believe it's viewable in-game so I'm not putting it in the location list
-     */
+    public static Location Lore_Tablet__Nuu_Scroll => new DualLocation
+    {
+        Name = LocationNames.Lore_Tablet__Nuu_Scroll,
+        SceneName = SceneNames.Halfway_01,
+        Test = new PDBool(nameof(PlayerData.nuuMementoAwarded)),
+        FalseLocation = new ObjectLocation
+        {
+            Name = LocationNames.Lore_Tablet__Nuu_Scroll,
+            SceneName = SceneNames.Halfway_01,
+            ObjectName = "_NPCs/Hunter Fan Control/Nuu_Scrolls/Inspect Region",
+            Correction = default,
+            Tags = 
+            [
+                new OriginalContainerTag() { ContainerType = ContainerNames.Tablet, Force = true },
+                new RequiredModuleTag<NuuIsHomeOverride>(),
+            ],
+        },
+        TrueLocation = new CoordinateLocation
+        {
+            Name = LocationNames.Lore_Tablet__Nuu_Scroll,
+            SceneName = SceneNames.Halfway_01,
+            X = 25f,
+            Y = 20.6f,
+            Managed = false,
+            ForceDefaultContainer = true,
+        }
+    };
 
     public static Location Lore_Tablet__Trobbio_Sign => new ObjectLocation()
     {
