@@ -32,11 +32,11 @@ public class GreyrootPollipLocation : AutoLocation
             }
             finish();
         });
-        rewardQueryState.AddLambdaMethod(this.GiveAll(fsm.transform)); // only reached if POLLIP REWARD was not sent.
+        rewardQueryState.AddLambdaMethod(this.CreateGiveAllDelegate(fsm.transform)); // only reached if POLLIP REWARD was not sent.
 
         FsmState rewardState = fsm.MustGetState("Flower Quest Reward");
         i = rewardState.IndexFirstActionOfType<SetToolUnlocked>();
         rewardState.RemoveAction(i);
-        rewardState.InsertLambdaMethod(i, this.GiveAll(fsm.transform));
+        rewardState.InsertLambdaMethod(i, this.CreateGiveAllDelegate(fsm.transform));
     }
 }

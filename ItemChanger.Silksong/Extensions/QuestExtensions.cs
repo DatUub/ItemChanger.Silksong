@@ -1,4 +1,10 @@
-﻿namespace ItemChanger.Silksong.Extensions;
+﻿using ItemChanger.Enums;
+using ItemChanger.Items;
+using ItemChanger.Placements;
+using ItemChanger.Silksong.Placements;
+using UnityEngine;
+
+namespace ItemChanger.Silksong.Extensions;
 
 public static class QuestExtensions
 {
@@ -15,6 +21,16 @@ public static class QuestExtensions
             QuestCompletionData.Completion c = self.Completion;
             modifier(ref c);
             self.Completion = c;
+        }
+
+        public void ModifyTargetAmount(int newTargetAmount)
+        {
+            self.ModifyTargetAmount(0, newTargetAmount);
+        }
+
+        public void ModifyTargetAmount(int targetIndex, int newTargetAmount)
+        {
+            self.targets[targetIndex].Count = newTargetAmount;
         }
     }
 }

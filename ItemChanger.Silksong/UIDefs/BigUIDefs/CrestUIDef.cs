@@ -29,13 +29,12 @@ public class CrestUIDef : ControlRelinquishedUIDef
     {
         // The prefab is instantiated by the UIMsgBase.Spawn function, so we don't need to instantiate it ourselves
         GameObject prefab = PrefabKey.GetGameObjectPrefab();
-
-        GameObject spawned = UIMsgBase<ToolCrest>.Spawn(Crest.Value, prefab.GetComponent<ToolCrestUIMsg>(), callback).gameObject;
-
+        GameObject spawned = UObject.Instantiate(prefab);
         spawned.AddComponent<UIProxyControlBlockerComponent>();
-
         spawned.GetComponent<Animator>().speed = HastenFactor;
-        spawned.GetComponent<ToolCrestUIMsg>().startPauseTime = 1f / HastenFactor;
+        ToolCrestUIMsg msg = spawned.GetComponent<ToolCrestUIMsg>();
+        msg.startPauseTime = 1f / HastenFactor;
+        msg.StartCoroutine(msg.DoMsg(Crest.Value, callback));
 
         // Remove the backboard?
         // spawned.FindChild("backboard")!.GetComponent<SpriteRenderer>().sprite = new EmptySprite().Value;
