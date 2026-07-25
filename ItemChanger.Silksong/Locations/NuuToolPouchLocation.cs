@@ -56,6 +56,13 @@ public class NuuToolPouchLocation : AutoLocation
         FsmState completeConvoState = fsm.AddState("Complete Convo 5");
         fsm.ChangeTransition("Complete Convo 4", "CONVO_END", "Complete Convo 5");
         fsm.AddTransition("Complete Convo 5", "FINISHED", "End Dialogue");
+        completeConvoState.AddAction(new EndDialogue()
+        {
+            ReturnControl = false,
+            ReturnHUD = false,
+            Target = new FsmOwnerDefault() { OwnerOption = OwnerDefaultOption.UseOwner },
+            UseChildren = false
+        });
         completeConvoState.AddLambdaMethod(GiveAll);
     }
 }
