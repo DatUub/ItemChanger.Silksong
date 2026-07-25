@@ -21,8 +21,8 @@ internal static partial class BaseLocationList
         {
             SceneName = SceneNames.Halfway_01,
             Name = LocationNames.Tool_Pouch__Nuu,
-            X = 29.01f,
-            Y = 20.57f,
+            X = 17.08f,
+            Y = 4.57f,
             Managed = false,
         },
         FalseLocation = new NuuToolPouchLocation()

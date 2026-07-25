@@ -21,7 +21,7 @@ internal static partial class BaseLocationList
         {
             SceneName = SceneNames.Halfway_01,
             Name = LocationNames.Hunter_s_Memento,
-            X = 33.66f,
+            X = 26.92f,
             Y = 20.57f,
             Managed = false,
         },
