@@ -1,5 +1,6 @@
 using HarmonyLib;
 using HutongGames.PlayMaker;
+using HutongGames.PlayMaker.Actions;
 using ItemChanger.Locations;
 using ItemChanger.Silksong.Extensions;
 using ItemChanger.Silksong.Modules.BossKillsCounter;
@@ -57,10 +58,17 @@ public class NuuToolPouchLocation : AutoLocation
         FsmState endDialogue = fsm.MustGetState("End Dialogue");
         FsmState endDialogueIC = fsm.AddState("End Dialogue IC");
         endDialogueIC.AddActions(endDialogue.Actions);
-        endDialogue.Actions = [];
         endDialogueIC.AddTransition("FINISHED", getRewardState.Name);
-        endDialogue.ChangeTransition("FINISHED", endDialogueIC.Name);
 
+        endDialogue.ChangeTransition("FINISHED", endDialogueIC.Name);
+        endDialogue.Actions = [];
+        endDialogue.AddAction(new EndDialogue()
+        {
+            ReturnControl = false,
+            ReturnHUD = false,
+            Target = new FsmOwnerDefault() { OwnerOption = OwnerDefaultOption.UseOwner },
+            UseChildren = false
+        });
         endDialogue.AddLambdaMethod(callback =>
         {
             if (QuestManager.GetQuest(Quests.Journal).IsCompleted)
