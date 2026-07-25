@@ -1,6 +1,5 @@
 using HarmonyLib;
 using HutongGames.PlayMaker;
-using HutongGames.PlayMaker.Actions;
 using ItemChanger.Locations;
 using ItemChanger.Silksong.Extensions;
 using ItemChanger.Silksong.Modules.BossKillsCounter;
@@ -31,7 +30,7 @@ public class NuuToolPouchLocation : AutoLocation
 
         Using(new FsmEditGroup()
         {
-            { new(UnsafeSceneName, "Nuu", "Dialogue"), HookGetQuestReward }
+            { new(UnsafeSceneName, "Nuu", "Dialogue"), HookGetQuestReward },
         });
     }
 
@@ -44,25 +43,34 @@ public class NuuToolPouchLocation : AutoLocation
         JournalQuestTarget self,
         QuestCompletionData.Completion sourceCompletion)
     {
-        return ActiveProfile!.Modules.GetOrAdd<BossKillsCounterModule>().BossKillCount;
+        return ActiveProfile!.Modules.GetOrAdd<BossKillsCounterModule>().GetKillCount();
     }
 
     private void HookGetQuestReward(PlayMakerFSM fsm)
     {
-        // Replace quest reward with IC placement
+        // give reward before end dialogue rather than after, so that control is relinquished.
+        // on revisit, respawned items are given at the end of dialogue
+        // (except when nuu permanently leaves, in which case the room must be reloaded)
         FsmState getRewardState = fsm.MustGetState("Get Reward?");
-        getRewardState.GetFirstActionOfType<SavedItemGet>()!.enabled = false;
+        getRewardState.Actions = [];
 
-        FsmState completeConvoState = fsm.AddState("Complete Convo 5");
-        fsm.ChangeTransition("Complete Convo 4", "CONVO_END", "Complete Convo 5");
-        fsm.AddTransition("Complete Convo 5", "FINISHED", "End Dialogue");
-        completeConvoState.AddAction(new EndDialogue()
+        FsmState endDialogue = fsm.MustGetState("End Dialogue");
+        FsmState endDialogueIC = fsm.AddState("End Dialogue IC");
+        endDialogueIC.AddActions(endDialogue.Actions);
+        endDialogue.Actions = [];
+        endDialogueIC.AddTransition("FINISHED", getRewardState.Name);
+        endDialogue.ChangeTransition("FINISHED", endDialogueIC.Name);
+
+        endDialogue.AddLambdaMethod(callback =>
         {
-            ReturnControl = false,
-            ReturnHUD = false,
-            Target = new FsmOwnerDefault() { OwnerOption = OwnerDefaultOption.UseOwner },
-            UseChildren = false
+            if (QuestManager.GetQuest(Quests.Journal).IsCompleted)
+            {
+                this.CreateGiveAllDelegate(fsm.transform).Invoke(callback);
+            }
+            else
+            {
+                callback();
+            }
         });
-        completeConvoState.AddLambdaMethod(GiveAll);
     }
 }

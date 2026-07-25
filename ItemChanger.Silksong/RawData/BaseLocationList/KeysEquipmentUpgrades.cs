@@ -15,24 +15,24 @@ internal static partial class BaseLocationList
     {
         SceneName = SceneNames.Halfway_01,
         Name = LocationNames.Tool_Pouch__Nuu,
-        Test = new PlacementVisitStateBool()
-        {
-            PlacementName = LocationNames.Tool_Pouch__Nuu,
-            RequiredFlags = VisitState.ObtainedAnyItem
-        },
+        Test = new PDBool(nameof(PlayerData.nuuMementoAwarded)),
         TrueLocation = new CoordinateLocation()
         {
             SceneName = SceneNames.Halfway_01,
             Name = LocationNames.Tool_Pouch__Nuu,
-            X = 17.08f,
-            Y = 4.57f,
+            X = 27f,
+            Y = 20.57f,
             Managed = false,
+            ForceDefaultContainer = true,
         },
         FalseLocation = new NuuToolPouchLocation()
         {
             RequiredBossKills = 10,
             SceneName = SceneNames.Halfway_01,
-            Name = LocationNames.Tool_Pouch__Nuu
+            Name = LocationNames.Tool_Pouch__Nuu,
+            Tags = [
+                new RequiredModuleTag<NuuIsHomeOverride>(),
+                ]
         }
     };
 

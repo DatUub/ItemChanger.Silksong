@@ -1,8 +1,7 @@
 using Benchwarp.Data;
-using ItemChanger.Enums;
 using ItemChanger.Locations;
-using ItemChanger.Serialization;
 using ItemChanger.Silksong.Locations;
+using ItemChanger.Silksong.Serialization;
 
 namespace ItemChanger.Silksong.RawData;
 
@@ -12,11 +11,7 @@ internal static partial class BaseLocationList
     {
         SceneName = SceneNames.Halfway_01,
         Name = LocationNames.Hunter_s_Memento,
-        Test = new PlacementVisitStateBool()
-        {
-            PlacementName = LocationNames.Hunter_s_Memento,
-            RequiredFlags = VisitState.ObtainedAnyItem
-        },
+        Test = new PDBool(nameof(PlayerData.nuuMementoAwarded)),
         TrueLocation = new CoordinateLocation()
         {
             SceneName = SceneNames.Halfway_01,
@@ -24,6 +19,7 @@ internal static partial class BaseLocationList
             X = 26.92f,
             Y = 20.57f,
             Managed = false,
+            ForceDefaultContainer = true,
         },
         FalseLocation = new NuuMementoLocation()
         {
