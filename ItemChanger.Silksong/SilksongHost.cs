@@ -34,12 +34,9 @@ public partial class SilksongHost : ItemChangerHost
 
     public override IEnumerable<Module> BuildDefaultModules()
     {
-        BossKillsCounterModule killsCounterModule = new();
-        killsCounterModule.AddDefaultBosses();
-
         return
         [
-            killsCounterModule,
+            BossKillsCounterModule.CreateDefault(),
             new CustomYNEnableModule(),
             new YNBoxDamageControlModule(),
             new UIProxyControlBlockerModule(),

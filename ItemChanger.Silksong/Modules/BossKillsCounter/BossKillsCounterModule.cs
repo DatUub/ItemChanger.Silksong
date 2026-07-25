@@ -1,6 +1,9 @@
+using Benchwarp.Data;
 using ItemChanger.Modules;
+using ItemChanger.Serialization;
 using ItemChanger.Silksong.RawData;
-using Newtonsoft.Json;
+using ItemChanger.Silksong.Serialization;
+using System.Collections.ObjectModel;
 
 namespace ItemChanger.Silksong.Modules.BossKillsCounter;
 
@@ -11,112 +14,86 @@ namespace ItemChanger.Silksong.Modules.BossKillsCounter;
 public class BossKillsCounterModule : Module
 {
     /// <summary>
-    /// A list of bosses which should count towards the boss kill count.
+    /// The total number of bosses killed, as determined by the list of boss counters.
     /// </summary>
-    [JsonIgnore]
-    public IReadOnlyCollection<BossDefinition> BossDefinitions => BossDefinitionsInternal;
+    public int GetKillCount() => BossCounters.Values.Sum(counter => counter.GetKillCount());
 
-    [JsonProperty] private HashSet<BossDefinition> BossDefinitionsInternal { get; init; } = [];
+    /// <summary>
+    /// Bosses tracked by the module, keyed by name. A single BossDefinition can count multiple kills.
+    /// </summary>
+    public Dictionary<string, IBossCounter> BossCounters { get; init; } = [];
 
     /// <summary>
     /// <para>Note that several of the bosses in this list are missable in vanilla playthroughs (Garmond + Zaza,
     /// Shakra). However, these are not missable in Rando due to the ability to return to Act 2. </para>
     /// </summary>
-    private static IReadOnlyCollection<BossDefinition> DefaultBosses =>
-    [
-        new JournalEntryBossDefinition(JournalEntries.Bone_Beast), // Bell Beast
-        new JournalEntryBossDefinition(JournalEntries.Song_Golem), // Fourth Chorus
-        new JournalEntryBossDefinition(JournalEntries.Coral_Conch_Driller_Giant, 2), // Great Conchflies
-        new JournalEntryBossDefinition(JournalEntries.Last_Judge), // Last Judge
-        new JournalEntryBossDefinition(JournalEntries.Vampire_Gnat), // Moorwing
-        new JournalEntryBossDefinition(JournalEntries.Phantom), // Phantom
-        new JournalEntryBossDefinition(JournalEntries.Bone_Flyer_Giant, 2), // Savage Beastfly
-        new JournalEntryBossDefinition(JournalEntries.Splinter_Queen), // Sister Splinter
-        new JournalEntryBossDefinition(JournalEntries.Skull_King), // Skull Tyrant
-        new JournalEntryBossDefinition(JournalEntries.Spinner_Boss), // Widow
-        new JournalEntryBossDefinition(JournalEntries.Slab_Fly_Broodmother), // Broodmother
-        new JournalEntryBossDefinition(JournalEntries.Clockwork_Dancer), // Cogwork Dancers
-        new JournalEntryBossDefinition(JournalEntries.Roachkeeper_Chef), // Disgraced Chef Lugoli
-        new JournalEntryBossDefinition(JournalEntries.Wisp_Pyre_Effigy), // Father of the Flame
-        new JournalEntryBossDefinition(JournalEntries.First_Weaver), // First Sinner
-        new JournalEntryBossDefinition(JournalEntries.Dock_Guard_Thrower), // Forebrothers Signis & Grom
-        new JournalEntryBossDefinition(JournalEntries.Garmond_Zaza), // Garmond & Zaza
-        new JournalEntryBossDefinition(JournalEntries.Silk_Boss), // Grand Mother Silk
-        new JournalEntryBossDefinition(JournalEntries.Swamp_Shaman), // Groal the Great
-        new JournalEntryBossDefinition(JournalEntries.Song_Knight), // Second Sentinel
-        new JournalEntryBossDefinition(JournalEntries.Shakra), // Shakra
-        new JournalEntryBossDefinition(JournalEntries.Abyss_Mass), // Summoned Saviour
-        new JournalEntryBossDefinition(JournalEntries.Conductor_Boss), // The Unravelled
-        new JournalEntryBossDefinition(JournalEntries.Trobbio), // Trobbio
-        new JournalEntryBossDefinition(JournalEntries.Zap_Core_Enemy), // Voltvyrm
-        new JournalEntryBossDefinition(JournalEntries.Giant_Centipede), // Bell Eater
-        new JournalEntryBossDefinition(JournalEntries.Clover_Dancer), // Clover Dancers
-        new JournalEntryBossDefinition(JournalEntries.Crawfather), // Crawfather
-        new JournalEntryBossDefinition(JournalEntries.Coral_King), // Crust King Khann
-        new JournalEntryBossDefinition(JournalEntries.Bone_Hunter_Trapper), // Gurr the Outcast
-        new JournalEntryBossDefinition(JournalEntries.Garmond), // Lost Garmond
-        new JournalEntryBossDefinition(JournalEntries.Lost_Lace), // Lost Lace
-        new JournalEntryBossDefinition(JournalEntries.Flower_Queen), // Nyleth
-        new JournalEntryBossDefinition(JournalEntries.Pinstress_Boss), // Pinstress
-        new JournalEntryBossDefinition(JournalEntries.Blue_Assistant), // Plasmified Zango
-        new JournalEntryBossDefinition(JournalEntries.Seth), // Shrine Guardian Seth
-        new JournalEntryBossDefinition(JournalEntries.Hunter_Queen), // Skarrsinger Karmelita
-        new JournalEntryBossDefinition(JournalEntries.Tormented_Trobbio), // Tormented Trobbio
-        new JournalEntryBossDefinition(JournalEntries.Coral_Warrior_Grey), // Watcher at the Edge
+    public static ReadOnlyDictionary<string, IBossCounter> DefaultBossCounters { get; } = new(new Dictionary<string, IBossCounter>
+    {
+        [JournalEntries.Bone_Beast] = new JournalBossCounter(JournalEntries.Bone_Beast), // Bell Beast
+        [JournalEntries.Song_Golem] = new JournalBossCounter(JournalEntries.Song_Golem), // Fourth Chorus
+        [JournalEntries.Coral_Conch_Driller_Giant] = new JournalBossCounter(JournalEntries.Coral_Conch_Driller_Giant, 2), // Great Conchflies
+        [JournalEntries.Last_Judge] = new JournalBossCounter(JournalEntries.Last_Judge), // Last Judge
+        [JournalEntries.Vampire_Gnat] = new JournalBossCounter(JournalEntries.Vampire_Gnat), // Moorwing
+        [JournalEntries.Phantom] = new JournalBossCounter(JournalEntries.Phantom), // Phantom
+        [JournalEntries.Bone_Flyer_Giant] = new JournalBossCounter(JournalEntries.Bone_Flyer_Giant, 2), // Savage Beastfly
+        [JournalEntries.Splinter_Queen] = new JournalBossCounter(JournalEntries.Splinter_Queen), // Sister Splinter
+        [JournalEntries.Skull_King] = new JournalBossCounter(JournalEntries.Skull_King), // Skull Tyrant
+        [JournalEntries.Spinner_Boss] = new JournalBossCounter(JournalEntries.Spinner_Boss), // Widow
+        [JournalEntries.Slab_Fly_Broodmother] = new JournalBossCounter(JournalEntries.Slab_Fly_Broodmother), // Broodmother
+        [JournalEntries.Clockwork_Dancer] = new JournalBossCounter(JournalEntries.Clockwork_Dancer), // Cogwork Dancers
+        [JournalEntries.Roachkeeper_Chef] = new JournalBossCounter(JournalEntries.Roachkeeper_Chef), // Disgraced Chef Lugoli
+        [JournalEntries.Wisp_Pyre_Effigy] = new JournalBossCounter(JournalEntries.Wisp_Pyre_Effigy), // Father of the Flame
+        [JournalEntries.First_Weaver] = new JournalBossCounter(JournalEntries.First_Weaver), // First Sinner
+        [JournalEntries.Dock_Guard_Thrower] = new JournalBossCounter(JournalEntries.Dock_Guard_Thrower), // Forebrothers Signis & Grom
+        [JournalEntries.Garmond_Zaza] = new JournalBossCounter(JournalEntries.Garmond_Zaza), // Garmond & Zaza
+        [JournalEntries.Silk_Boss] = new JournalBossCounter(JournalEntries.Silk_Boss), // Grand Mother Silk
+        [JournalEntries.Swamp_Shaman] = new JournalBossCounter(JournalEntries.Swamp_Shaman), // Groal the Great
+        [JournalEntries.Song_Knight] = new JournalBossCounter(JournalEntries.Song_Knight), // Second Sentinel
+        [JournalEntries.Shakra] = new JournalBossCounter(JournalEntries.Shakra), // Shakra
+        [JournalEntries.Abyss_Mass] = new JournalBossCounter(JournalEntries.Abyss_Mass), // Summoned Saviour
+        [JournalEntries.Conductor_Boss] = new JournalBossCounter(JournalEntries.Conductor_Boss), // The Unravelled
+        [JournalEntries.Trobbio] = new JournalBossCounter(JournalEntries.Trobbio), // Trobbio
+        [JournalEntries.Zap_Core_Enemy] = new JournalBossCounter(JournalEntries.Zap_Core_Enemy), // Voltvyrm
+        [JournalEntries.Giant_Centipede] = new JournalBossCounter(JournalEntries.Giant_Centipede), // Bell Eater
+        [JournalEntries.Clover_Dancer] = new JournalBossCounter(JournalEntries.Clover_Dancer), // Clover Dancers
+        [JournalEntries.Crawfather] = new JournalBossCounter(JournalEntries.Crawfather), // Crawfather
+        [JournalEntries.Coral_King] = new JournalBossCounter(JournalEntries.Coral_King), // Crust King Khann
+        [JournalEntries.Bone_Hunter_Trapper] = new JournalBossCounter(JournalEntries.Bone_Hunter_Trapper), // Gurr the Outcast
+        [JournalEntries.Garmond] = new JournalBossCounter(JournalEntries.Garmond), // Lost Garmond
+        [JournalEntries.Lost_Lace] = new JournalBossCounter(JournalEntries.Lost_Lace), // Lost Lace
+        [JournalEntries.Flower_Queen] = new JournalBossCounter(JournalEntries.Flower_Queen), // Nyleth
+        [JournalEntries.Pinstress_Boss] = new JournalBossCounter(JournalEntries.Pinstress_Boss), // Pinstress
+        [JournalEntries.Blue_Assistant] = new JournalBossCounter(JournalEntries.Blue_Assistant), // Plasmified Zango
+        [JournalEntries.Seth] = new JournalBossCounter(JournalEntries.Seth), // Shrine Guardian Seth
+        [JournalEntries.Hunter_Queen] = new JournalBossCounter(JournalEntries.Hunter_Queen), // Skarrsinger Karmelita
+        [JournalEntries.Tormented_Trobbio] = new JournalBossCounter(JournalEntries.Tormented_Trobbio), // Tormented Trobbio
+        [JournalEntries.Coral_Warrior_Grey] = new JournalBossCounter(JournalEntries.Coral_Warrior_Grey), // Watcher at the Edge
 
-        new LaceBossDefinition(), // Lace
-        new MossMotherBossDefinition(), // Moss Mother + refight
-        new PalestagBossDefinition(), // Palestag
-    ];
+        [JournalEntries.Lace] = new SpecialBossCounter(JournalEntries.Lace,
+            new Disjunction(new PDBool(nameof(PlayerData.defeatedLace1)), new PDBool(nameof(PlayerData.laceLeftDocks)), 
+                new PDBool(nameof(PlayerData.visitedCitadel))), // Lace-Docks, encounteredLace1Grotto also deactivates the Docks fight, but this seems to be unused
+            new PDBool(nameof(PlayerData.defeatedLaceTower))), // Lace-Cradle
+        [JournalEntries.Mossbone_Mother] = new SpecialBossCounter(JournalEntries.Mossbone_Mother,
+            new PDBool(nameof(PlayerData.defeatedMossMother)), // Moss Mother-Grotto
+            new CoalescingValueProvider<bool>(new ComponentFieldOption<BattleScene, bool>(SceneNames.Weave_03, "Boss Scene", nameof(BattleScene.completed)),
+                new SDBool(SceneNames.Weave_03, "Boss Scene"))), // Moss Mother Duo-Weavenest
+        [JournalEntries.Cloverstag_White] = new SpecialBossCounter(JournalEntries.Cloverstag_White,
+            new Disjunction(new IntComparisonBool
+            {
+                ToCompare = new JournalKillDataKills(JournalEntries.Cloverstag_White),
+                Amount = 0,
+                Operator = Enums.ComparisonOperator.Gt, // Palestag 
+            }, new PDBool(nameof(PlayerData.defeatedCloverDancers)))), // locks out Palestag without granting entry 
+        // TODO: if Verdania is made reaccessible, Palestag should be replaced by a JournalBossCounter
+    });
 
+    internal static BossKillsCounterModule CreateDefault() => new() { BossCounters = [with(DefaultBossCounters)] };
 
     protected override void DoLoad()
     {
-        foreach (var def in BossDefinitionsInternal)
-            def.DoLoad();
     }
 
     protected override void DoUnload()
     {
-        foreach (var def in BossDefinitionsInternal)
-            def.DoUnload();
-    }
-
-    internal void AddDefaultBosses()
-    {
-        BossDefinitionsInternal.UnionWith(DefaultBosses);
-    }
-
-    /// <summary>
-    /// Add a boss definition to the boss collection.
-    /// </summary>
-    /// <returns>True if the definition was added to the collection. False if the definition was already present.
-    /// </returns>
-    /// <exception cref="ArgumentException">Thrown if <c>def</c> is a <see cref="JournalEntryBossDefinition"/> and a
-    /// definition for that journal entry already exists in the collection.</exception>
-    public bool AddBossDefinition(BossDefinition def)
-    {
-        // Don't allow adding the same journal entry definition twice
-        if (def is JournalEntryBossDefinition journalDef
-            && BossDefinitionsInternal.Any(internalDef =>
-                internalDef is JournalEntryBossDefinition internalJournalDef
-                && journalDef.BossName == internalJournalDef.BossName))
-        {
-            throw new ArgumentException($"Boss definition for {journalDef.BossName} already exists", nameof(def));
-        }
-
-        return BossDefinitionsInternal.Add(def);
-    }
-
-    /// <summary>
-    /// Removes a boss definition from the boss collection.
-    /// </summary>
-    /// <returns>True if the definition was removed from the collection. False if the definition was not present.
-    /// </returns>
-    public bool RemoveBossDefinition(BossDefinition def) => BossDefinitionsInternal.Remove(def);
-
-    public int BossKillCount
-    {
-        get { return BossDefinitions.Sum(killDef => killDef.BossesKilledContribution); }
     }
 }
