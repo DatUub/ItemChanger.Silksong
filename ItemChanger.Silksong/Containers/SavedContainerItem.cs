@@ -13,7 +13,7 @@ namespace ItemChanger.Silksong.Containers
     {
         public required ContainerInfo ContainerInfo { get; set; }
         public MessageType SupportedMessageTypes { get; set; } = MessageType.SmallPopup;
-        
+
         /// <summary>
         /// If this is true, the saved item will retain control during the give procedure.
         /// This will only be necessary for certain containers.
@@ -24,7 +24,11 @@ namespace ItemChanger.Silksong.Containers
 
         // refer to CheckActivation() and activatedRead field of CollectableItemPickup.
         public override bool IsUnique => true;
-        public override bool CanGetMore() => ContainerInfo.GiveInfo.Items.Any(i => !i.IsObtained());
+        public override bool CanGetMore() => ForceCanGetMore || ContainerInfo.GiveInfo.Items.Any(i => !i.IsObtained());
+        /// <summary>
+        /// If true, CanGetMore() returns true even if all items are obtained.
+        /// </summary>
+        public bool ForceCanGetMore { get; set; }
 
         public override void Get(bool showPopup = true)
         {

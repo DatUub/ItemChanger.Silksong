@@ -2,6 +2,7 @@ using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
 using ItemChanger.Locations;
 using ItemChanger.Serialization;
+using ItemChanger.Silksong.Extensions;
 using ItemChanger.Silksong.RawData;
 using ItemChanger.Silksong.Serialization;
 using Silksong.FsmUtil;
@@ -67,18 +68,7 @@ public class ElegyOfTheDeepLocation : AutoLocation
                 fsm.SendEvent("HINT");
             }
         });
-        melodyHint.AddAction(new RunDialogue
-        {
-            Sheet = PreconditionHint!.Sheet,
-            Key = PreconditionHint!.Key,
-            PlayerVoiceTableOverride = new() { Value = null },
-            PreventHeroAnimation = false,
-            HideDecorators = false,
-            TextAlignment = TMProOld.TextAlignmentOptions.TopLeft,
-            OffsetY = 0f,
-            OverrideContinue = false,
-            Target = new() { OwnerOption = OwnerDefaultOption.UseOwner },
-        });
+        melodyHint.AddRunDialogueAction(PreconditionHint!);
         melodyHint.AddTransition("CONVO_END", "End Dialogue");
 
         // Skip the Elegy popup, grant the placement whilst the screen is black.

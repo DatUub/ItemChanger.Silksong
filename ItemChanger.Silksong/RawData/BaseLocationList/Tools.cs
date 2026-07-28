@@ -1,11 +1,12 @@
 using Benchwarp.Data;
 using ItemChanger.Locations;
 using ItemChanger.Tags;
-using ItemChanger.Silksong.Locations;
-using ItemChanger.Silksong.Costs;
-using ItemChanger.Silksong.RawData;
 using ItemChanger.Silksong.Containers;
+using ItemChanger.Silksong.Costs;
+using ItemChanger.Silksong.Locations;
 using ItemChanger.Silksong.Locations.MultiLocationEnums;
+using ItemChanger.Silksong.RawData;
+using ItemChanger.Silksong.Serialization;
 
 namespace ItemChanger.Silksong.RawData;
 
@@ -58,5 +59,32 @@ internal static partial class BaseLocationList
                 Tags = [new OriginalContainerTag() { ContainerType = ContainerNames.Shiny }]
             }
         }
+    };
+  
+    public static Location Pin_Badge => new PinstressLocation
+    {
+        SceneName = SceneNames.Peak_07,
+        Name = LocationNames.Pin_Badge,
+    };
+
+    public static Location Pollip_Pouch => new DualLocation
+    {
+        SceneName = SceneNames.Room_Witch,
+        Name = LocationNames.Pollip_Pouch,
+        Test = new QuestCompletionBool(Quests.Wood_Witch_Curse),
+        TrueLocation = new CoordinateLocation
+        {
+            SceneName = SceneNames.Room_Witch,
+            Name = LocationNames.Pollip_Pouch,
+            X = 17.0f,
+            Y = 6.57f,
+            Managed = false,
+            ForceDefaultContainer = true,
+        },
+        FalseLocation = new GreyrootPollipLocation
+        {
+            Name = LocationNames.Pollip_Pouch,
+            SceneName = SceneNames.Room_Witch,
+        },
     };
 }
