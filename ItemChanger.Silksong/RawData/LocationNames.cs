@@ -373,6 +373,9 @@ public static class LocationNames
     public const string Crafting_Kit__Grindle = "Crafting_Kit-Grindle";
     public const string Crafting_Kit__Twelfth_Architect = "Crafting_Kit-Twelfth_Architect";
 
+    // journal
+    public const string Hunter_s_Journal = "Hunter's_Journal";
+
     // bellhome upgrades
     public const string Crawbell = "Crawbell";
     public const string Farsight = "Farsight";
@@ -470,6 +473,11 @@ public static class LocationNames
     // Pale rosary necklaces
     public const string Pale_Rosary_Necklace__Far_Fields = "Pale_Rosary_Necklace-Far_Fields"; // Northeastern Far Fields, guarded by Skarr Stalker
     public const string Pale_Rosary_Necklace__High_Halls_Vault = "Pale_Rosary_Necklace-High_Halls_Vault"; // Rosary Bank chest west of Ventrica station
+
+    // Moss Druid payouts
+    public const string Moss_Druid_Payout_1 = "Moss_Druid_Payout_1";
+    public const string Moss_Druid_Payout_2 = "Moss_Druid_Payout_2";
+    public const string Moss_Druid_Payout_3 = "Moss_Druid_Payout_3";
 
     // ROSARY POUCHES (Destructible Sacks)
     public const string Rosary_Pouch__Coral_12 = "Rosary_Pouch-Coral_12";
@@ -578,6 +586,7 @@ public static class LocationNames
     public const string Lore_Tablet__Cradle_Cage_3 = "Lore_Tablet-Cradle_Cage_3";
     public const string Lore_Tablet__Greymoor_Orders_Above_Home = "Lore_Tablet-Greymoor_Orders_Above_Home";
     public const string Lore_Tablet__Greymoor_Bottom = "Lore_Tablet-Greymoor_Bottom";
+    public const string Lore_Tablet__Nuu_Scroll = "Lore_Tablet-Nuu_Scroll";
     public const string Lore_Tablet__Trobbio_Sign = "Lore_Tablet-Trobbio_Sign";
     public const string Lore_Tablet__Trobbio_Notes = "Lore_Tablet-Trobbio_Notes";
     public const string Lore_Tablet__Tormented_Trobbio_Notes = "Lore_Tablet-Tormented_Trobbio_Notes";

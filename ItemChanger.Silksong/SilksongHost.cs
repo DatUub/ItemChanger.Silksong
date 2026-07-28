@@ -4,6 +4,7 @@ using ItemChanger.Events;
 using ItemChanger.Logging;
 using ItemChanger.Modules;
 using ItemChanger.Silksong.Modules;
+using ItemChanger.Silksong.Modules.BossKillsCounter;
 using ItemChanger.Silksong.Modules.Obstacles;
 using ItemChanger.Silksong.Modules.YNBox;
 using ItemChanger.Silksong.Util;
@@ -12,7 +13,7 @@ namespace ItemChanger.Silksong;
 
 public partial class SilksongHost : ItemChangerHost
 {
-    internal SilksongHost() 
+    internal SilksongHost()
     {
         MessageUtil.Setup();
         Finder = new();
@@ -33,16 +34,21 @@ public partial class SilksongHost : ItemChangerHost
 
     public override IEnumerable<Module> BuildDefaultModules()
     {
-        return [
+        return
+        [
+            BossKillsCounterModule.CreateDefault(),
             new CustomYNEnableModule(),
             new YNBoxDamageControlModule(),
             new UIProxyControlBlockerModule(),
             new SkipEndDialogueAnimModule(),
             new CrestUIMsgRepairModule(),
             new ConsistentRandomnessModule(),
+            new MainQuestReflowModule(),
             new ObstacleHandlerModule(),
             new ChapelDoorObstacleModule(),
-            ];
+            new ReusableAbyssEscapeModule(),
+            new RemoveCurrencyCapModule(),
+        ];
     }
 
     private LifecycleEvents.Invoker? lifecycleInvoker;

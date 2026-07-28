@@ -5,6 +5,8 @@ using ItemChanger.Silksong.Containers;
 using ItemChanger.Silksong.Serialization;
 using ItemChanger.Silksong.Tags;
 using ItemChanger.Tags;
+using ItemChanger.Enums;
+using ItemChanger.Serialization;
 
 namespace ItemChanger.Silksong.RawData;
 
@@ -30,7 +32,7 @@ internal static partial class BaseLocationList
             ]
         };
     }
-    
+
     public static Location Crest_of_Wanderer => new CrestCorpseLocation
     {
         SceneName = SceneNames.Chapel_Wanderer,
@@ -83,11 +85,69 @@ internal static partial class BaseLocationList
             Managed = false,
         },
     };
+    
+    public static Location Crest_of_Cursed_Witch => new DualLocation
+    {
+        SceneName = SceneNames.Room_Witch,
+        Name = LocationNames.Crest_of_Cursed_Witch,
+        Test = new QuestCompletionBool(Quests.Wood_Witch_Curse),
+        FalseLocation = new GreyrootCrestLocation
+        {
+            SceneName = SceneNames.Room_Witch,
+            Name = LocationNames.Crest_of_Cursed_Witch,
+            FlingType = FlingType.DirectDeposit,
+        },
+        TrueLocation = new CoordinateLocation
+        {
+            SceneName = SceneNames.Room_Witch,
+            Name = LocationNames.Crest_of_Cursed_Witch,
+            X = 19.7f,
+            Y = 6.57f,
+            Managed = false,
+            FlingType = FlingType.DirectDeposit,
+            ForceDefaultContainer = true,
+        }.WithTag(new ChangeSceneTag { TargetScene = SceneNames.Shellwood_25b, TargetGate = PrimitiveGateNames.door_curseSequenceEnd }),
+    };
 
     public static Location Eva => new EvaLocation
     {
         SceneName = SceneNames.Weave_10,
         Name = LocationNames.Eva,
+    };
+
+    public static Location Faydown_Cloak => new FayfornLocation
+    {
+        SceneName = SceneNames.Peak_08b,
+        Name = LocationNames.Faydown_Cloak,
+    };
+
+    public static Location Cross_Stitch => new DualLocation
+    {
+        SceneName = SceneNames.Organ_01,
+        Name = LocationNames.Cross_Stitch,
+        FlingType = Enums.FlingType.Everywhere,
+        Test = new PDBool(nameof(PlayerData.defeatedPhantom)),
+        FalseLocation = new PhantomLocation
+        {
+            SceneName = SceneNames.Organ_01,
+            Name = LocationNames.Cross_Stitch,
+            FlingType = Enums.FlingType.Everywhere,
+        },
+        TrueLocation = new CoordinateLocation
+        {
+            SceneName = SceneNames.Organ_01,
+            Name = LocationNames.Cross_Stitch,
+            X = 84.3f,
+            Y = 104.6f,
+            Managed = false,
+            FlingType = Enums.FlingType.Everywhere,
+        },
+    };
+
+    public static Location Pale_Nails => new PaleNailsLocation
+    {
+        SceneName = SceneNames.Cradle_03_Destroyed,
+        Name = LocationNames.Pale_Nails
     };
 
     public static Location Silkspear => CreateWeaverCorpseLocation(
@@ -131,7 +191,7 @@ internal static partial class BaseLocationList
     ).WithTag(
         new RemoveComponentTag<PlayMakerFSM>()
         {
-            SceneName =  SceneNames.Abyss_08,
+            SceneName = SceneNames.Abyss_08,
             ObjectName = "weaver_spire_base control"
         }
     );
@@ -140,5 +200,55 @@ internal static partial class BaseLocationList
     {
         SceneName = SceneNames.Peak_07,
         Name = LocationNames.Pin_Badge,
+    };
+
+    public static Location Elegy_of_the_Deep => new DualLocation()
+    {
+        SceneName = SceneNames.Tut_04,
+        Name = LocationNames.Elegy_of_the_Deep,
+        Test = new QuestCompletionBool(Quests.Black_Thread_Pt4_Return),
+        TrueLocation = new CoordinateLocation()
+        {
+            SceneName = SceneNames.Tut_04,
+            Name = LocationNames.Elegy_of_the_Deep,
+            X = 37.90f,
+            Y = 6.57f,
+            Managed = false
+        },
+        FalseLocation = new ElegyOfTheDeepLocation()
+        {
+            SceneName = SceneNames.Tut_04,
+            Name = LocationNames.Elegy_of_the_Deep,
+        }
+    };
+
+    public static Location Needolin => new DualLocation
+    {
+        Name = LocationNames.Needolin,
+        Test = new PDBool(nameof(PlayerData.spinnerDefeated)),
+        SceneName = SceneNames.Belltown_Shrine,
+        FlingType = Enums.FlingType.Everywhere,
+        FalseLocation = new WidowLocation 
+        {
+            Name = LocationNames.Needolin,
+            SceneName = SceneNames.Belltown_Shrine,
+            FlingType = Enums.FlingType.DirectDeposit,
+        },
+        TrueLocation = new CoordinateLocation
+        {
+            Name = LocationNames.Needolin,
+            SceneName = SceneNames.Belltown_Shrine,
+            FlingType = Enums.FlingType.Everywhere,
+            X = 55.2f,
+            Y = 8.6f,
+            ForceDefaultContainer = true,
+            Managed = false,
+        },
+    };
+    
+    public static Location Beastling_Call => new BeastlingCallLocation()
+    {
+        SceneName = SceneNames.Bellway_Centipede_Arena,
+        Name = LocationNames.Beastling_Call,
     };
 }

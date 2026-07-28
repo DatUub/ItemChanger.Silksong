@@ -6,6 +6,7 @@ using ItemChanger.Placements;
 using ItemChanger.Serialization;
 using ItemChanger.Silksong.RawData;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace ItemChanger.Silksong.Extensions;
 
@@ -50,6 +51,28 @@ internal static class ICExtensions
         profile.AddPlacement(
             ItemChangerHost.Singleton.Finder.GetLocation(LocationNames.Start)!.Wrap().Add(item),
             Enums.PlacementConflictResolution.MergeKeepingOld);
+    }
+
+    /// <summary>
+    /// Returns an action which gives all unobtained items from the location's placement, then runs a provided callback.
+    /// The transform on the location's GiveInfo is set to the provided transform.
+    /// </summary>
+    public static Action<Action> CreateGiveAllDelegate(this AutoLocation loc, Transform t)
+    {
+        GiveInfo info = loc.GetGiveInfo();
+        info.Transform = t;
+        return a => loc.Placement!.GiveAll(info, a);
+    }
+
+    /// <summary>
+    /// Returns an action which gives all unobtained items from the location's placement.
+    /// The transform on the location's GiveInfo is set to the fsm transform. The specified event is sent to the fsm on completion.
+    /// </summary>
+    public static Action CreateGiveAllDelegate(this AutoLocation loc, PlayMakerFSM fsm, string sendEventOnFinish)
+    {
+        GiveInfo info = loc.GetGiveInfo();
+        info.Transform = fsm.transform;
+        return () => loc.Placement!.GiveAll(info, () => fsm.SendEvent(sendEventOnFinish));
     }
 
     public static string GetUIName(this Placement pmt, IEnumerable<Item> items, int maxLength = 120)
