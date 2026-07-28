@@ -196,12 +196,6 @@ internal static partial class BaseLocationList
         }
     );
 
-    public static Location Pin_Badge => new PinstressLocation
-    {
-        SceneName = SceneNames.Peak_07,
-        Name = LocationNames.Pin_Badge,
-    };
-
     public static Location Elegy_of_the_Deep => new DualLocation()
     {
         SceneName = SceneNames.Tut_04,
