@@ -1,9 +1,9 @@
 using Benchwarp.Data;
 using ItemChanger.Locations;
 using ItemChanger.Tags;
-using ItemChanger.Silksong.Locations;
+using ItemChanger.Silksong.Containers;
 using ItemChanger.Silksong.Costs;
-using ItemChanger.Silksong.RawData;
+using ItemChanger.Silksong.Locations;
 using ItemChanger.Silksong.Serialization;
 
 namespace ItemChanger.Silksong.RawData;
@@ -26,6 +26,27 @@ internal static partial class BaseLocationList
         PreviewIndex = 4,
     }.WithTag(new DefaultCostTag { Cost = new MossberryCost { Value = 7 } });
 
+    public static Location Tacks => new DualLocation
+    {
+        Name = LocationNames.Tacks,
+        SceneName = SceneNames.Dust_Shack,
+        Test = new PDBool(nameof(PlayerData.blackThreadWorld)),
+        FalseLocation = new BenjinAndCrullTacksLocation() 
+        {
+            Name = LocationNames.Tacks,
+            SceneName = SceneNames.Dust_Shack,
+        },
+        TrueLocation = new ObjectLocation()
+        {
+            Name = LocationNames.Tacks,
+            SceneName = SceneNames.Dust_Shack,
+            ObjectName = "Collectable Item Dustpilo",
+            FlingType = Enums.FlingType.Everywhere,
+            Correction = default,
+            Tags = [new OriginalContainerTag() { ContainerType = ContainerNames.Shiny }]
+        },
+    };
+  
     public static Location Pin_Badge => new PinstressLocation
     {
         SceneName = SceneNames.Peak_07,
