@@ -1,6 +1,7 @@
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
 using ItemChanger.Locations;
+using ItemChanger.Silksong.Extensions;
 using ItemChanger.Silksong.RawData;
 using QuestPlaymakerActions;
 using Silksong.FsmUtil;
@@ -25,8 +26,9 @@ public class BenjinAndCrullTacksLocation : AutoLocation
     {
         // Replace CanEndQuest state - to support persistent items
         FsmState dialogTreeCheckState = fsm.MustGetState("State?");
+        dialogTreeCheckState.AddTransition("CAN END QUICK", "Complete Dlg");
         dialogTreeCheckState.RemoveFirstActionOfType<CanEndQuestV2>();
-        dialogTreeCheckState.InsertLambdaMethod(0, _ =>
+        dialogTreeCheckState.InsertMethod(0, () =>
         {
             FullQuestBase quest = QuestManager.GetQuest(Quests.Roach_Killing);
             if (quest == null || !quest.IsAccepted)
@@ -35,7 +37,10 @@ public class BenjinAndCrullTacksLocation : AutoLocation
             if (quest.CanComplete && !quest.IsCompleted)
             {
                 fsm.SendEvent("CAN END");
-                return;
+            }
+            else if (quest.IsCompleted && !Placement!.AllObtained())
+            {
+                fsm.SendEvent("CAN END QUICK");
             }
         });
 
@@ -52,6 +57,6 @@ public class BenjinAndCrullTacksLocation : AutoLocation
             Target = new FsmOwnerDefault() { OwnerOption = OwnerDefaultOption.UseOwner },
             UseChildren = false
         });
-        rewardState.AddLambdaMethod(GiveAll);
+        rewardState.AddLambdaMethod(this.CreateGiveAllDelegate(fsm.transform));
     }
 }
