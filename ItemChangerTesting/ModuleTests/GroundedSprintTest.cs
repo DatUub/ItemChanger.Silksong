@@ -1,6 +1,7 @@
 using Benchwarp.Data;
 using ItemChanger.Locations;
 using ItemChanger.Silksong.RawData;
+using UnityEngine;
 
 namespace ItemChangerTesting.ModuleTests;
 
@@ -10,8 +11,8 @@ internal class GroundedSprintTest : Test
     {
         Folder = TestFolder.ModuleTests,
         MenuName = "Grounded Sprint",
-        MenuDescription = "Pickup grants Grounded Sprint. Hold dash on ground: vanilla sprint anim + Swift Step speed. Air: sprint cancels, walk speed, no shuttle-cock. Nearby Swift Step restores full vanilla sprint.",
-        Revision = 2026073001
+        MenuDescription = "Pickup grants Grounded Sprint. Hold dash on ground: vanilla sprint anim + Swift Step speed. Air: sprint cancels, walk speed, no shuttle-cock. Nearby Swift Step restores full vanilla sprint. Test Methods → Run physics probe.",
+        Revision = 2026073101
     };
 
     public override void Setup(TestArgs args)
@@ -36,4 +37,14 @@ internal class GroundedSprintTest : Test
             Managed = false,
         }.Wrap().Add(Finder.GetItem(ItemNames.Swift_Step)!));
     }
+
+    public override IEnumerable<(string, Action)> TestMethods() =>
+    [
+        ("Run physics probe (jump / sprint-jump / downspike)", () =>
+        {
+            var host = ItemChangerTestingPlugin.Instance;
+            host.StartCoroutine(GroundedSprintPhysicsProbe.Run());
+            host.Logger.LogInfo("[GS] physics probe coroutine started — see BepInEx log + persistentDataPath/gs_physics_probe.txt");
+        }),
+    ];
 }

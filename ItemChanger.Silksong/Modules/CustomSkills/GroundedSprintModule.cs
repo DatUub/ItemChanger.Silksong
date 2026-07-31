@@ -10,14 +10,12 @@ namespace ItemChanger.Silksong.Modules.CustomSkills;
 ///
 /// flibber (#209): trick the game so vanilla sprint anim/cState run.
 ///
-/// Playtest fixes:
-/// - Ledge fall: soft cancel + clamp air horizontal speed to walk.
-/// - Wall clip: never allow real HeroDash for GS-only.
-/// - Ground dash still worked: Prepatcher makes playerData.hasDash use GetBool, so
-///   spoofing hasDash made CanDash true. Force CanDash false and block HeroDash*.
-/// - Jump-from-sprint / downslash: never send HARD LANDING (kills jump Y and interrupts
-///   air attacks). Only CANCEL SPRINT + flag clear, and only on leave-ground / jump —
-///   not every airborne frame.
+/// Critical decomp (HeroController.FixedUpdate):
+///   if (cState.jumping &amp;&amp; !cState.dashing &amp;&amp; !cState.isSprinting) Jump();
+/// Jump() is the only place that applies JUMP_SPEED. If isSprinting stays true after a
+/// sprint-jump (GS cancels shuttlecock but not the sprint flag in time), you get a
+/// near-zero hop. CanJump() also requires !isSprinting, so sprint jump normally goes
+/// through the shuttlecock FSM path — which we intentionally block.
 /// </summary>
 public class GroundedSprintModule : CustomSkillModule
 {
@@ -101,7 +99,6 @@ public class GroundedSprintModule : CustomSkillModule
     private static bool IsEffectivelyGrounded(HeroController hc)
     {
         if (hc.cState.onGround) return true;
-        // Don't treat wall-slide as ground sprint surface
         if (hc.cState.wallSliding || hc.cState.wallClinging || hc.cState.wallScrambling)
             return false;
         try
@@ -124,10 +121,9 @@ public class GroundedSprintModule : CustomSkillModule
 
         _harmony = new Harmony("itemchanger.silksong.groundedsprint");
 
-        // GetBool("hasDash") is true while grounded so the sprint FSM can run, but
-        // Prepatcher routes playerData.hasDash through GetBool — so CanDash would also
-        // become true. Force CanDash false and block HeroDash* for GS-only (sprint only).
         Patch(typeof(HeroController), nameof(HeroController.CanDash), postfix: nameof(CanDashPostfix));
+        Patch(typeof(HeroController), nameof(HeroController.CanJump), postfix: nameof(CanJumpPostfix));
+
         var heroDashPressed = AccessTools.Method(typeof(HeroController), "HeroDashPressed");
         if (heroDashPressed != null)
         {
@@ -141,8 +137,13 @@ public class GroundedSprintModule : CustomSkillModule
                 prefix: new HarmonyMethod(typeof(GroundedSprintModule), nameof(HeroDashPrefix)));
         }
 
-        Patch(typeof(HeroController), "Update", postfix: nameof(HeroUpdatePostfix));
-        Patch(typeof(HeroController), "FixedUpdate", postfix: nameof(HeroFixedUpdatePostfix));
+        // PREFIX FixedUpdate so isSprinting is cleared before Jump() gate.
+        Patch(typeof(HeroController), "Update",
+            prefix: nameof(HeroUpdatePrefix),
+            postfix: nameof(HeroUpdatePostfix));
+        Patch(typeof(HeroController), "FixedUpdate",
+            prefix: nameof(HeroFixedUpdatePrefix),
+            postfix: nameof(HeroFixedUpdatePostfix));
 
         var leftGround = AccessTools.Method(typeof(HeroController), "LeftGround", [typeof(bool)]);
         if (leftGround != null)
@@ -167,7 +168,7 @@ public class GroundedSprintModule : CustomSkillModule
         }
 
         ItemChangerPlugin.Instance.Logger.LogInfo(
-            "[GroundedSprint] loaded: GetBool hasDash for FSM, CanDash/HeroDash blocked, TRY SPRINT + air clamp.");
+            "[GroundedSprint] loaded: Jump-gate isSprinting clear (FixedUpdate prefix), CanJump while GS sprint, no shuttlecock.");
     }
 
     private void Patch(Type type, string name, string? prefix = null, string? postfix = null)
@@ -206,31 +207,44 @@ public class GroundedSprintModule : CustomSkillModule
 
     // ---- Harmony ----
 
-    /// <summary>
-    /// Prepatcher makes hasDash property use GetBool — force dash ability off for GS-only.
-    /// Sprint is entered via TRY SPRINT, not HeroDash.
-    /// </summary>
     private static void CanDashPostfix(HeroController __instance, ref bool __result)
     {
         if (!OnlyGroundedSprintKit()) return;
         __result = false;
     }
 
-    /// <summary>Skip HeroDashPressed entirely for GS-only (redirect dash button to sprint).</summary>
+    /// <summary>
+    /// Vanilla CanJump requires !isSprinting (sprint jump is shuttlecock via FSM).
+    /// GS blocks shuttlecock, so allow a normal grounded jump while GS-sprinting.
+    /// </summary>
+    private static void CanJumpPostfix(HeroController __instance, ref bool __result)
+    {
+        if (__result || !OnlyGroundedSprintKit()) return;
+        if (!__instance.cState.isSprinting && !__instance.cState.isBackSprinting) return;
+        // Mirror CanJump's safe grounded branch without ActorStates (not public in all refs).
+        if (__instance.cState.onGround
+            && !__instance.cState.dashing
+            && !__instance.cState.jumping
+            && !__instance.cState.hazardDeath
+            && !__instance.cState.hazardRespawning
+            && !__instance.cState.dead)
+        {
+            __result = true;
+        }
+    }
+
     private static bool HeroDashPressedPrefix(HeroController __instance)
     {
         if (!OnlyGroundedSprintKit()) return true;
-        // Convert dash press into sprint attempt on ground only.
-        if (__instance.cState.onGround && __instance.CanSprint())
+        if (__instance.cState.onGround && !__instance.cState.jumping && __instance.CanSprint())
             __instance.sprintFSM?.SendEvent("TRY SPRINT");
-        return false; // skip original dash
+        return false;
     }
 
     private static bool HeroDashPrefix(HeroController __instance, bool startAlreadyDashing)
     {
         if (!OnlyGroundedSprintKit()) return true;
-        // Never start a real dash with GS-only.
-        if (__instance.cState.onGround && __instance.CanSprint())
+        if (__instance.cState.onGround && !__instance.cState.jumping && __instance.CanSprint())
             __instance.sprintFSM?.SendEvent("TRY SPRINT");
         return false;
     }
@@ -240,21 +254,19 @@ public class GroundedSprintModule : CustomSkillModule
     private static void HeroJumpBoolPrefix(HeroController __instance, ref bool checkSprint)
     {
         if (!OnlyGroundedSprintKit()) return;
-        // Disable shuttlecock path without wrecking jump velocity.
         checkSprint = false;
         __instance.PreventShuttlecock();
         SprintBufferStepsField?.SetValue(__instance, 0);
         SyncBufferStepsField?.SetValue(__instance, false);
         NoShuttlecockTimeField?.SetValue(__instance, Time.timeAsDouble + 5.0);
-        // Soft cancel only — HARD LANDING / air clamp here was killing jump height.
+        // Must clear isSprinting here so Jump() can apply JUMP_SPEED this physics step.
         SoftCancelSprint(__instance, sendFsmEvent: true, clampAirSpeed: false);
+        __instance.cState.shuttleCock = false;
     }
 
-    /// <summary>Before LeftGround fills sprintBufferSteps from isSprinting/dashing.</summary>
     private static void LeftGroundPrefix(HeroController __instance)
     {
         if (!OnlyGroundedSprintKit()) return;
-        // Clear sprint flags BEFORE vanilla buffer fill (uses isSprinting || dashing).
         __instance.cState.isSprinting = false;
         __instance.cState.isBackSprinting = false;
         SprintBufferStepsField?.SetValue(__instance, 0);
@@ -267,7 +279,65 @@ public class GroundedSprintModule : CustomSkillModule
         SoftCancelSprint(__instance, sendFsmEvent: true, clampAirSpeed: true);
     }
 
+    /// <summary>
+    /// Before Update input: if jump pressed while GS-sprinting, cancel sprint so
+    /// CanJump/HeroJump see a clean non-sprint state.
+    /// </summary>
+    private static void HeroUpdatePrefix(HeroController __instance)
+    {
+        if (!OnlyGroundedSprintKit()) return;
+
+        InputHandler? ih = InputHandler.Instance;
+        if (ih != null
+            && ih.inputActions.Jump.WasPressed
+            && (__instance.cState.isSprinting || __instance.cState.isBackSprinting)
+            && __instance.cState.onGround)
+        {
+            SoftCancelSprint(__instance, sendFsmEvent: true, clampAirSpeed: false);
+            __instance.cState.shuttleCock = false;
+            __instance.PreventShuttlecock();
+        }
+    }
+
     private static void HeroUpdatePostfix(HeroController __instance) => TickGuards(__instance, physics: false);
+
+    /// <summary>
+    /// BEFORE FixedUpdate body: Jump() is gated on !isSprinting. Clear sprint flags
+    /// for any airborne / jumping frame so JUMP_SPEED applies and downspike isn't
+    /// fighting sprint control.
+    /// </summary>
+    private static void HeroFixedUpdatePrefix(HeroController __instance)
+    {
+        if (!OnlyGroundedSprintKit()) return;
+
+        bool airborne = !IsEffectivelyGrounded(__instance)
+            || __instance.cState.jumping
+            || __instance.cState.doubleJumping
+            || __instance.cState.downSpiking
+            || __instance.cState.downSpikeAntic
+            || __instance.cState.shuttleCock;
+
+        if (!airborne) return;
+
+        // Hard-clear every physics frame while air/jumping — FSM can re-set isSprinting.
+        __instance.cState.isSprinting = false;
+        __instance.cState.isBackSprinting = false;
+        __instance.cState.shuttleCock = false;
+        SprintBufferStepsField?.SetValue(__instance, 0);
+        SyncBufferStepsField?.SetValue(__instance, false);
+        ClearSprintSpeedAdd(__instance);
+
+        if (__instance.sprintFSM != null)
+        {
+            var isSprint = __instance.sprintFSM.FsmVariables.GetFsmBool("Is Sprinting");
+            if (isSprint != null && isSprint.Value)
+            {
+                isSprint.Value = false;
+                __instance.sprintFSM.SendEvent("CANCEL SPRINT");
+            }
+        }
+    }
+
     private static void HeroFixedUpdatePostfix(HeroController __instance) => TickGuards(__instance, physics: true);
 
     private static void TickGuards(HeroController hc, bool physics)
@@ -282,31 +352,35 @@ public class GroundedSprintModule : CustomSkillModule
         NoShuttlecockTimeField?.SetValue(hc, Time.timeAsDouble + 1.0);
 
         bool grounded = IsEffectivelyGrounded(hc);
+        bool busyAirAction = hc.cState.jumping
+            || hc.cState.doubleJumping
+            || hc.cState.downSpiking
+            || hc.cState.downSpikeAntic
+            || hc.cState.attacking;
 
-        // Edge: just left ground (ledge or jump) — one soft cancel, not HARD LANDING.
         if (_wasOnGround && !grounded)
             SoftCancelSprint(hc, sendFsmEvent: true, clampAirSpeed: true);
 
         _wasOnGround = grounded;
 
-        if (!grounded)
+        if (!grounded || busyAirAction)
         {
-            // Maintain no-sprint midair without re-firing FSM events every frame
-            // (HARD LANDING spam broke jump height + downslash).
             if (hc.cState.isSprinting || hc.cState.isBackSprinting)
-                SoftCancelSprint(hc, sendFsmEvent: true, clampAirSpeed: true);
+                SoftCancelSprint(hc, sendFsmEvent: true, clampAirSpeed: !busyAirAction);
             else
                 ClearSprintSpeedAdd(hc);
 
-            if (physics)
+            // Don't clamp horizontal during downspike thrust (sets intentional X vel).
+            if (physics && !grounded && !hc.cState.downSpiking && !hc.cState.downSpikeAntic)
                 ClampAirHorizontalSpeed(hc);
             return;
         }
 
-        // Ground: hold dash → enter vanilla sprint path without enabling CanDash/HeroDash.
+        // Ground only: hold dash → sprint. Never while jumping.
         if (InputHandler.Instance != null
             && InputHandler.Instance.inputActions.Dash.IsPressed
             && !hc.cState.dashing
+            && !hc.cState.jumping
             && !hc.cState.hazardDeath
             && hc.CanSprint())
         {
@@ -314,10 +388,6 @@ public class GroundedSprintModule : CustomSkillModule
         }
     }
 
-    /// <summary>
-    /// End sprint cleanly. Never send HARD LANDING — that event aborts jump impulse
-    /// and interrupts aerial attacks (downslash).
-    /// </summary>
     private static void SoftCancelSprint(HeroController hc, bool sendFsmEvent, bool clampAirSpeed)
     {
         SprintBufferStepsField?.SetValue(hc, 0);
@@ -328,6 +398,7 @@ public class GroundedSprintModule : CustomSkillModule
 
         hc.cState.isSprinting = false;
         hc.cState.isBackSprinting = false;
+        hc.cState.shuttleCock = false;
 
         if (hc.sprintFSM != null)
         {
@@ -337,7 +408,7 @@ public class GroundedSprintModule : CustomSkillModule
 
         ClearSprintSpeedAdd(hc);
 
-        if (clampAirSpeed && !IsEffectivelyGrounded(hc))
+        if (clampAirSpeed && !IsEffectivelyGrounded(hc) && !hc.cState.downSpiking && !hc.cState.downSpikeAntic)
             ClampAirHorizontalSpeed(hc);
     }
 
@@ -347,16 +418,13 @@ public class GroundedSprintModule : CustomSkillModule
             add.Value = 0f;
     }
 
-    /// <summary>
-    /// Cap midair horizontal speed to walk so "still sprinting off a ledge" has no mobility gain.
-    /// </summary>
     private static void ClampAirHorizontalSpeed(HeroController hc)
     {
         Rigidbody2D rb = hc.rb2d;
         if (rb == null) return;
 
         float max = Mathf.Abs(hc.GetWalkSpeed());
-        if (max < 0.01f) max = 6f; // fallback if walk speed unreadable
+        if (max < 0.01f) max = 6f;
 
         Vector2 v = rb.linearVelocity;
         if (Mathf.Abs(v.x) > max)
