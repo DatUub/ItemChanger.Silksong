@@ -11,10 +11,13 @@ namespace ItemChanger.Silksong.Modules.CustomSkills;
 /// flibber (#209): trick the game so vanilla sprint anim/cState run.
 ///
 /// Playtest fixes:
-/// - Ledge fall: hard cancel + clamp air horizontal speed to walk.
+/// - Ledge fall: soft cancel + clamp air horizontal speed to walk.
 /// - Wall clip: never allow real HeroDash for GS-only.
 /// - Ground dash still worked: Prepatcher makes playerData.hasDash use GetBool, so
 ///   spoofing hasDash made CanDash true. Force CanDash false and block HeroDash*.
+/// - Jump-from-sprint / downslash: never send HARD LANDING (kills jump Y and interrupts
+///   air attacks). Only CANCEL SPRINT + flag clear, and only on leave-ground / jump —
+///   not every airborne frame.
 /// </summary>
 public class GroundedSprintModule : CustomSkillModule
 {
@@ -237,12 +240,14 @@ public class GroundedSprintModule : CustomSkillModule
     private static void HeroJumpBoolPrefix(HeroController __instance, ref bool checkSprint)
     {
         if (!OnlyGroundedSprintKit()) return;
+        // Disable shuttlecock path without wrecking jump velocity.
         checkSprint = false;
         __instance.PreventShuttlecock();
         SprintBufferStepsField?.SetValue(__instance, 0);
         SyncBufferStepsField?.SetValue(__instance, false);
         NoShuttlecockTimeField?.SetValue(__instance, Time.timeAsDouble + 5.0);
-        CancelSprintHard(__instance, clampAirSpeed: false);
+        // Soft cancel only — HARD LANDING / air clamp here was killing jump height.
+        SoftCancelSprint(__instance, sendFsmEvent: true, clampAirSpeed: false);
     }
 
     /// <summary>Before LeftGround fills sprintBufferSteps from isSprinting/dashing.</summary>
@@ -259,7 +264,7 @@ public class GroundedSprintModule : CustomSkillModule
     private static void LeftGroundPostfix(HeroController __instance)
     {
         if (!OnlyGroundedSprintKit()) return;
-        CancelSprintHard(__instance, clampAirSpeed: true);
+        SoftCancelSprint(__instance, sendFsmEvent: true, clampAirSpeed: true);
     }
 
     private static void HeroUpdatePostfix(HeroController __instance) => TickGuards(__instance, physics: false);
@@ -278,15 +283,21 @@ public class GroundedSprintModule : CustomSkillModule
 
         bool grounded = IsEffectivelyGrounded(hc);
 
-        // Edge: just left ground (ledge or jump) — cancel immediately.
+        // Edge: just left ground (ledge or jump) — one soft cancel, not HARD LANDING.
         if (_wasOnGround && !grounded)
-            CancelSprintHard(hc, clampAirSpeed: true);
+            SoftCancelSprint(hc, sendFsmEvent: true, clampAirSpeed: true);
 
         _wasOnGround = grounded;
 
         if (!grounded)
         {
-            CancelSprintHard(hc, clampAirSpeed: true);
+            // Maintain no-sprint midair without re-firing FSM events every frame
+            // (HARD LANDING spam broke jump height + downslash).
+            if (hc.cState.isSprinting || hc.cState.isBackSprinting)
+                SoftCancelSprint(hc, sendFsmEvent: true, clampAirSpeed: true);
+            else
+                ClearSprintSpeedAdd(hc);
+
             if (physics)
                 ClampAirHorizontalSpeed(hc);
             return;
@@ -303,14 +314,17 @@ public class GroundedSprintModule : CustomSkillModule
         }
     }
 
-    private static void CancelSprintHard(HeroController hc, bool clampAirSpeed)
+    /// <summary>
+    /// End sprint cleanly. Never send HARD LANDING — that event aborts jump impulse
+    /// and interrupts aerial attacks (downslash).
+    /// </summary>
+    private static void SoftCancelSprint(HeroController hc, bool sendFsmEvent, bool clampAirSpeed)
     {
         SprintBufferStepsField?.SetValue(hc, 0);
         SyncBufferStepsField?.SetValue(hc, false);
 
-        hc.sprintFSM?.SendEvent("CANCEL SPRINT");
-        // Extra cancel events some sprint substates listen for
-        hc.sprintFSM?.SendEvent("HARD LANDING");
+        if (sendFsmEvent)
+            hc.sprintFSM?.SendEvent("CANCEL SPRINT");
 
         hc.cState.isSprinting = false;
         hc.cState.isBackSprinting = false;
@@ -321,11 +335,16 @@ public class GroundedSprintModule : CustomSkillModule
             if (isSprint != null) isSprint.Value = false;
         }
 
-        if (SprintSpeedAddFloatField?.GetValue(hc) is HutongGames.PlayMaker.FsmFloat add)
-            add.Value = 0f;
+        ClearSprintSpeedAdd(hc);
 
         if (clampAirSpeed && !IsEffectivelyGrounded(hc))
             ClampAirHorizontalSpeed(hc);
+    }
+
+    private static void ClearSprintSpeedAdd(HeroController hc)
+    {
+        if (SprintSpeedAddFloatField?.GetValue(hc) is HutongGames.PlayMaker.FsmFloat add)
+            add.Value = 0f;
     }
 
     /// <summary>
