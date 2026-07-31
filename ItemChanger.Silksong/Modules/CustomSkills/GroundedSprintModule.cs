@@ -6,18 +6,15 @@ using UnityEngine;
 namespace ItemChanger.Silksong.Modules.CustomSkills;
 
 /// <summary>
-/// Novelty: Swift Step sprint while grounded, without air dash / air sprint / shuttle-cock.
+/// Novelty: Swift Step sprint while grounded only — no air sprint, no air dash, no shuttle-cock.
 ///
-/// flibber (#209): trick the game so vanilla sprint anim/cState run — not a GetRunSpeed hack.
+/// flibber (#209): trick the game so vanilla sprint anim/cState run.
 ///
-/// Silksong path: CanDash (field hasDash) → HeroDash → sprintFSM DASHED → TRY SPRINT.
-/// Sprint speed is FSM "Add Speed". CanDash is postfixed true only on ground for GS-only.
-///
-/// Air / shuttle-cock (playtest failures):
-/// - Prefix OnShuttleCockJump to skip entirely for GS-only kit
-/// - Prefix HeroJump(bool) forces checkSprint=false
-/// - PreventShuttlecock every frame while GS-only (covers dashing→jump)
-/// - Air: CANCEL SPRINT, clear cState sprint flags, zero buffer + Add Speed
+/// Playtest fixes:
+/// - Ledge fall kept sprinting: CANCEL SPRINT alone is not enough; clamp air horizontal
+///   speed to walk and zero FSM Add Speed every physics tick while airborne.
+/// - Wall clip on turn+jump: do NOT spoof CanDash (that starts a real ground dash into
+///   walls). Enter sprint only via TRY SPRINT + GetBool("hasDash") while grounded.
 /// </summary>
 public class GroundedSprintModule : CustomSkillModule
 {
@@ -35,8 +32,11 @@ public class GroundedSprintModule : CustomSkillModule
         AccessTools.Field(typeof(HeroController), "sprintSpeedAddFloat");
     private static readonly FieldInfo? NoShuttlecockTimeField =
         AccessTools.Field(typeof(HeroController), "noShuttlecockTime");
+    private static readonly FieldInfo? SyncBufferStepsField =
+        AccessTools.Field(typeof(HeroController), "syncBufferSteps");
 
     private Harmony? _harmony;
+    private static bool _wasOnGround = true;
 
     public override IEnumerable<string> GettableSkillBools() =>
     [
@@ -69,8 +69,9 @@ public class GroundedSprintModule : CustomSkillModule
     {
         if (ReadRawHasDash()) return true;
         if (!hasGroundedSprint) return false;
+        // Strict ground only — false the instant we leave ground so FSM gates flip.
         HeroController? hc = HeroController.SilentInstance;
-        return hc != null && hc.cState.onGround;
+        return hc != null && IsEffectivelyGrounded(hc);
     }
 
     private static bool ReadRawHasDash()
@@ -89,31 +90,51 @@ public class GroundedSprintModule : CustomSkillModule
         return !ReadRawHasDash();
     }
 
+    /// <summary>
+    /// Grounded for GS purposes: onGround flag OR still touching floor this frame.
+    /// Leaving ledge often has a frame where velocity is high but flag lags — treat
+    /// !CheckTouchingGround as air for cancel/clamp.
+    /// </summary>
+    private static bool IsEffectivelyGrounded(HeroController hc)
+    {
+        if (hc.cState.onGround) return true;
+        // Don't treat wall-slide as ground sprint surface
+        if (hc.cState.wallSliding || hc.cState.wallClinging || hc.cState.wallScrambling)
+            return false;
+        try
+        {
+            return hc.CheckTouchingGround();
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     protected override void DoLoad()
     {
         base.DoLoad();
         _activeInstance = this;
+        _wasOnGround = true;
 
         Using(Md.InventoryItemConditional.Evaluate.Prefix(OverrideInventoryDisplayTest));
 
         _harmony = new Harmony("itemchanger.silksong.groundedsprint");
 
-        Patch(typeof(HeroController), nameof(HeroController.CanDash),
-            postfix: nameof(CanDashPostfix));
+        // Intentionally NOT spoofing CanDash — that starts a real ground dash and caused
+        // wall clips on turn+jump. Sprint entry is TRY SPRINT + GetBool hasDash only.
 
-        // Private Update — per-frame air cancel + continuous shuttlecock block
         Patch(typeof(HeroController), "Update", postfix: nameof(HeroUpdatePostfix));
         Patch(typeof(HeroController), "FixedUpdate", postfix: nameof(HeroFixedUpdatePostfix));
 
-        // LeftGround fills sprintBufferSteps when isSprinting/dashing — zero after.
         var leftGround = AccessTools.Method(typeof(HeroController), "LeftGround", [typeof(bool)]);
         if (leftGround != null)
         {
             _harmony.Patch(leftGround,
+                prefix: new HarmonyMethod(typeof(GroundedSprintModule), nameof(LeftGroundPrefix)),
                 postfix: new HarmonyMethod(typeof(GroundedSprintModule), nameof(LeftGroundPostfix)));
         }
 
-        // HeroJump(bool): collapse checkSprint
         var heroJumpBool = AccessTools.Method(typeof(HeroController), "HeroJump", [typeof(bool)]);
         if (heroJumpBool != null)
         {
@@ -121,21 +142,15 @@ public class GroundedSprintModule : CustomSkillModule
                 prefix: new HarmonyMethod(typeof(GroundedSprintModule), nameof(HeroJumpBoolPrefix)));
         }
 
-        // Hard block: skip OnShuttleCockJump body entirely for GS-only
         var shuttle = AccessTools.Method(typeof(HeroController), "OnShuttleCockJump");
         if (shuttle != null)
         {
             _harmony.Patch(shuttle,
                 prefix: new HarmonyMethod(typeof(GroundedSprintModule), nameof(OnShuttleCockJumpPrefix)));
         }
-        else
-        {
-            ItemChangerPlugin.Instance.Logger.LogWarning(
-                "[GroundedSprint] OnShuttleCockJump not found — shuttlecock may still fire.");
-        }
 
         ItemChangerPlugin.Instance.Logger.LogInfo(
-            "[GroundedSprint] loaded: grounded CanDash/GetBool + hard shuttlecock skip + air cancel.");
+            "[GroundedSprint] loaded: GetBool grounded hasDash, TRY SPRINT only (no CanDash), hard air clamp.");
     }
 
     private void Patch(Type type, string name, string? prefix = null, string? postfix = null)
@@ -172,92 +187,120 @@ public class GroundedSprintModule : CustomSkillModule
         }
     }
 
-    // ---- Harmony targets ----
+    // ---- Harmony ----
 
-    private static void CanDashPostfix(HeroController __instance, ref bool __result)
-    {
-        if (__result) return;
-        if (!OnlyGroundedSprintKit()) return;
-        if (!__instance.cState.onGround) return;
-        if (__instance.cState.hazardDeath) return;
-        __result = true;
-    }
-
-    /// <summary>Harmony prefix: return false to skip original OnShuttleCockJump.</summary>
-    private static bool OnShuttleCockJumpPrefix()
-    {
-        if (!OnlyGroundedSprintKit()) return true; // run original
-        return false; // skip — no shuttle-cock for GS-only
-    }
+    private static bool OnShuttleCockJumpPrefix() => !OnlyGroundedSprintKit();
 
     private static void HeroJumpBoolPrefix(HeroController __instance, ref bool checkSprint)
     {
         if (!OnlyGroundedSprintKit()) return;
         checkSprint = false;
-        // Belt-and-suspenders: keep prevent window open and clear buffer before jump body.
         __instance.PreventShuttlecock();
         SprintBufferStepsField?.SetValue(__instance, 0);
-        // Far-future prevent in case PreventShuttlecock window is too short during frame spikes
+        SyncBufferStepsField?.SetValue(__instance, false);
         NoShuttlecockTimeField?.SetValue(__instance, Time.timeAsDouble + 5.0);
+        CancelSprintHard(__instance, clampAirSpeed: false);
     }
 
-    private static void HeroUpdatePostfix(HeroController __instance) => TickGroundedSprintGuards(__instance);
-    private static void HeroFixedUpdatePostfix(HeroController __instance) => TickGroundedSprintGuards(__instance);
-
-    private static void TickGroundedSprintGuards(HeroController hc)
+    /// <summary>Before LeftGround fills sprintBufferSteps from isSprinting/dashing.</summary>
+    private static void LeftGroundPrefix(HeroController __instance)
     {
         if (!OnlyGroundedSprintKit()) return;
+        // Clear sprint flags BEFORE vanilla buffer fill (uses isSprinting || dashing).
+        __instance.cState.isSprinting = false;
+        __instance.cState.isBackSprinting = false;
+        SprintBufferStepsField?.SetValue(__instance, 0);
+        SyncBufferStepsField?.SetValue(__instance, false);
+    }
 
-        // Always keep shuttlecock blocked while GS-only (covers dashing frames before isSprinting).
-        hc.PreventShuttlecock();
-        NoShuttlecockTimeField?.SetValue(hc, Time.timeAsDouble + 1.0);
+    private static void LeftGroundPostfix(HeroController __instance)
+    {
+        if (!OnlyGroundedSprintKit()) return;
+        CancelSprintHard(__instance, clampAirSpeed: true);
+    }
 
-        if (!hc.cState.onGround)
+    private static void HeroUpdatePostfix(HeroController __instance) => TickGuards(__instance, physics: false);
+    private static void HeroFixedUpdatePostfix(HeroController __instance) => TickGuards(__instance, physics: true);
+
+    private static void TickGuards(HeroController hc, bool physics)
+    {
+        if (!OnlyGroundedSprintKit())
         {
-            CancelSprintHard(hc);
+            _wasOnGround = hc.cState.onGround;
             return;
         }
 
-        // Hold-dash on ground: poke TRY SPRINT if idle walk (FSM may need the nudge).
+        hc.PreventShuttlecock();
+        NoShuttlecockTimeField?.SetValue(hc, Time.timeAsDouble + 1.0);
+
+        bool grounded = IsEffectivelyGrounded(hc);
+
+        // Edge: just left ground (ledge or jump) — cancel immediately.
+        if (_wasOnGround && !grounded)
+            CancelSprintHard(hc, clampAirSpeed: true);
+
+        _wasOnGround = grounded;
+
+        if (!grounded)
+        {
+            CancelSprintHard(hc, clampAirSpeed: true);
+            if (physics)
+                ClampAirHorizontalSpeed(hc);
+            return;
+        }
+
+        // Ground: hold dash → enter vanilla sprint path without enabling CanDash/HeroDash.
         if (InputHandler.Instance != null
             && InputHandler.Instance.inputActions.Dash.IsPressed
             && !hc.cState.dashing
-            && !hc.cState.isSprinting
-            && !hc.cState.isBackSprinting
+            && !hc.cState.hazardDeath
             && hc.CanSprint())
         {
             hc.sprintFSM?.SendEvent("TRY SPRINT");
         }
     }
 
-    private static void LeftGroundPostfix(HeroController __instance)
+    private static void CancelSprintHard(HeroController hc, bool clampAirSpeed)
     {
-        if (!OnlyGroundedSprintKit()) return;
-        CancelSprintHard(__instance);
+        SprintBufferStepsField?.SetValue(hc, 0);
+        SyncBufferStepsField?.SetValue(hc, false);
+
+        hc.sprintFSM?.SendEvent("CANCEL SPRINT");
+        // Extra cancel events some sprint substates listen for
+        hc.sprintFSM?.SendEvent("HARD LANDING");
+
+        hc.cState.isSprinting = false;
+        hc.cState.isBackSprinting = false;
+
+        if (hc.sprintFSM != null)
+        {
+            var isSprint = hc.sprintFSM.FsmVariables.GetFsmBool("Is Sprinting");
+            if (isSprint != null) isSprint.Value = false;
+        }
+
+        if (SprintSpeedAddFloatField?.GetValue(hc) is HutongGames.PlayMaker.FsmFloat add)
+            add.Value = 0f;
+
+        if (clampAirSpeed && !IsEffectivelyGrounded(hc))
+            ClampAirHorizontalSpeed(hc);
     }
 
     /// <summary>
-    /// Force end of sprint state for GS-only: FSM event + cState + buffer + Add Speed float.
+    /// Cap midair horizontal speed to walk so "still sprinting off a ledge" has no mobility gain.
     /// </summary>
-    private static void CancelSprintHard(HeroController hc)
+    private static void ClampAirHorizontalSpeed(HeroController hc)
     {
-        SprintBufferStepsField?.SetValue(hc, 0);
+        Rigidbody2D rb = hc.rb2d;
+        if (rb == null) return;
 
-        bool wasSprinting = hc.cState.isSprinting
-            || hc.cState.isBackSprinting
-            || hc.cState.isBackScuttling
-            || (hc.sprintFSM != null && hc.sprintFSM.FsmVariables.GetFsmBool("Is Sprinting") is { } b && b.Value);
+        float max = Mathf.Abs(hc.GetWalkSpeed());
+        if (max < 0.01f) max = 6f; // fallback if walk speed unreadable
 
-        if (wasSprinting || !hc.cState.onGround)
+        Vector2 v = rb.linearVelocity;
+        if (Mathf.Abs(v.x) > max)
         {
-            hc.sprintFSM?.SendEvent("CANCEL SPRINT");
-            // Direct cState clear if FSM is slow a frame
-            hc.cState.isSprinting = false;
-            hc.cState.isBackSprinting = false;
+            v.x = Mathf.Sign(v.x) * max;
+            rb.linearVelocity = v;
         }
-
-        // Zero sprint speed add so residual velocity doesn't linger mid-air
-        if (SprintSpeedAddFloatField?.GetValue(hc) is HutongGames.PlayMaker.FsmFloat add)
-            add.Value = 0f;
     }
 }
