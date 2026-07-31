@@ -418,13 +418,18 @@ public class GroundedSprintModule : CustomSkillModule
             add.Value = 0f;
     }
 
+    /// <summary>
+    /// Cap midair |vx| to run speed (not walk). Vanilla Move() uses GetRunSpeed() in air
+    /// (~8.25); walk (~5) was killing normal jump/fall air control. Sprint is faster than
+    /// run, so this still strips ledge-sprint carry without nerfing ordinary air mobility.
+    /// </summary>
     private static void ClampAirHorizontalSpeed(HeroController hc)
     {
         Rigidbody2D rb = hc.rb2d;
         if (rb == null) return;
 
-        float max = Mathf.Abs(hc.GetWalkSpeed());
-        if (max < 0.01f) max = 6f;
+        float max = Mathf.Abs(hc.GetRunSpeed());
+        if (max < 0.01f) max = 8.25f;
 
         Vector2 v = rb.linearVelocity;
         if (Mathf.Abs(v.x) > max)
