@@ -6,7 +6,6 @@
   "FMT_FAST_TRAVEL_PATTERN": "{TRAVEL_TYPE} - {STATION_NAME}",
   "FMT_MATERIUM_ENTRY_NAME": "{0} Entry",
   "FMT_JOURNAL_ENTRY_NAME": "{0} Entry",
-
   "INV_NAME_SKILL_HARPOON_LEFT": "Left Clawline",
   "INV_NAME_SKILL_HARPOON_RIGHT": "Right Clawline",
   "INV_DESC_SKILL_HARPOON_LEFT": "Advanced Weaver talent. Throw the Silk-strung needle to the left and charge towards it.",
@@ -29,7 +28,6 @@
   "INV_DESC_TAUNT": "Learn the power to skip Sister Splinter",
   "GET_TAUNT_1": "Goad enemies into attacking",
   "SHOP_DESC_ROSARIES": "We're having a firesale today, go ahead and collect your rebate.",
-
   "CREST_HUNTER_NAME": "Crest of Hunter",
   "CREST_HUNTER_V2_NAME": "Crest of Hunter Level 2",
   "CREST_HUNTER_V3_NAME": "Crest of Hunter Level 3",
@@ -41,15 +39,15 @@
   "CREST_WITCH_NAME": "Crest of Witch",
   "CREST_CURSED_NAME": "Crest of Cursed Witch",
   "CREST_CLOAKLESS_NAME": "Crest of Cloakless",
-
   "FREE": "Free",
   "OBTAINED": "Obtained",
   "PAID": "Paid",
   "COST_FOR": "for",
-
   "QUEST_BROLLY_GET_DESC_PREVIEW": "Hunt Hokers in the Far Fields and collect Spine Cores for {PREVIEW_TEXT}.",
   "SEAMSTRESS_BROLLY_QUEST_OFFER_PREVIEW": "If you’re planning to ascend from these low fields, you’ll be needing {PREVIEW_TEXT}, and I’m just the bug to help.<page>Head for the caves beyond my home. The bugs within produce a spine with a marvellous core, flexible yet strong.<page>Cut their spines and collect the cores. Return to me, and I’ll soon have your old cloak transformed into {PREVIEW_TEXT}.",
   "SEAMSTRESS_BROLLY_QUEST_REOFFER_PREVIEW": "Ready to reconsider my offer? Good for you! You won’t be going far without {PREVIEW_TEXT}, dear.",
   "SNAILS_ACT3_DESCEND_HINT": "Enough chatting, Old One. Return with the Needolin, and after visiting the lake of liquid nothing.",
-  "FMT_HUNTER_FAN_COMPLETION_RESULT": "Oooh, but the scroll is so heavy with {COUNTER} beautiful beasts! Miss grown-up, you must prey on {TARGET} beasts for your reward. No time for rest!"
+  "FMT_HUNTER_FAN_COMPLETION_RESULT": "Oooh, but the scroll is so heavy with {COUNTER} beautiful beasts! Miss grown-up, you must prey on {TARGET} beasts for your reward. No time for rest!",
+  "INV_NAME_GROUNDED_SPRINT": "Grounded Sprint",
+  "INV_DESC_GROUNDED_SPRINT": "Hold dash to sprint at Swift Step's pace while grounded. Cancels in the air."
 }
