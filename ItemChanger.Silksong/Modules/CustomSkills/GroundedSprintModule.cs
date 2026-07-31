@@ -11,10 +11,10 @@ namespace ItemChanger.Silksong.Modules.CustomSkills;
 /// flibber (#209): trick the game so vanilla sprint anim/cState run.
 ///
 /// Playtest fixes:
-/// - Ledge fall kept sprinting: CANCEL SPRINT alone is not enough; clamp air horizontal
-///   speed to walk and zero FSM Add Speed every physics tick while airborne.
-/// - Wall clip on turn+jump: do NOT spoof CanDash (that starts a real ground dash into
-///   walls). Enter sprint only via TRY SPRINT + GetBool("hasDash") while grounded.
+/// - Ledge fall: hard cancel + clamp air horizontal speed to walk.
+/// - Wall clip: never allow real HeroDash for GS-only.
+/// - Ground dash still worked: Prepatcher makes playerData.hasDash use GetBool, so
+///   spoofing hasDash made CanDash true. Force CanDash false and block HeroDash*.
 /// </summary>
 public class GroundedSprintModule : CustomSkillModule
 {
@@ -121,8 +121,22 @@ public class GroundedSprintModule : CustomSkillModule
 
         _harmony = new Harmony("itemchanger.silksong.groundedsprint");
 
-        // Intentionally NOT spoofing CanDash — that starts a real ground dash and caused
-        // wall clips on turn+jump. Sprint entry is TRY SPRINT + GetBool hasDash only.
+        // GetBool("hasDash") is true while grounded so the sprint FSM can run, but
+        // Prepatcher routes playerData.hasDash through GetBool — so CanDash would also
+        // become true. Force CanDash false and block HeroDash* for GS-only (sprint only).
+        Patch(typeof(HeroController), nameof(HeroController.CanDash), postfix: nameof(CanDashPostfix));
+        var heroDashPressed = AccessTools.Method(typeof(HeroController), "HeroDashPressed");
+        if (heroDashPressed != null)
+        {
+            _harmony.Patch(heroDashPressed,
+                prefix: new HarmonyMethod(typeof(GroundedSprintModule), nameof(HeroDashPressedPrefix)));
+        }
+        var heroDash = AccessTools.Method(typeof(HeroController), "HeroDash", [typeof(bool)]);
+        if (heroDash != null)
+        {
+            _harmony.Patch(heroDash,
+                prefix: new HarmonyMethod(typeof(GroundedSprintModule), nameof(HeroDashPrefix)));
+        }
 
         Patch(typeof(HeroController), "Update", postfix: nameof(HeroUpdatePostfix));
         Patch(typeof(HeroController), "FixedUpdate", postfix: nameof(HeroFixedUpdatePostfix));
@@ -150,7 +164,7 @@ public class GroundedSprintModule : CustomSkillModule
         }
 
         ItemChangerPlugin.Instance.Logger.LogInfo(
-            "[GroundedSprint] loaded: GetBool grounded hasDash, TRY SPRINT only (no CanDash), hard air clamp.");
+            "[GroundedSprint] loaded: GetBool hasDash for FSM, CanDash/HeroDash blocked, TRY SPRINT + air clamp.");
     }
 
     private void Patch(Type type, string name, string? prefix = null, string? postfix = null)
@@ -188,6 +202,35 @@ public class GroundedSprintModule : CustomSkillModule
     }
 
     // ---- Harmony ----
+
+    /// <summary>
+    /// Prepatcher makes hasDash property use GetBool — force dash ability off for GS-only.
+    /// Sprint is entered via TRY SPRINT, not HeroDash.
+    /// </summary>
+    private static void CanDashPostfix(HeroController __instance, ref bool __result)
+    {
+        if (!OnlyGroundedSprintKit()) return;
+        __result = false;
+    }
+
+    /// <summary>Skip HeroDashPressed entirely for GS-only (redirect dash button to sprint).</summary>
+    private static bool HeroDashPressedPrefix(HeroController __instance)
+    {
+        if (!OnlyGroundedSprintKit()) return true;
+        // Convert dash press into sprint attempt on ground only.
+        if (__instance.cState.onGround && __instance.CanSprint())
+            __instance.sprintFSM?.SendEvent("TRY SPRINT");
+        return false; // skip original dash
+    }
+
+    private static bool HeroDashPrefix(HeroController __instance, bool startAlreadyDashing)
+    {
+        if (!OnlyGroundedSprintKit()) return true;
+        // Never start a real dash with GS-only.
+        if (__instance.cState.onGround && __instance.CanSprint())
+            __instance.sprintFSM?.SendEvent("TRY SPRINT");
+        return false;
+    }
 
     private static bool OnShuttleCockJumpPrefix() => !OnlyGroundedSprintKit();
 
